@@ -2,7 +2,9 @@ package com.rohan.dragoncell.GameUtils.Entity;
 
 public class Inventory {
 
-    public Inventory() {
+    private Player player;
 
+    public Inventory(Player player) {
+        this.player = player;
     }
 }

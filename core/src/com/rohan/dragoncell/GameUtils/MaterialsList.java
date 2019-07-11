@@ -8,6 +8,12 @@ package com.rohan.dragoncell.GameUtils;
 // 5 - legendary
 // 6 - mystic
 
+import com.badlogic.gdx.Gdx;
+
+import javax.smartcardio.Card;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+
 public class MaterialsList {
 
     public final Material STICK = new Material("Wooden Stick", "Can be obtained from trees or carving", 1, 1);
@@ -48,10 +54,21 @@ public class MaterialsList {
     public final Material WELDED_SAND = new Material("Welded Sand", "Extremely packed sand. Very heavy", 35, 2);
     public final Material THICK_GLASS = new Material("Thick Glass", "2 inches thicker", 36, 2);
 
-
+    public ArrayList<Material> materialList = new ArrayList<Material>();
 
     public MaterialsList() {
         initRecipes();
+
+        Field[] fields = MaterialsList.class.getDeclaredFields();
+        try {
+            for(Field field : fields) {
+                if (field.getType() == Material.class) {
+                    materialList.add((Material) field.get(this));
+                }
+            }
+        } catch (Exception e) {
+            Gdx.app.log("Materials", "ArrayList Initialization Failed");
+        }
     }
 
     private void initRecipes() {

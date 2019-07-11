@@ -5,17 +5,21 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.rohan.dragoncell.GameUtils.Display.HUD;
 import com.rohan.dragoncell.GameUtils.Entity.Player;
 import com.rohan.dragoncell.GameUtils.MaterialsList;
 
 public class MainScreen implements Screen {
 
     private Game game;
-    private boolean loadData = false;
     private MaterialsList materials;
     private Player player;
-
     private SpriteBatch mainBatch = new SpriteBatch();
+    private HUD headsUp;
+
+
+    private boolean loadData = false;
+
 
     public MainScreen(Game game, boolean loadData) {
         this.game = game;
@@ -28,10 +32,12 @@ public class MainScreen implements Screen {
     private void initMaterials() {
         materials = new MaterialsList();
         Gdx.app.log("World", "Materials and Recipes Loaded");
+
     }
 
     private void initPlayer() {
         player = new Player();
+        headsUp = new HUD(player);
     }
 
 
@@ -42,6 +48,8 @@ public class MainScreen implements Screen {
 
         mainBatch.begin();
         mainBatch.end();
+
+        headsUp.render(delta);
 
     }
 

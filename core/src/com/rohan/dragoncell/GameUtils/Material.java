@@ -10,12 +10,12 @@ import java.util.Arrays;
 
 public class Material {
 
-    private String name;
-    private String description;
-    private int ID;
-    private String obtainMethod;
-    private int rarity;
-    private boolean unpickupable;
+    public String name;
+    public String description;
+    public int ID;
+    public String obtainMethod;
+    public int rarity;
+    public boolean unpickupable;
     private Sprite sprite;
 
     private boolean canBeFilled;

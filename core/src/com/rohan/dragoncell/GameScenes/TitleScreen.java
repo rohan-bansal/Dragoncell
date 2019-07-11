@@ -54,10 +54,6 @@ public class TitleScreen extends AbstractScreen {
         addActor(load_glow);
         addActor(about_glow);
 
-        play_glow.setVisible(false);
-        load_glow.setVisible(false);
-        about_glow.setVisible(false);
-
         play_glow.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -66,7 +62,7 @@ public class TitleScreen extends AbstractScreen {
                 return true;
             }
         });
-        load_glow.addListener(new ClickListener() {
+        load.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 game.setScreen(new MainScreen(game, true));
@@ -74,7 +70,7 @@ public class TitleScreen extends AbstractScreen {
                 return true;
             }
         });
-        about_glow.addListener(new ClickListener() {
+        about.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 game.setScreen(new AboutScreen(game));
@@ -95,12 +91,21 @@ public class TitleScreen extends AbstractScreen {
 
     private void checkHover() {
         Vector2 mouseScreenPosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
-        Vector2 localPos = play.screenToLocalCoordinates(mouseScreenPosition);
+        Vector2 playlocalPos = play.screenToLocalCoordinates(mouseScreenPosition);
 
-        if(play.hit(localPos.x, localPos.y, false) != null) {
+        //Vector2 aboutlocalPos = about.screenToLocalCoordinates(mouseScreenPosition);
+        //Vector2 loadlocalPos = load.screenToLocalCoordinates(mouseScreenPosition);
+
+        if(play.hit(playlocalPos.x, playlocalPos.y, false) != null) {
             play_glow.setVisible(true);
+        //} else if(about.hit(aboutlocalPos.x, aboutlocalPos.y, false) != null) {
+        //    about_glow.setVisible(true);
+        //} else if(load.hit(loadlocalPos.x, loadlocalPos.y, false) != null) {
+        //    load_glow.setVisible(true);
         } else {
             play_glow.setVisible(false);
+            load_glow.setVisible(false);
+            about_glow.setVisible(false);
 
         }
     }

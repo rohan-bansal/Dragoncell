@@ -12,6 +12,15 @@ public class Player {
 
         inventory = new Inventory(this);
 
+    }
 
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+
+    public void render() {
+
+        inventory.render();
     }
 }

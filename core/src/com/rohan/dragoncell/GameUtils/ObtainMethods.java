@@ -1,5 +1,7 @@
 package com.rohan.dragoncell.GameUtils;
 
+import java.util.HashMap;
+
 public class ObtainMethods {
 
     public static final String TREE = "tree";
@@ -18,5 +20,14 @@ public class ObtainMethods {
     public static final String STOVE = "food";
     public static final String SHOVEL = "digging";
     public static final String UNOBTAINABLE = "unobtainable";
+
+    public static final HashMap<Integer, String> rarities = new HashMap<Integer, String>() {{
+        put(1, "Common");
+        put(2, "Uncommon");
+        put(3, "Rare");
+        put(4, "Epic");
+        put(5, "Legendary");
+        put(6, "Mystic");
+    }};
 
 }

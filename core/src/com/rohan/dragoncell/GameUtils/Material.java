@@ -64,6 +64,10 @@ public class Material {
         }
     }
 
+    public Sprite getSprite() {
+        return sprite;
+    }
+
     Material setObtainMethod(String method) {
         this.obtainMethod = method;
         return this;

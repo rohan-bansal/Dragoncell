@@ -18,15 +18,15 @@ public class MaterialsList {
 
     public final Material STICK = new Material("Wooden Stick", "Can be obtained from trees or carving", 1, 1);
     public final Material STONE = new Material("Stone", "Hard material obtained from mining", 2, 1);
-    public final Material AMBER = new Material("Amber", "Rare mining drop", 3, 3);
+    public final Material AMBER = new Material("Amber", "Might contain a mosquito", 3, 3);
     public final Material DIRT = new Material("Dirt", "Diggy diggy hole", 4, 1);
     public final Material WOOD = new Material("Wood", "Obtained from trees through sawing", 5, 1);
-    public final Material SASMITE_ORE = new Material("Sasmite Ore", "Rare mining drop", 6, 3);
+    public final Material SASMITE_ORE = new Material("Sasmite Ore", "Created from Earth's seismic motions", 6, 3);
     public final Material SASMITE_BAR = new Material("Sasmite Bar", "Very hard and shock resistant metal", 7, 3);
     public final Material COAL = new Material("Coal", "Powers almost everything", 8, 1);
     public final Material CRIMSTONE_ORE = new Material("Crimstone Ore", "Epic mining drop", 9, 4);
     public final Material CRIMSTONE_BAR = new Material("Crimstone Bar", "Contains the essence of the Earth's core", 10, 4);
-    public final Material IRON_ORE = new Material("Iron Ore", "Uncommon mining drop", 10, 2);
+    public final Material IRON_ORE = new Material("Iron Ore", "One of the most abundant ores", 10, 2);
     public final Material IRON_INGOT = new Material("Iron Ingot", "Important crafting material", 11, 2);
     public final Material SEEDS = new Material("Seeds", "The most basic farming material", 12, 1);
     public final Material TORCH = new Material("Torch", "Creates light wherever it goes", 13, 1);
@@ -39,7 +39,7 @@ public class MaterialsList {
     public final Material HARDENED_WOOD = new Material("Hardened Wood", "Can hold much more weight", 20, 1);
     public final Material CARROT_SEEDS = new Material("Carrot Seeds", "Grows multiple carrots", 21, 2);
     public final Material WHEAT = new Material("Wheat", "Most abundant crop in the world", 22, 1);
-    public final Material COPPER_ORE = new Material("Copper Ore", "Uncommon mining drop", 23, 2);
+    public final Material COPPER_ORE = new Material("Copper Ore", "Stands out with its gold sheen", 23, 2);
     public final Material COPPER_INGOT = new Material("Copper Ingot", "Conducts electricity very well", 24, 2);
     public final Material BOOK = new Material("Book", "Filled with knowledge", 25, 2);
     public final Material BOTTLE = new Material("Bottle", "Can be filled with various liquids", 26, 2);
@@ -49,7 +49,7 @@ public class MaterialsList {
     public final Material FIRE = new Material("FIRE", "Debug Item", 30, 1, true);
     public final Material LEATHER = new Material("Leather", "Obtained from cows and horses", 31, 2);
     public final Material PAPER = new Material("Paper", "The pen is mightier than the sword", 32, 2);
-    public final Material RUBBER = new Material("Rubber", "The material of the future", 33, 2);
+    public final Material RUBBER = new Material("Rubber", "The material of the future", 33, 4);
     public final Material WOODEN_BOWL = new Material("Wooden Bowl", "Can hold items", 34, 1);
     public final Material WELDED_SAND = new Material("Welded Sand", "Extremely packed sand. Very heavy", 35, 2);
     public final Material THICK_GLASS = new Material("Thick Glass", "2 inches thicker", 36, 2);

@@ -13,7 +13,7 @@ public class HUD {
     private Player player;
     private SpriteBatch batch = new SpriteBatch();
 
-    private Texture heart, emptyHeart, inventory, chest;
+    private Texture heart, emptyHeart, inventory, chest, gameView;
 
     private GlyphLayout layout = new GlyphLayout();
     private BitmapFont inventory_ = new BitmapFont(Gdx.files.internal("Fonts/turok2.fnt"), Gdx.files.internal("Fonts/turok2.png"), false);
@@ -25,6 +25,7 @@ public class HUD {
         emptyHeart = new Texture(Gdx.files.internal("Interface/HUD/background.png"));
         inventory = new Texture(Gdx.files.internal("Interface/HUD/inventory.png"));
         chest = new Texture(Gdx.files.internal("Interface/HUD/chestInventory.png"));
+        gameView = new Texture(Gdx.files.internal("Interface/HUD/gameView.png"));
     }
 
     public void render(float delta) {
@@ -43,6 +44,7 @@ public class HUD {
         }
 
         batch.draw(inventory, 570, 10);
+        batch.draw(gameView, 20, 10);
 
         layout.setText(inventory_, "Inventory");
         inventory_.setColor(Color.TAN);

@@ -126,7 +126,7 @@ public class Inventory {
         if(followMaterial != null && followMaterial.isFollowingMouse) {
             followMaterial.render(invBatch);
             followMaterial.setCenter(Gdx.input.getX(), 800 - Gdx.input.getY());
-            if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
                 if(inventory.get(slotNumberForFollow - 1).stackedItem.getSprite().getColor().a == 0) {
                     inventory.get(slotNumberForFollow - 1).stackedItem.getSprite().setAlpha(1);
                     slotNumberForFollow = 0;
@@ -186,24 +186,11 @@ public class Inventory {
                             rarityDrawer.setColor(Color.SCARLET); //mystic
                             break;
                     }
-                    rarityDrawer.draw(invBatch, ObtainMethods.rarities.get(item.stackedItem.rarity), (775 - layout.width / 2), 260);
+                    rarityDrawer.draw(invBatch, ObtainMethods.rarities.get(item.stackedItem.rarity), (775 - layout.width / 2), 250);
                 }
 
                 if(item.stackedItem.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
                     hoveredMaterial = item;
-                    if(Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-                        if(item.count > 1) {
-                            item.count -= 1;
-                            followMaterial = new Material(item.stackedItem.name, item.stackedItem.description, item.stackedItem.ID, item.stackedItem.rarity);
-                            followMaterial.isFollowingMouse = true;
-                            slotNumberForFollow = item.stackedItem.slotNumber;
-                        } else {
-                            followMaterial = new Material(item.stackedItem.name, item.stackedItem.description, item.stackedItem.ID, item.stackedItem.rarity);
-                            followMaterial.isFollowingMouse = true;
-                            item.stackedItem.getSprite().setAlpha(0);
-                            slotNumberForFollow = item.stackedItem.slotNumber;
-                        }
-                    }
                 } else {
                     hoveredMaterial = null;
                 }
@@ -249,5 +236,24 @@ public class Inventory {
             select.setPosition(slots.get(slotSelected - 1).getX(), slots.get(slotSelected - 1).getY());
             select.draw(invBatch);
         }
+    }
+
+    public void leftDown() {
+        for(ItemStack item : inventory) {
+            if(item.stackedItem.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+                if (item.count > 1) {
+                    item.count -= 1;
+                    followMaterial = new Material(item.stackedItem.name, item.stackedItem.description, item.stackedItem.ID, item.stackedItem.rarity);
+                    followMaterial.isFollowingMouse = true;
+                    slotNumberForFollow = item.stackedItem.slotNumber;
+                } else {
+                    followMaterial = new Material(item.stackedItem.name, item.stackedItem.description, item.stackedItem.ID, item.stackedItem.rarity);
+                    followMaterial.isFollowingMouse = true;
+                    item.stackedItem.getSprite().setAlpha(0);
+                    slotNumberForFollow = item.stackedItem.slotNumber;
+                }
+            }
+        }
+
     }
 }

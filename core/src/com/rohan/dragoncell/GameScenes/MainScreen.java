@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.rohan.dragoncell.FileUtils.ModInputProcessor;
 import com.rohan.dragoncell.GameUtils.Display.HUD;
 import com.rohan.dragoncell.GameUtils.Display.ViewCam;
 import com.rohan.dragoncell.GameUtils.Entity.Player;
@@ -30,6 +31,9 @@ public class MainScreen implements Screen {
 
         initMaterials();
         initPlayer();
+
+        ModInputProcessor processor = new ModInputProcessor(player.getInventory());
+        Gdx.input.setInputProcessor(processor);
     }
 
     private void initMaterials() {

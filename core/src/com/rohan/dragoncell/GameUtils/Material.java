@@ -29,6 +29,8 @@ public class Material {
     private Material smeltInto;
     private int smeltNumber;
 
+    private Material juicedInto;
+
     private Material seedDrop;
     private int foodNumber;
 
@@ -100,8 +102,13 @@ public class Material {
         return this;
     }
 
-    Material setGrinderRecipe(Material[] materials) {
+    Material setCombinerRecipe(Material[] materials) {
         this.grinderRecipe.addAll(Arrays.asList(materials));
+        return this;
+    }
+
+    Material setJuicingRecipe(Material juicedInto) {
+        this.juicedInto = juicedInto;
         return this;
     }
 }

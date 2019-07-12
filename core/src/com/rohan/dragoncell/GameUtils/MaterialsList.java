@@ -10,7 +10,6 @@ package com.rohan.dragoncell.GameUtils;
 
 import com.badlogic.gdx.Gdx;
 
-import javax.smartcardio.Card;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
@@ -53,6 +52,9 @@ public class MaterialsList {
     public final Material WOODEN_BOWL = new Material("Wooden Bowl", "Can hold items", 34, 1);
     public final Material WELDED_SAND = new Material("Welded Sand", "Extremely packed sand. Very heavy", 35, 2);
     public final Material THICK_GLASS = new Material("Thick Glass", "2 inches thicker", 36, 2);
+    public final Material STEEL_INGOT = new Material("Steel Ingot", "Industrial grade metal", 37, 2);
+    public final Material NAILS = new Material("Nails", "Hold a lot of things together", 38, 2);
+    public final Material OIL = new Material("Oil", "Very slick", 39, 3);
 
     public ArrayList<Material> materialList = new ArrayList<Material>();
 
@@ -105,10 +107,13 @@ public class MaterialsList {
         FIRE.setObtainMethod(ObtainMethods.UNOBTAINABLE);
         WATER.setObtainMethod(ObtainMethods.UNOBTAINABLE);
         LEATHER.setObtainMethod(ObtainMethods.ANIMALS);
-        PAPER.setObtainMethod(ObtainMethods.GRINDER).setGrinderRecipe(new Material[] {WOOD, STICK});
+        PAPER.setObtainMethod(ObtainMethods.GRINDER).setCombinerRecipe(new Material[] {WOOD, STICK});
+        STEEL_INGOT.setObtainMethod(ObtainMethods.GRINDER).setCombinerRecipe(new Material[] {IRON_INGOT, COAL});
+        NAILS.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {STEEL_INGOT, STICK});
         RUBBER.setObtainMethod(ObtainMethods.TREE);
         WOODEN_BOWL.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {STICK, STICK, STICK, HARDENED_WOOD});
         THICK_GLASS.setObtainMethod(ObtainMethods.FORGE);
         WELDED_SAND.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {SAND, SAND, SAND, SAND, SAND, SAND, SAND, SAND}).setSmelting(THICK_GLASS, 2);
+        OIL.setObtainMethod(ObtainMethods.JUICER);
     }
 }

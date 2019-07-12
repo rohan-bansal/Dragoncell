@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.rohan.dragoncell.FileUtils.ModInputProcessor;
 import com.rohan.dragoncell.GameUtils.Display.HUD;
 import com.rohan.dragoncell.GameUtils.Display.ViewCam;
+import com.rohan.dragoncell.GameUtils.Entity.Crafting;
 import com.rohan.dragoncell.GameUtils.Entity.Player;
 import com.rohan.dragoncell.GameUtils.MaterialsList;
 
@@ -20,6 +21,7 @@ public class MainScreen implements Screen {
     private SpriteBatch mainBatch = new SpriteBatch();
     private HUD headsUp;
     private ViewCam camera;
+    public static Crafting crafting;
 
 
     private boolean loadData = false;
@@ -29,8 +31,8 @@ public class MainScreen implements Screen {
         this.game = game;
         this.loadData = loadData;
 
-        initMaterials();
         initPlayer();
+        initMaterials();
 
         ModInputProcessor processor = new ModInputProcessor(player.getInventory());
         Gdx.input.setInputProcessor(processor);
@@ -40,17 +42,10 @@ public class MainScreen implements Screen {
         materials = new MaterialsList();
         Gdx.app.log("World", "Materials and Recipes Loaded");
 
-    }
-
-    private void initPlayer() {
-        player = new Player();
-        headsUp = new HUD(player);
-        camera = new ViewCam();
-
         player.getInventory().addItem(materials.AMBER);
         player.getInventory().addItem(materials.AMBER);
         player.getInventory().addItem(materials.AMBER);
-        player.getInventory().addItem(materials.AMBER);
+        player.getInventory().addItem(materials.WOOD);
         player.getInventory().addItem(materials.FLINT);
         player.getInventory().addItem(materials.SASMITE_BAR);
         player.getInventory().addItem(materials.SASMITE_BAR);
@@ -59,6 +54,15 @@ public class MainScreen implements Screen {
         player.getInventory().addItem(materials.STONE);
         player.getInventory().addItem(materials.COPPER_ORE);
         player.getInventory().addItem(materials.RUBBER);
+        player.getInventory().addItem(materials.STICK);
+
+    }
+
+    private void initPlayer() {
+        player = new Player();
+        headsUp = new HUD(player);
+        camera = new ViewCam();
+        crafting = new Crafting(player, player.getInventory(), headsUp);
     }
 
 
@@ -74,6 +78,8 @@ public class MainScreen implements Screen {
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.U)) {
             player.getInventory().removeItem();
+        } else if(Gdx.input.isKeyJustPressed(Input.Keys.I)) {
+            Gdx.app.log("Main", Gdx.input.getX() + " | " + (800 - Gdx.input.getY()));
         }
 
     }

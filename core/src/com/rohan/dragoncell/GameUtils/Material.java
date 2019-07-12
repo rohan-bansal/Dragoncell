@@ -21,6 +21,8 @@ public class Material {
     private boolean canBeFilled;
     private boolean isOre;
     private boolean isSeed;
+    public boolean isFollowingMouse = false;
+    public int slotNumber = 0;
 
     private ArrayList<Material> recipe = new ArrayList<Material>();
 

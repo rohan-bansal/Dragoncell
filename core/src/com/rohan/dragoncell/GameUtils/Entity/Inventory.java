@@ -2,6 +2,8 @@ package com.rohan.dragoncell.GameUtils.Entity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -20,12 +22,17 @@ public class Inventory {
 
     private ArrayList<ItemStack> inventory = new ArrayList<ItemStack>();
     private ArrayList<Sprite> slots = new ArrayList<Sprite>();
+    private ArrayList<ItemStack> materialsToRemove = new ArrayList<ItemStack>();
     private int slotHovered = 1;
     private int slotSelected = 1;
     private int slotToFill;
     private Sprite highlight = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/invSlot2.jpg")));
     private Sprite select = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/invSlot3.jpg")));
     private SpriteBatch invBatch = new SpriteBatch();
+
+    private Material followMaterial = null;
+    private int slotNumberForFollow = 0;
+    private ItemStack hoveredMaterial = null;
 
     private BitmapFont nameDrawer = new BitmapFont(Gdx.files.internal("Fonts/turok2.fnt"), Gdx.files.internal("Fonts/turok2.png"), false);
     private BitmapFont rarityDrawer = new BitmapFont(Gdx.files.internal("Fonts/Retron2.fnt"), Gdx.files.internal("Fonts/Retron2.png"), false);
@@ -80,8 +87,10 @@ public class Inventory {
         }
 
         if(count.length > 0) {
+            item.slotNumber = slotToFill - 1;
             inventory.add(new ItemStack(item, count[0]));
         } else {
+            item.slotNumber = slotToFill - 1;
             inventory.add(new ItemStack(item, 1));
         }
 
@@ -96,6 +105,7 @@ public class Inventory {
                 inventory.get(inventory.indexOf(temp)).count -= 1;
                 Gdx.app.log("Inventory", temp.stackedItem.name + " size reduced by 1");
             } else {
+                inventory.get(slotSelected - 1).stackedItem.slotNumber = 0;
                 inventory.remove(inventory.get(slotSelected - 1));
                 Gdx.app.log("Inventory", temp.stackedItem.name + " removed from Inventory");
             }
@@ -113,7 +123,31 @@ public class Inventory {
         checkSlotSelected();
         renderInventory();
 
+        if(followMaterial != null && followMaterial.isFollowingMouse) {
+            followMaterial.render(invBatch);
+            followMaterial.setCenter(Gdx.input.getX(), 800 - Gdx.input.getY());
+            if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+                if(inventory.get(slotNumberForFollow - 1).stackedItem.getSprite().getColor().a == 0) {
+                    inventory.get(slotNumberForFollow - 1).stackedItem.getSprite().setAlpha(1);
+                    slotNumberForFollow = 0;
+                } else {
+                    inventory.get(slotNumberForFollow - 1).count += 1;
+                    slotNumberForFollow = 0;
+                }
+
+                followMaterial = null;
+
+            }
+        }
+
         invBatch.end();
+
+        for(ItemStack material : materialsToRemove) {
+            inventory.remove(material);
+        }
+
+        materialsToRemove.clear();
+
     }
 
     private void renderInventory() {
@@ -155,6 +189,24 @@ public class Inventory {
                     rarityDrawer.draw(invBatch, ObtainMethods.rarities.get(item.stackedItem.rarity), (775 - layout.width / 2), 260);
                 }
 
+                if(item.stackedItem.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+                    hoveredMaterial = item;
+                    if(Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+                        if(item.count > 1) {
+                            item.count -= 1;
+                            followMaterial = new Material(item.stackedItem.name, item.stackedItem.description, item.stackedItem.ID, item.stackedItem.rarity);
+                            followMaterial.isFollowingMouse = true;
+                            slotNumberForFollow = item.stackedItem.slotNumber;
+                        } else {
+                            followMaterial = new Material(item.stackedItem.name, item.stackedItem.description, item.stackedItem.ID, item.stackedItem.rarity);
+                            followMaterial.isFollowingMouse = true;
+                            item.stackedItem.getSprite().setAlpha(0);
+                            slotNumberForFollow = item.stackedItem.slotNumber;
+                        }
+                    }
+                } else {
+                    hoveredMaterial = null;
+                }
             }
         }
     }

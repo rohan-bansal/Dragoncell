@@ -34,7 +34,7 @@ public class ModInputProcessor implements InputProcessor {
         if (button == Input.Buttons.RIGHT) {
             inv.leftDown();
             return true;
-        } else if (button == Input.Buttons.LEFT) {
+        } else if(button == Input.Buttons.LEFT) {
             return true;
         }
         return false;

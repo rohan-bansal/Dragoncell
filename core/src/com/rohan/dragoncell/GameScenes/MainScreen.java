@@ -77,7 +77,7 @@ public class MainScreen implements Screen {
         player.render();
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.U)) {
-            player.getInventory().removeItem();
+            player.getInventory().refreshInventory();
         } else if(Gdx.input.isKeyJustPressed(Input.Keys.I)) {
             Gdx.app.log("Main", Gdx.input.getX() + " | " + (800 - Gdx.input.getY()));
         }

@@ -18,13 +18,14 @@ public class Material {
     public boolean unpickupable;
     private Sprite sprite;
 
-    private boolean canBeFilled;
-    private boolean isOre;
-    private boolean isSeed;
+    private boolean canBeFilled = false;
+    private boolean isOre = false;
+    private boolean isSeed = false;
+    public boolean canBeCrafted = false;
     public boolean isFollowingMouse = false;
     public int slotNumber = 0;
 
-    private ArrayList<Material> recipe = new ArrayList<Material>();
+    public ArrayList<Material> recipe = new ArrayList<Material>();
 
     private Material smeltInto;
     private int smeltNumber;
@@ -79,6 +80,7 @@ public class Material {
 
     Material setRecipe(Material[] recipe) {
         this.recipe.addAll(Arrays.asList(recipe));
+        this.canBeCrafted = true;
         return this;
     }
 

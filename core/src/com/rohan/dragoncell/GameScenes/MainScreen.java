@@ -40,6 +40,8 @@ public class MainScreen implements Screen {
 
     private void initMaterials() {
         materials = new MaterialsList();
+        crafting = new Crafting(player.getInventory(), materials);
+
         Gdx.app.log("World", "Materials and Recipes Loaded");
 
         player.getInventory().addItem(materials.AMBER);
@@ -47,14 +49,19 @@ public class MainScreen implements Screen {
         player.getInventory().addItem(materials.AMBER);
         player.getInventory().addItem(materials.WOOD);
         player.getInventory().addItem(materials.FLINT);
-        player.getInventory().addItem(materials.SASMITE_BAR);
+        player.getInventory().addItem(materials.IRON_INGOT);
         player.getInventory().addItem(materials.SASMITE_BAR);
         player.getInventory().addItem(materials.STONE);
-        player.getInventory().addItem(materials.STONE);
+        player.getInventory().addItem(materials.STICK);
         player.getInventory().addItem(materials.STONE);
         player.getInventory().addItem(materials.COPPER_ORE);
-        player.getInventory().addItem(materials.RUBBER);
+        player.getInventory().addItem(materials.COAL);
+        player.getInventory().addItem(materials.COAL);
         player.getInventory().addItem(materials.STICK);
+        player.getInventory().addItem(materials.LEATHER);
+        player.getInventory().addItem(materials.LEATHER);
+        player.getInventory().addItem(materials.PAPER);
+        player.getInventory().addItem(materials.PAPER);
 
     }
 
@@ -62,7 +69,6 @@ public class MainScreen implements Screen {
         player = new Player();
         headsUp = new HUD(player);
         camera = new ViewCam();
-        crafting = new Crafting(player, player.getInventory(), headsUp);
     }
 
 

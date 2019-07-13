@@ -208,10 +208,8 @@ public class Inventory {
         slotToFill = 1;
         for(ItemStack item : inventory) {
             item.stackedItem.setCenter(slots.get(slotToFill - 1).getX() + 25, slots.get(slotToFill - 1).getY() + 25);
-            if(slotNumberForFollow == item.stackedItem.slotNumber) {
-                slotNumberForFollow = slotToFill - 1;
-            }
-            item.stackedItem.slotNumber = slotToFill - 1;
+            item.stackedItem.slotNumber = slotToFill;
+
             slotToFill += 1;
         }
     }
@@ -256,13 +254,11 @@ public class Inventory {
                         followMaterial = new Material(item.stackedItem.name, item.stackedItem.description, item.stackedItem.ID, item.stackedItem.rarity);
                         followMaterial.isFollowingMouse = true;
                         slotNumberForFollow = item.stackedItem.slotNumber;
-                        Gdx.app.log(item.stackedItem.name, slotNumberForFollow + "");
                     } else {
                         followMaterial = new Material(item.stackedItem.name, item.stackedItem.description, item.stackedItem.ID, item.stackedItem.rarity);
                         followMaterial.isFollowingMouse = true;
                         item.stackedItem.getSprite().setAlpha(0);
                         slotNumberForFollow = item.stackedItem.slotNumber;
-                        Gdx.app.log(item.stackedItem.name, slotNumberForFollow + "");
                     }
                 }
             }
@@ -274,7 +270,7 @@ public class Inventory {
                         if(!MainScreen.crafting.addToSlot(MainScreen.crafting.craftingSlots.indexOf(slot) + 1)) {
                             if(inventory.get(slotNumberForFollow - 1).stackedItem.getSprite().getColor().a == 0) {
                                 inventory.remove(inventory.get(slotNumberForFollow - 1));
-                                refreshInventory();
+                                slotNumberForFollow = 0;
                             }
                         }
                         refreshInventory();

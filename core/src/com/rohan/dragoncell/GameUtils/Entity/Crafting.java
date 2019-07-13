@@ -7,15 +7,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.rohan.dragoncell.FileUtils.Tuple;
 import com.rohan.dragoncell.GameUtils.Display.HUD;
 import com.rohan.dragoncell.GameUtils.Material;
+import com.rohan.dragoncell.GameUtils.MaterialsList;
+import com.rohan.dragoncell.Main;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Crafting {
 
-    private Player player;
     private Inventory inventory;
-    private HUD hud;
+    private MaterialsList materials;
 
     public ArrayList<Sprite> craftingSlots = new ArrayList<Sprite>();
     private ArrayList<Material> craftingItems = new ArrayList<Material>();
@@ -24,12 +26,13 @@ public class Crafting {
     private Sprite highlight = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/craftingSlot2.png")));
     private Sprite outputFail = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/output_fail.png")));
     private Sprite outputSuccess = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/output_success.png")));
+    private boolean outputSucc = false;
+    private Material craft = null;
 
 
-    public Crafting(Player player, Inventory inventory, HUD hud) {
-        this.player = player;
+    public Crafting(Inventory inventory, MaterialsList materials) {
         this.inventory = inventory;
-        this.hud = hud;
+        this.materials = materials;
 
         int xPos = 190;
         int yPos = 350;
@@ -51,6 +54,7 @@ public class Crafting {
         }
 
         outputFail.setCenter(280, 100);
+        outputSuccess.setCenter(280, 100);
     }
 
     public void clearGrid() {
@@ -61,7 +65,39 @@ public class Crafting {
     }
 
     public void craft() {
+        ArrayList<Material> craftables = new ArrayList<Material>();
+        for(Material material : materials.materialList) {
+            if(material.canBeCrafted) {
+                craftables.add(material);
+            }
+        }
 
+        ArrayList<String> temp = new ArrayList<String>();
+        ArrayList<String> temp2 = new ArrayList<String>();
+
+        for(Material n : craftingItems) {
+            temp.add(n.name);
+        }
+
+        for(Material m : craftables) {
+            temp2.clear();
+            for(Material x : m.recipe) {
+                temp2.add(x.name);
+            }
+            if (temp2.size() == temp.size()) {
+                if (temp.containsAll(temp2) && temp2.containsAll(temp)) {
+                    Gdx.app.log("Crafting", "Crafting Option: " + m.name);
+                    craft = new Material(m.name, m.description, m.ID, m.rarity);
+                    break;
+                }
+            }
+        }
+
+        if(craft != null) {
+            outputSucc = true;
+            craft.setCenter(outputSuccess.getX() + 25, outputSuccess.getY() + 25);
+            craftingItems.clear();
+        }
     }
 
     public boolean addToSlot(int slot) {
@@ -99,7 +135,22 @@ public class Crafting {
             craftingItems.remove(m_);
         }
 
-        outputFail.draw(batch);
+        if(!outputSucc) {
+            outputFail.draw(batch);
+        } else {
+            outputSuccess.draw(batch);
+        }
+
+        if(craft != null) {
+            craft.render(batch);
+            if(craft.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+                if(Gdx.input.justTouched()) {
+                    inventory.addItem(craft);
+                    craft = null;
+                    outputSucc = false;
+                }
+            }
+        }
 
         craftingItemsToRemove.clear();
     }

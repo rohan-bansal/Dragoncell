@@ -93,7 +93,7 @@ public class MaterialsList {
         FIRESTARTER.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {FLINT, IRON_INGOT, STICK});
         HARDENED_STONE.setObtainMethod(ObtainMethods.FORGE);
         BLACKBERRY.setObtainMethod(ObtainMethods.BUSHES);
-        GREEN_APPLE.setObtainMethod(ObtainMethods.TREE); //
+        GREEN_APPLE.setObtainMethod(ObtainMethods.TREE);
         CARROT.setObtainMethod(ObtainMethods.FARMING);
         HARDENED_WOOD.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {WOOD, WOOD, WOOD});
         CARROT_SEEDS.setObtainMethod(ObtainMethods.SHOVEL).setSeedDrop(CARROT, 2);

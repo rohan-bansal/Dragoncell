@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
-
+import com.rohan.dragoncell.FileUtils.SoundEffects;
 
 
 public class TitleScreen extends AbstractScreen {
@@ -18,6 +18,7 @@ public class TitleScreen extends AbstractScreen {
     private Game game;
 
     private Image title, play, play_glow, load, load_glow, about, about_glow;
+    private SoundEffects music = new SoundEffects();
 
     public TitleScreen(Game game) {
         this.game = game;
@@ -31,6 +32,7 @@ public class TitleScreen extends AbstractScreen {
         about = new Image(new Texture(Gdx.files.internal("Interface/Title/about.png")));
         about_glow = new Image(new Texture(Gdx.files.internal("Interface/Title/about_glow.png")));
 
+        music.loadTrack("Music/afterlife.mp3", true);
 
         title.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() * 5/6, Align.center);
         play.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 3, Align.center);
@@ -39,6 +41,8 @@ public class TitleScreen extends AbstractScreen {
         load_glow.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 5, Align.center);
         about.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 8, Align.center);
         about_glow.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 8 , Align.center);
+
+        music.play();
     }
 
 

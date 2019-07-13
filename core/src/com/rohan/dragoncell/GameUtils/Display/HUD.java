@@ -16,7 +16,7 @@ public class HUD {
     private Player player;
     private SpriteBatch batch = new SpriteBatch();
 
-    private Texture heart, emptyHeart, inventory, chest, crafting_;
+    private Texture heart, emptyHeart, inventory, chest, crafting_, recipeBook;
     private Sprite craftingIcon, clearIcon, clearIconHighlight, finishIcon, finishIconHighlight;
     private boolean clearIconActive = true;
     public boolean craftingActive = true;
@@ -24,6 +24,7 @@ public class HUD {
     private GlyphLayout layout = new GlyphLayout();
     private BitmapFont inventory_ = new BitmapFont(Gdx.files.internal("Fonts/turok2.fnt"), Gdx.files.internal("Fonts/turok2.png"), false);
     private BitmapFont crafting = new BitmapFont(Gdx.files.internal("Fonts/turok2.fnt"), Gdx.files.internal("Fonts/turok2.png"), false);
+    private BitmapFont recipe_ = new BitmapFont(Gdx.files.internal("Fonts/turok2.fnt"), Gdx.files.internal("Fonts/turok2.png"), false);
 
     public HUD(Player player) {
         this.player = player;
@@ -33,6 +34,7 @@ public class HUD {
         inventory = new Texture(Gdx.files.internal("Interface/HUD/inventory.png"));
         chest = new Texture(Gdx.files.internal("Interface/HUD/chestInventory.png"));
         crafting_ = new Texture(Gdx.files.internal("Interface/HUD/gameView.png"));
+        recipeBook = new Texture(Gdx.files.internal("Interface/HUD/recipeBook.png"));
         craftingIcon = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/craftingIcon.png")));
         clearIcon = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/clear.png")));
         clearIconHighlight = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/clear_highlight.png")));
@@ -52,22 +54,14 @@ public class HUD {
 
         crafting.setColor(Color.TAN);
         crafting.getData().setScale(2);
+
+        recipe_.setColor(Color.TAN);
+        recipe_.getData().setScale(1f);
     }
 
     public void render(float delta) {
 
         batch.begin();
-        for(int x = 0; x < player.hearts; x++) {
-            if(player.health == player.hearts) {
-                batch.draw(heart, 20 * x + 5, 770);
-            } else {
-                if(x > player.health - 1) {
-                    batch.draw(emptyHeart, 20 * x + 5, 770);
-                } else {
-                    batch.draw(heart, 20 * x + 5, 770);
-                }
-            }
-        }
 
         batch.draw(inventory, 570, 10);
         craftingIcon.draw(batch);
@@ -76,11 +70,28 @@ public class HUD {
 
         if(craftingActive) {
             batch.draw(crafting_, 20, 10);
+            batch.draw(recipeBook, 80, 520);
+
             MainScreen.crafting.render(batch);
 
             layout.setText(crafting, "Workbench");
             crafting.draw(batch, "Workbench", 20 + (crafting_.getWidth() / 2) - layout.width / 2, 480);
+
+            layout.setText(recipe_, "Material Book");
+            recipe_.draw(batch, "Material Book", 80 + (recipeBook.getWidth() / 2) - layout.width / 2, 770);
+
         } else {
+            for(int x = 0; x < player.hearts; x++) {
+                if(player.health == player.hearts) {
+                    batch.draw(heart, 20 * x + 5, 770);
+                } else {
+                    if(x > player.health - 1) {
+                        batch.draw(emptyHeart, 20 * x + 5, 770);
+                    } else {
+                        batch.draw(heart, 20 * x + 5, 770);
+                    }
+                }
+            }
         }
 
         if(clearIconActive) {

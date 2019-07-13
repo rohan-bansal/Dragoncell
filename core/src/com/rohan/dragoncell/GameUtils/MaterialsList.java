@@ -12,6 +12,7 @@ import com.badlogic.gdx.Gdx;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MaterialsList {
 
@@ -57,6 +58,7 @@ public class MaterialsList {
     public final Material OIL = new Material("Oil", "Very slick", 39, 3);
 
     public ArrayList<Material> materialList = new ArrayList<Material>();
+    public HashMap<String, Boolean> discoveredMaterials = new HashMap<String, Boolean>();
 
     public MaterialsList() {
         initRecipes();
@@ -66,6 +68,7 @@ public class MaterialsList {
             for(Field field : fields) {
                 if (field.getType() == Material.class) {
                     materialList.add((Material) field.get(this));
+                    discoveredMaterials.put(((Material) field.get(this)).name, ((Material) field.get(this)).discovered);
                 }
             }
         } catch (Exception e) {
@@ -75,21 +78,21 @@ public class MaterialsList {
 
     private void initRecipes() {
 
-        STICK.setObtainMethod(ObtainMethods.TREE);
-        STONE.setObtainMethod(ObtainMethods.MINING).setSmelting(HARDENED_STONE, 2);
+        STICK.setObtainMethod(ObtainMethods.TREE).setDiscovered(true);
+        STONE.setObtainMethod(ObtainMethods.MINING).setSmelting(HARDENED_STONE, 2).setDiscovered(true);
         AMBER.setObtainMethod(ObtainMethods.MINING);
-        DIRT.setObtainMethod(ObtainMethods.SHOVEL);
-        WOOD.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {STICK, STICK});
+        DIRT.setObtainMethod(ObtainMethods.SHOVEL).setDiscovered(true);
+        WOOD.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {STICK, STICK}).setDiscovered(true);
         SASMITE_ORE.setObtainMethod(ObtainMethods.MINING).setSmelting(SASMITE_BAR, 1);
         SASMITE_BAR.setObtainMethod(ObtainMethods.FORGE);
-        COAL.setObtainMethod(ObtainMethods.MINING);
+        COAL.setObtainMethod(ObtainMethods.MINING).setDiscovered(true);
         CRIMSTONE_ORE.setObtainMethod(ObtainMethods.MINING).setSmelting(CRIMSTONE_BAR, 1);
         CRIMSTONE_BAR.setObtainMethod(ObtainMethods.MINING);
         IRON_ORE.setObtainMethod(ObtainMethods.MINING).setSmelting(IRON_INGOT, 1);
-        IRON_INGOT.setObtainMethod(ObtainMethods.MINING);
+        IRON_INGOT.setObtainMethod(ObtainMethods.MINING).setDiscovered(true);
         SEEDS.setObtainMethod(ObtainMethods.SHOVEL).setSeedDrop(WHEAT, 3);
         TORCH.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {STICK, COAL, FIRESTARTER});
-        FLINT.setObtainMethod(ObtainMethods.SHOVEL);
+        FLINT.setObtainMethod(ObtainMethods.SHOVEL).setDiscovered(true);
         FIRESTARTER.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {FLINT, IRON_INGOT, STICK});
         HARDENED_STONE.setObtainMethod(ObtainMethods.FORGE);
         BLACKBERRY.setObtainMethod(ObtainMethods.BUSHES);

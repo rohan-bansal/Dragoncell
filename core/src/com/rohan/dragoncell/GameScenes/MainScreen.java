@@ -7,6 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.rohan.dragoncell.FileUtils.ModInputProcessor;
+import com.rohan.dragoncell.FileUtils.SoundEffects;
 import com.rohan.dragoncell.GameUtils.Display.HUD;
 import com.rohan.dragoncell.GameUtils.Display.ViewCam;
 import com.rohan.dragoncell.GameUtils.Entity.Crafting;
@@ -45,8 +46,8 @@ public class MainScreen implements Screen {
         Gdx.app.log("World", "Materials and Recipes Loaded");
 
         player.getInventory().addItem(materials.AMBER);
-        player.getInventory().addItem(materials.AMBER);
-        player.getInventory().addItem(materials.AMBER);
+        player.getInventory().addItem(materials.STICK);
+        player.getInventory().addItem(materials.STICK);
         player.getInventory().addItem(materials.WOOD);
         player.getInventory().addItem(materials.FLINT);
         player.getInventory().addItem(materials.IRON_INGOT);

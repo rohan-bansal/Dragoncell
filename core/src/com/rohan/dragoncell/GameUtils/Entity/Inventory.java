@@ -36,8 +36,7 @@ public class Inventory {
     private ItemStack hoveredMaterial = null;
 
     private BitmapFont nameDrawer = new BitmapFont(Gdx.files.internal("Fonts/turok2.fnt"), Gdx.files.internal("Fonts/turok2.png"), false);
-    private BitmapFont rarityDrawer = new BitmapFont(Gdx.files.internal("Fonts/Retron2.fnt"), Gdx.files.internal("Fonts/Retron2.png"), false);
-    private BitmapFont descriptionDrawer = new BitmapFont(Gdx.files.internal("Fonts/Retron2.fnt"), Gdx.files.internal("Fonts/Retron2.png"), false);
+
     private BitmapFont itemCounter = new BitmapFont(Gdx.files.internal("Fonts/Retron2.fnt"), Gdx.files.internal("Fonts/Retron2.png"), false);
     GlyphLayout layout = new GlyphLayout();
 
@@ -66,10 +65,7 @@ public class Inventory {
         nameDrawer.getData().setScale(2f);
         nameDrawer.setColor(Color.GOLD);
 
-        descriptionDrawer.getData().setScale(0.5f);
-        descriptionDrawer.setColor(Color.TAN);
 
-        rarityDrawer.getData().setScale(0.5f);
     }
 
     public void addItem(Material item, int... count) {
@@ -165,32 +161,6 @@ public class Inventory {
                 if(slotSelected == inventory.indexOf(item) + 1) {
                     layout.setText(nameDrawer, item.stackedItem.name);
                     nameDrawer.draw(invBatch, item.stackedItem.name, (775 - layout.width / 2), 345);
-
-                    layout.setText(descriptionDrawer, item.stackedItem.description);
-                    descriptionDrawer.draw(invBatch, item.stackedItem.description, (775 - layout.width / 2), 280);
-
-                    layout.setText(rarityDrawer, ObtainMethods.rarities.get(item.stackedItem.rarity));
-                    switch(item.stackedItem.rarity) {
-                        case 1:
-                            rarityDrawer.setColor(Color.LIME); //common
-                            break;
-                        case 2:
-                            rarityDrawer.setColor(Color.OLIVE); //uncommon
-                            break;
-                        case 3:
-                            rarityDrawer.setColor(Color.BLUE); //rare
-                            break;
-                        case 4:
-                            rarityDrawer.setColor(Color.MAROON); //epic
-                            break;
-                        case 5:
-                            rarityDrawer.setColor(Color.ORANGE); //legendary
-                            break;
-                        case 6:
-                            rarityDrawer.setColor(Color.SCARLET); //mystic
-                            break;
-                    }
-                    rarityDrawer.draw(invBatch, ObtainMethods.rarities.get(item.stackedItem.rarity), (775 - layout.width / 2), 250);
                 }
 
                 if(item.stackedItem.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {

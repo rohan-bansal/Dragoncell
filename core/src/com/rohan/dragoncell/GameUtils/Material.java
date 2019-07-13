@@ -21,6 +21,7 @@ public class Material {
     private boolean canBeFilled = false;
     private boolean isOre = false;
     private boolean isSeed = false;
+    public boolean discovered = false;
     public boolean canBeCrafted = false;
     public boolean isFollowingMouse = false;
     public int slotNumber = 0;
@@ -59,6 +60,11 @@ public class Material {
 
     public void render(SpriteBatch batch) {
         sprite.draw(batch);
+    }
+
+    public Material setDiscovered(boolean discovered) {
+        this.discovered = discovered;
+        return this;
     }
 
     public void setCenter(float x, float y, boolean... notCenter) {

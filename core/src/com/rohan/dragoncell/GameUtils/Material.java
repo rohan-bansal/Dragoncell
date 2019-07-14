@@ -18,9 +18,9 @@ public class Material {
     public boolean unpickupable;
     private Sprite sprite;
 
-    private boolean canBeFilled = false;
-    private boolean isOre = false;
-    private boolean isSeed = false;
+    public boolean canBeFilled = false;
+    public boolean isOre = false;
+    public boolean isSeed = false;
     public boolean discovered = false;
     public boolean canBeCrafted = false;
     public boolean isFollowingMouse = false;
@@ -58,8 +58,47 @@ public class Material {
         this.sprite.setSize(32, 32);
     }
 
+    public Material(Material material) {
+        this.name = material.name;
+        this.description = material.description;
+        this.ID = material.ID;
+        this.rarity = material.rarity;
+
+        if(material.unpickupable) {
+            this.unpickupable = true;
+        }
+
+        String temp = name.toLowerCase();
+        String temp2 = temp.replaceAll(" ", "_");
+        this.sprite = new Sprite(new Texture(Gdx.files.internal("Materials/" + temp2 + ".png")));
+        this.sprite.setSize(32, 32);
+    }
+
     public void render(SpriteBatch batch) {
         sprite.draw(batch);
+    }
+
+    public Material setVariables(Material material) {
+        material.canBeFilled = canBeFilled;
+        material.canBeCrafted = canBeCrafted;
+        material.isOre = isOre;
+        material.isSeed = isSeed;
+
+        if(canBeCrafted) {
+            material.recipe = recipe;
+        }
+        if(canBeFilled) {
+            material.liquidFill = liquidFill;
+        }
+        if(isOre) {
+            material.smeltInto = smeltInto;
+            material.smeltNumber = smeltNumber;
+        }
+        if(isSeed) {
+            material.seedDrop = seedDrop;
+            material.foodNumber = foodNumber;
+        }
+        return material;
     }
 
     public Material setDiscovered(boolean discovered) {

@@ -44,14 +44,14 @@ public class MaterialsList {
     public final Material BOOK = new Material("Book", "Filled with knowledge", 25, 2);
     public final Material BOTTLE = new Material("Bottle", "Can be filled with various liquids", 26, 2);
     public final Material WATER = new Material("Water", "Debug Item", 27, 1, true);
-    public final Material SAND = new Material("Sand", "Can only be found on beaches and near rivers", 28, 2);
+    public final Material SAND = new Material("Sand", "Near beaches and near rivers", 28, 2);
     public final Material GLASS = new Material("Glass", "Clear, see through version of sand", 29, 2);
     public final Material FIRE = new Material("FIRE", "Debug Item", 30, 1, true);
     public final Material LEATHER = new Material("Leather", "Obtained from cows and horses", 31, 2);
     public final Material PAPER = new Material("Paper", "The pen is mightier than the sword", 32, 2);
     public final Material RUBBER = new Material("Rubber", "The material of the future", 33, 4);
     public final Material WOODEN_BOWL = new Material("Wooden Bowl", "Can hold items", 34, 1);
-    public final Material WELDED_SAND = new Material("Welded Sand", "Extremely packed sand. Very heavy", 35, 2);
+    public final Material WELDED_SAND = new Material("Welded Sand", "Extremely packed sand. Very heavy", 35, 2).setDiscovered(true);
     public final Material THICK_GLASS = new Material("Thick Glass", "2 inches thicker", 36, 2);
     public final Material STEEL_INGOT = new Material("Steel Ingot", "Industrial grade metal", 37, 2);
     public final Material NAILS = new Material("Nails", "Hold a lot of things together", 38, 2);
@@ -76,6 +76,15 @@ public class MaterialsList {
         }
     }
 
+    public Material getMaterialByID(int ID) {
+        for(Material material : materialList) {
+            if(material.ID == ID) {
+                return material;
+            }
+        }
+        return null;
+    }
+
     private void initRecipes() {
 
         STICK.setObtainMethod(ObtainMethods.TREE).setDiscovered(true);
@@ -91,7 +100,7 @@ public class MaterialsList {
         IRON_ORE.setObtainMethod(ObtainMethods.MINING).setSmelting(IRON_INGOT, 1);
         IRON_INGOT.setObtainMethod(ObtainMethods.MINING).setDiscovered(true);
         SEEDS.setObtainMethod(ObtainMethods.SHOVEL).setSeedDrop(WHEAT, 3);
-        TORCH.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {STICK, COAL, FIRESTARTER});
+        TORCH.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {STICK, COAL, FIRESTARTER}).setDiscovered(true);
         FLINT.setObtainMethod(ObtainMethods.SHOVEL).setDiscovered(true);
         FIRESTARTER.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {FLINT, IRON_INGOT, STICK});
         HARDENED_STONE.setObtainMethod(ObtainMethods.FORGE);

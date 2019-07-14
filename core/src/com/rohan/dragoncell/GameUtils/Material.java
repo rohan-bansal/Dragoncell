@@ -24,7 +24,9 @@ public class Material {
     public boolean discovered = false;
     public boolean canBeCrafted = false;
     public boolean canBeJuiced = false;
+    public boolean canBeGround = false;
     public boolean isFollowingMouse = false;
+    public boolean isFuel = false;
     public int slotNumber = 0;
 
     public ArrayList<Material> recipe = new ArrayList<Material>();
@@ -38,7 +40,7 @@ public class Material {
     private ArrayList<Material> liquidFill = new ArrayList<Material>();
     private Material currentLiquid;
 
-    private ArrayList<Material> grinderRecipe = new ArrayList<Material>();
+    public ArrayList<Material> grinderRecipe = new ArrayList<Material>();
 
 
     public Material(String name, String description, int ID, int rarity, boolean... unpickupable) {
@@ -79,6 +81,8 @@ public class Material {
         this.discovered = material.discovered;
         this.obtainMethod = material.obtainMethod;
         this.canBeJuiced = material.canBeJuiced;
+        this.isFollowingMouse = material.isFuel;
+        this.canBeGround = material.canBeGround;
 
         if(material.canBeCrafted) {
             this.recipe = material.recipe;
@@ -95,6 +99,9 @@ public class Material {
         if(material.canBeJuiced) {
             this.juicedInto = material.juicedInto;
         }
+        if(material.canBeGround) {
+            this.grinderRecipe = material.grinderRecipe;
+        }
     }
 
     public void render(SpriteBatch batch) {
@@ -109,6 +116,8 @@ public class Material {
         material.discovered = discovered;
         material.obtainMethod = obtainMethod;
         material.canBeJuiced = canBeJuiced;
+        material.isFuel = isFuel;
+        material.canBeGround = canBeGround;
 
         if(canBeCrafted) {
             material.recipe = recipe;
@@ -122,7 +131,15 @@ public class Material {
         if(isSeed) {
             material.seedDrop = seedDrop;
         }
+        if(canBeGround) {
+            material.grinderRecipe = grinderRecipe;
+        }
         return material;
+    }
+
+    public Material setFuel(boolean fuel) {
+        this.isFuel = fuel;
+        return this;
     }
 
     public Material setDiscovered(boolean discovered) {
@@ -173,6 +190,7 @@ public class Material {
 
     Material setCombinerRecipe(Material[] materials) {
         this.grinderRecipe.addAll(Arrays.asList(materials));
+        this.canBeGround = true;
         return this;
     }
 

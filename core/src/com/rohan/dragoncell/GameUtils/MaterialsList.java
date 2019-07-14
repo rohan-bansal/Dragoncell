@@ -104,7 +104,7 @@ public class MaterialsList {
         CRIMSTONE_BAR.setObtainMethod(ObtainMethods.MINING);
         IRON_ORE.setObtainMethod(ObtainMethods.MINING).setSmelting(IRON_INGOT, 1);
         IRON_INGOT.setObtainMethod(ObtainMethods.MINING).setDiscovered(true);
-        SEEDS.setObtainMethod(ObtainMethods.FARMING).setSeedDrop(WHEAT, 3);
+        SEEDS.setObtainMethod(ObtainMethods.FARMING).setSeedDrop(WHEAT, 3).setRecipe(new Material[] {WHEAT, WHEAT, WHEAT});
         TORCH.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {STICK, COAL, FIRESTARTER}).setDiscovered(true);
         FLINT.setObtainMethod(ObtainMethods.SHOVEL).setDiscovered(true);
         FIRESTARTER.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {FLINT, IRON_INGOT, STICK}).setDiscovered(true);
@@ -113,7 +113,7 @@ public class MaterialsList {
         GREEN_APPLE.setObtainMethod(ObtainMethods.TREE).setJuicingRecipe(APPLE_JUICE);
         CARROT.setObtainMethod(ObtainMethods.FARMING).setJuicingRecipe(CARROT_JUICE);
         HARDENED_WOOD.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {WOOD, WOOD, WOOD});
-        CARROT_SEEDS.setObtainMethod(ObtainMethods.FARMING).setSeedDrop(CARROT, 2);
+        CARROT_SEEDS.setObtainMethod(ObtainMethods.FARMING).setSeedDrop(CARROT, 2).setRecipe(new Material[] {CARROT, CARROT, CARROT});
         WHEAT.setObtainMethod(ObtainMethods.FARMING);
         COPPER_ORE.setObtainMethod(ObtainMethods.MINING).setSmelting(COPPER_INGOT, 1);
         COPPER_INGOT.setObtainMethod(ObtainMethods.MINING);

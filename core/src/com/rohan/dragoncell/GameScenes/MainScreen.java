@@ -11,6 +11,8 @@ import com.rohan.dragoncell.FileUtils.SoundEffects;
 import com.rohan.dragoncell.GameUtils.Display.HUD;
 import com.rohan.dragoncell.GameUtils.Display.ViewCam;
 import com.rohan.dragoncell.GameUtils.Entity.Crafting;
+import com.rohan.dragoncell.GameUtils.Entity.Forge;
+import com.rohan.dragoncell.GameUtils.Entity.MaterialsBook;
 import com.rohan.dragoncell.GameUtils.Entity.Player;
 import com.rohan.dragoncell.GameUtils.Material;
 import com.rohan.dragoncell.GameUtils.MaterialsList;
@@ -24,6 +26,8 @@ public class MainScreen implements Screen {
     private HUD headsUp;
     private ViewCam camera;
     public static Crafting crafting;
+    public static Forge forge;
+    public static MaterialsBook materialsBook;
 
 
     private boolean loadData = false;
@@ -43,6 +47,8 @@ public class MainScreen implements Screen {
     private void initMaterials() {
         materials = new MaterialsList();
         crafting = new Crafting(player.getInventory(), materials);
+        forge = new Forge(player.getInventory(), materials);
+        materialsBook = new MaterialsBook(materials);
 
         Gdx.app.log("World", "Materials and Recipes Loaded");
 
@@ -64,6 +70,9 @@ public class MainScreen implements Screen {
         player.getInventory().addItem(new Material(materials.LEATHER));
         player.getInventory().addItem(new Material(materials.PAPER));
         player.getInventory().addItem(new Material(materials.PAPER));
+        player.getInventory().addItem(new Material(materials.CARROT));
+        player.getInventory().addItem(new Material(materials.CARROT));
+        player.getInventory().addItem(new Material(materials.CARROT));
 
     }
 

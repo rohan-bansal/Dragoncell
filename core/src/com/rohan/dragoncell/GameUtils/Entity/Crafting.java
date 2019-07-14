@@ -32,13 +32,11 @@ public class Crafting {
     private Sprite outputSuccess = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/output_success.png")));
     private boolean outputSucc = false;
     private Material craft = null;
-    private MaterialsBook materialsBook;
 
 
     public Crafting(Inventory inventory, MaterialsList materials) {
         this.inventory = inventory;
         this.materials = materials;
-        this.materialsBook = new MaterialsBook(materials);
 
         int xPos = 190;
         int yPos = 350;
@@ -158,8 +156,6 @@ public class Crafting {
                 }
             }
         }
-
-        materialsBook.render(batch);
 
         craftingItemsToRemove.clear();
     }

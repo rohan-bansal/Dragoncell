@@ -26,10 +26,11 @@ public class MaterialsBook {
     private Sprite forge = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/forge.png")));
     private Sprite pixelTree = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/pixelTree.png")));
 
-    private Sprite next, back, next_high, back_high, return_;
+    private Sprite next, down, back, next_high, back_high, return_;
     GlyphLayout layout = new GlyphLayout();
 
     private int IDpage = 1;
+    private int recipePage = 1;
     private Material shownMat;
     private MaterialsList materials;
 
@@ -41,6 +42,8 @@ public class MaterialsBook {
 
         back = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/arrow_left.png")));
         back_high = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/arrow_left_highlight.png")));
+
+        down = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/arrow_down.png")));
 
         return_ = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/back.png")));
 
@@ -86,6 +89,7 @@ public class MaterialsBook {
             if (return_.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
                 if(Gdx.input.justTouched()) {
                     recipeShowing = false;
+                    recipePage = 1;
                 }
             }
         }
@@ -95,106 +99,254 @@ public class MaterialsBook {
         }
     }
 
+    private void canBeCrafted(SpriteBatch batch, Material tempMaterial) {
+        layout.setText(recipeTypeDrawer, "Workbench");
+        recipeTypeDrawer.draw(batch, "Workbench", 180 - layout.width / 2, 600);
+
+        Material[] recipe = tempMaterial.recipe.toArray(new Material[0]);
+        int spriteX = 270;
+        int spriteY = 700;
+        for(Material material : recipe) {
+            Material tempMaterial2 = new Material(material);
+            material.setVariables(tempMaterial2);
+            tempMaterial2.setCenter(spriteX, spriteY);
+            tempMaterial2.render(batch);
+            spriteX += 50;
+            if(spriteX > 400) {
+                spriteX = 270;
+                spriteY -= 50;
+            }
+
+            if (tempMaterial2.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+                layout.setText(recipeNameDrawer, tempMaterial2.name);
+                recipeNameDrawer.draw(batch, tempMaterial2.name, tempMaterial2.getSprite().getX() +
+                        (tempMaterial2.getSprite().getWidth() / 2)- layout.width / 2, tempMaterial2.getSprite().getY() - 10);
+            }
+        }
+
+        if(tempMaterial.isOre) {
+
+        }
+    }
+
+    private void canBeSmelted(SpriteBatch batch, Material tempMaterial) {
+
+        forge.draw(batch);
+
+        layout.setText(recipeTypeDrawer, "Forge");
+        recipeTypeDrawer.draw(batch, "Forge", forge.getX() + (forge.getWidth() / 2) - layout.width / 2, 625);
+
+        Material temp1 = new Material(tempMaterial);
+        Material temp2 = new Material(tempMaterial.smeltInto);
+
+        temp1.setCenter(290, 650);
+        temp2.setCenter(390, 650);
+
+        temp1.render(batch);
+        temp2.render(batch);
+
+        if (temp1.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+            layout.setText(recipeNameDrawer, temp1.name);
+            recipeNameDrawer.draw(batch, temp1.name, temp1.getSprite().getX() +
+                    (temp1.getSprite().getWidth() / 2)- layout.width / 2, temp1.getSprite().getY() - 10);
+        } else if (temp2.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+            layout.setText(recipeNameDrawer, temp2.name);
+            recipeNameDrawer.draw(batch, temp2.name, temp2.getSprite().getX() +
+                    (temp2.getSprite().getWidth() / 2)- layout.width / 2, temp2.getSprite().getY() - 10);
+        }
+    }
+
+    private void isSeedDrop(SpriteBatch batch, Material tempMaterial) {
+
+        next.setCenter(337, 650);
+        next.draw(batch);
+
+        layout.setText(recipeTypeDrawer, "Farming");
+        recipeTypeDrawer.draw(batch, "Farming", next.getX() + (next.getWidth() / 2) - layout.width / 2, 625);
+
+        Material temp1 = new Material(tempMaterial);
+        Material temp2 = new Material(tempMaterial.seedDrop);
+
+        temp1.setCenter(290, 650);
+        temp2.setCenter(390, 650);
+
+        temp1.render(batch);
+        temp2.render(batch);
+
+        if (temp1.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+            layout.setText(recipeNameDrawer, temp1.name);
+            recipeNameDrawer.draw(batch, temp1.name, temp1.getSprite().getX() +
+                    (temp1.getSprite().getWidth() / 2)- layout.width / 2, temp1.getSprite().getY() - 10);
+        } else if (temp2.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+            layout.setText(recipeNameDrawer, temp2.name);
+            recipeNameDrawer.draw(batch, temp2.name, temp2.getSprite().getX() +
+                    (temp2.getSprite().getWidth() / 2)- layout.width / 2, temp2.getSprite().getY() - 10);
+        }
+    }
+
+    private void obtainedFromTree(SpriteBatch batch, Material tempMaterial) {
+        next.setCenter(337, 650);
+        next.draw(batch);
+
+        layout.setText(recipeTypeDrawer, "Tree");
+        recipeTypeDrawer.draw(batch, "Tree", next.getX() + (next.getWidth() / 2) - layout.width / 2, 625);
+
+        Material temp2 = new Material(tempMaterial);
+        temp2.setCenter(390, 650);
+        temp2.render(batch);
+
+        pixelTree.draw(batch);
+
+        if (temp2.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+            layout.setText(recipeNameDrawer, temp2.name);
+            recipeNameDrawer.draw(batch, temp2.name, temp2.getSprite().getX() +
+                    (temp2.getSprite().getWidth() / 2)- layout.width / 2, temp2.getSprite().getY() - 10);
+        }
+    }
+
+    private void canBeGround(SpriteBatch batch, Material tempMaterial) {
+        down.setCenter(337, 650);
+        down.draw(batch);
+
+        layout.setText(recipeTypeDrawer, "Presser");
+        recipeTypeDrawer.draw(batch, "Presser", down.getX() + 55 + (down.getWidth() / 2) - layout.width / 2, down.getY() + 20);
+
+        Material temp2 = new Material(tempMaterial);
+        temp2.setCenter(337, 615);
+        temp2.render(batch);
+
+        Material[] recipe = temp2.grinderRecipe.toArray(new Material[0]);
+        int spriteX = 315;
+        int spriteY = 690;
+        for(Material material : recipe) {
+            Material tempMaterial2 = new Material(material);
+            material.setVariables(tempMaterial2);
+            tempMaterial2.setCenter(spriteX, spriteY);
+            tempMaterial2.render(batch);
+            spriteX += 50;
+            if (spriteX > 400) {
+                spriteX = 270;
+                spriteY -= 50;
+            }
+
+            if (tempMaterial2.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+                layout.setText(recipeNameDrawer, tempMaterial2.name);
+                recipeNameDrawer.draw(batch, tempMaterial2.name, tempMaterial2.getSprite().getX() +
+                        (tempMaterial2.getSprite().getWidth() / 2)- layout.width / 2, tempMaterial2.getSprite().getY() + 45);
+            }
+        }
+
+        if (temp2.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+            layout.setText(recipeNameDrawer, temp2.name);
+            recipeNameDrawer.draw(batch, temp2.name, temp2.getSprite().getX() +
+                    (temp2.getSprite().getWidth() / 2)- layout.width / 2, temp2.getSprite().getY() - 10);
+        }
+    }
+
+    private void canBeJuiced(SpriteBatch batch, Material tempMaterial) {
+
+        next.setCenter(337, 650);
+        next.draw(batch);
+
+        layout.setText(recipeTypeDrawer, "Juicer");
+        recipeTypeDrawer.draw(batch, "Juicer", next.getX() + (next.getWidth() / 2) - layout.width / 2, 625);
+
+        Material temp1 = new Material(tempMaterial);
+        Material temp2 = new Material(tempMaterial.juicedInto);
+
+        temp1.setCenter(290, 650);
+        temp2.setCenter(390, 650);
+
+        temp1.render(batch);
+        temp2.render(batch);
+
+        if (temp1.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+            layout.setText(recipeNameDrawer, temp1.name);
+            recipeNameDrawer.draw(batch, temp1.name, temp1.getSprite().getX() +
+                    (temp1.getSprite().getWidth() / 2)- layout.width / 2, temp1.getSprite().getY() - 10);
+        } else if (temp2.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+            layout.setText(recipeNameDrawer, temp2.name);
+            recipeNameDrawer.draw(batch, temp2.name, temp2.getSprite().getX() +
+                    (temp2.getSprite().getWidth() / 2)- layout.width / 2, temp2.getSprite().getY() - 10);
+        }
+    }
+
     public void drawMaterialRecipe(SpriteBatch batch) {
         Material tempMaterial = new Material(materials.getMaterialByID(IDpage));
-        //materials.getMaterialByID(IDpage).setVariables(tempMaterial);
         tempMaterial.getSprite().setScale(2f);
         tempMaterial.setCenter(170, 650);
         tempMaterial.render(batch);
 
-        if(tempMaterial.obtainMethod.equals(ObtainMethods.WORKBENCH)) { // item can be crafted by
+        if(tempMaterial.canBeCrafted) { // item can be crafted by
+            if(recipePage == 1) {
+                canBeCrafted(batch, tempMaterial);
+            } else if(recipePage == 2) {
+                canBeSmelted(batch, tempMaterial);
+            } else if(recipePage == 3) {
+                isSeedDrop(batch, tempMaterial);
+            }
 
-            layout.setText(recipeTypeDrawer, "Workbench");
-            recipeTypeDrawer.draw(batch, "Workbench", 180 - layout.width / 2, 600);
-
-            Material[] recipe = tempMaterial.recipe.toArray(new Material[0]);
-            int spriteX = 270;
-            int spriteY = 700;
-            for(Material material : recipe) {
-                Material tempMaterial2 = new Material(material);
-                material.setVariables(tempMaterial2);
-                tempMaterial2.setCenter(spriteX, spriteY);
-                tempMaterial2.render(batch);
-                spriteX += 50;
-                if(spriteX > 400) {
-                    spriteX = 270;
-                    spriteY -= 50;
+            if(tempMaterial.isOre && recipePage == 1) {
+                next.setY(600);
+                next.draw(batch);
+                if(next.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+                    if(Gdx.input.justTouched()) {
+                        recipePage = 2;
+                    }
                 }
-
-                if (tempMaterial2.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
-                    layout.setText(recipeNameDrawer, tempMaterial2.name);
-                    recipeNameDrawer.draw(batch, tempMaterial2.name, tempMaterial2.getSprite().getX() +
-                            (tempMaterial2.getSprite().getWidth() / 2)- layout.width / 2, tempMaterial2.getSprite().getY() - 10);
+            } else if(tempMaterial.isSeed && recipePage == 1) {
+                next.setY(600);
+                next.draw(batch);
+                if(next.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+                    if(Gdx.input.justTouched()) {
+                        recipePage = 3;
+                    }
                 }
-
             }
-        } else if(tempMaterial.obtainMethod.equals(ObtainMethods.MINING)) { // ore can be smelted into
 
-            layout.setText(recipeTypeDrawer, "Forge");
-            recipeTypeDrawer.draw(batch, "Forge", 180 - layout.width / 2, 600);
-            forge.draw(batch);
-
-            Material temp1 = new Material(tempMaterial);
-            Material temp2 = new Material(tempMaterial.smeltInto);
-
-            temp1.setCenter(290, 650);
-            temp2.setCenter(390, 650);
-
-            temp1.render(batch);
-            temp2.render(batch);
-
-            if (temp1.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
-                layout.setText(recipeNameDrawer, temp1.name);
-                recipeNameDrawer.draw(batch, temp1.name, temp1.getSprite().getX() +
-                        (temp1.getSprite().getWidth() / 2)- layout.width / 2, temp1.getSprite().getY() - 10);
-            } else if (temp2.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
-                layout.setText(recipeNameDrawer, temp2.name);
-                recipeNameDrawer.draw(batch, temp2.name, temp2.getSprite().getX() +
-                        (temp2.getSprite().getWidth() / 2)- layout.width / 2, temp2.getSprite().getY() - 10);
+        } else if(tempMaterial.isOre) { // ore can be smelted into
+            if(recipePage == 1) {
+                canBeSmelted(batch, tempMaterial);
+            } else if(recipePage == 2) {
+                isSeedDrop(batch, tempMaterial);
             }
-        } else if(tempMaterial.obtainMethod.equals(ObtainMethods.FARMING) && tempMaterial.isSeed) {  // seed turns into
 
-            layout.setText(recipeTypeDrawer, "Farming");
-            recipeTypeDrawer.draw(batch, "Farming", 175 - layout.width / 2, 600);
-            next.setCenter(337, 650);
-            next.draw(batch);
-
-            Material temp1 = new Material(tempMaterial);
-            Material temp2 = new Material(tempMaterial.seedDrop);
-
-            temp1.setCenter(290, 650);
-            temp2.setCenter(390, 650);
-
-            temp1.render(batch);
-            temp2.render(batch);
-
-            if (temp1.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
-                layout.setText(recipeNameDrawer, temp1.name);
-                recipeNameDrawer.draw(batch, temp1.name, temp1.getSprite().getX() +
-                        (temp1.getSprite().getWidth() / 2)- layout.width / 2, temp1.getSprite().getY() - 10);
-            } else if (temp2.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
-                layout.setText(recipeNameDrawer, temp2.name);
-                recipeNameDrawer.draw(batch, temp2.name, temp2.getSprite().getX() +
-                        (temp2.getSprite().getWidth() / 2)- layout.width / 2, temp2.getSprite().getY() - 10);
+            if(tempMaterial.isSeed && recipePage == 1) {
+                next.setY(600);
+                next.draw(batch);
+                if(next.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+                    if(Gdx.input.justTouched()) {
+                        recipePage += 1;
+                    }
+                }
             }
-        } else if(tempMaterial.obtainMethod.equals(ObtainMethods.TREE)) { //gotten from tree
 
-            layout.setText(recipeTypeDrawer, "Tree");
-            recipeTypeDrawer.draw(batch, "Tree", 175 - layout.width / 2, 600);
-            next.setCenter(337, 650);
-            next.draw(batch);
+        } else if(tempMaterial.isSeed) {  // seed turns into
+            isSeedDrop(batch, tempMaterial);
 
-            Material temp2 = new Material(tempMaterial);
-            temp2.setCenter(390, 650);
-            temp2.render(batch);
-
-            pixelTree.draw(batch);
-
-            if (temp2.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
-                layout.setText(recipeNameDrawer, temp2.name);
-                recipeNameDrawer.draw(batch, temp2.name, temp2.getSprite().getX() +
-                        (temp2.getSprite().getWidth() / 2)- layout.width / 2, temp2.getSprite().getY() - 10);
+        } else if(tempMaterial.obtainMethod.equals(ObtainMethods.TREE)) { // gotten from tree
+            if(recipePage == 1) {
+                obtainedFromTree(batch, tempMaterial);
+            } else if(recipePage == 2) {
+                canBeJuiced(batch, tempMaterial);
             }
+
+
+            if(tempMaterial.canBeJuiced && recipePage == 1) {
+                next.setCenter(450, 600);
+                next.draw(batch);
+                if(next.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+                    if(Gdx.input.justTouched()) {
+                        recipePage += 1;
+                    }
+                }
+            }
+
+        } else if(tempMaterial.canBeJuiced) {
+            canBeJuiced(batch, tempMaterial);
+
+        } else if(tempMaterial.canBeGround) {
+            canBeGround(batch, tempMaterial);
         }
     }
 
@@ -261,7 +413,8 @@ public class MaterialsBook {
         }
 
         if (shownMat.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
-            if(shownMat.canBeCrafted || shownMat.isSeed || shownMat.isOre || shownMat.canBeFilled || shownMat.canBeJuiced) {
+            if(shownMat.canBeCrafted || shownMat.isSeed || shownMat.isOre || shownMat.canBeFilled || shownMat.canBeJuiced
+                    || shownMat.canBeGround || shownMat.obtainMethod.equals(ObtainMethods.TREE)) {
                 if(Gdx.input.justTouched()) {
                     recipeShowing = true;
                 }

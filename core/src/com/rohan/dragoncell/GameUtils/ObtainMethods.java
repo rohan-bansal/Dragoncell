@@ -5,7 +5,6 @@ import java.util.HashMap;
 public class ObtainMethods {
 
     public static final String TREE = "tree";
-    public static final String BUSHES = "picking";
     public static final String FARMING = "farming";
     public static final String HANDSAW = "sawing";
     public static final String GRINDER = "grinding";

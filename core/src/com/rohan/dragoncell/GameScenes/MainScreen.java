@@ -12,6 +12,7 @@ import com.rohan.dragoncell.GameUtils.Display.HUD;
 import com.rohan.dragoncell.GameUtils.Display.ViewCam;
 import com.rohan.dragoncell.GameUtils.Entity.Crafting;
 import com.rohan.dragoncell.GameUtils.Entity.Player;
+import com.rohan.dragoncell.GameUtils.Material;
 import com.rohan.dragoncell.GameUtils.MaterialsList;
 
 public class MainScreen implements Screen {
@@ -45,24 +46,24 @@ public class MainScreen implements Screen {
 
         Gdx.app.log("World", "Materials and Recipes Loaded");
 
-        player.getInventory().addItem(materials.AMBER);
-        player.getInventory().addItem(materials.STICK);
-        player.getInventory().addItem(materials.STICK);
-        player.getInventory().addItem(materials.WOOD);
-        player.getInventory().addItem(materials.FLINT);
-        player.getInventory().addItem(materials.IRON_INGOT);
-        player.getInventory().addItem(materials.SASMITE_BAR);
-        player.getInventory().addItem(materials.STONE);
-        player.getInventory().addItem(materials.STICK);
-        player.getInventory().addItem(materials.STONE);
-        player.getInventory().addItem(materials.COPPER_ORE);
-        player.getInventory().addItem(materials.COAL);
-        player.getInventory().addItem(materials.COAL);
-        player.getInventory().addItem(materials.STICK);
-        player.getInventory().addItem(materials.LEATHER);
-        player.getInventory().addItem(materials.LEATHER);
-        player.getInventory().addItem(materials.PAPER);
-        player.getInventory().addItem(materials.PAPER);
+        player.getInventory().addItem(new Material(materials.AMBER));
+        player.getInventory().addItem(new Material(materials.STICK));
+        player.getInventory().addItem(new Material(materials.STICK));
+        player.getInventory().addItem(new Material(materials.WOOD));
+        player.getInventory().addItem(new Material(materials.FLINT));
+        player.getInventory().addItem(new Material(materials.IRON_INGOT));
+        player.getInventory().addItem(new Material(materials.SASMITE_BAR));
+        player.getInventory().addItem(new Material(materials.STONE));
+        player.getInventory().addItem(new Material(materials.STICK));
+        player.getInventory().addItem(new Material(materials.STONE));
+        player.getInventory().addItem(new Material(materials.COPPER_ORE));
+        player.getInventory().addItem(new Material(materials.COAL));
+        player.getInventory().addItem(new Material(materials.COAL));
+        player.getInventory().addItem(new Material(materials.STICK));
+        player.getInventory().addItem(new Material(materials.LEATHER));
+        player.getInventory().addItem(new Material(materials.LEATHER));
+        player.getInventory().addItem(new Material(materials.PAPER));
+        player.getInventory().addItem(new Material(materials.PAPER));
 
     }
 

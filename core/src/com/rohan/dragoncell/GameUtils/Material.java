@@ -23,18 +23,17 @@ public class Material {
     public boolean isSeed = false;
     public boolean discovered = false;
     public boolean canBeCrafted = false;
+    public boolean canBeJuiced = false;
     public boolean isFollowingMouse = false;
     public int slotNumber = 0;
 
     public ArrayList<Material> recipe = new ArrayList<Material>();
 
-    private Material smeltInto;
-    private int smeltNumber;
+    public Material smeltInto;
 
-    private Material juicedInto;
+    public Material juicedInto;
 
-    private Material seedDrop;
-    private int foodNumber;
+    public Material seedDrop;
 
     private ArrayList<Material> liquidFill = new ArrayList<Material>();
     private Material currentLiquid;
@@ -72,6 +71,30 @@ public class Material {
         String temp2 = temp.replaceAll(" ", "_");
         this.sprite = new Sprite(new Texture(Gdx.files.internal("Materials/" + temp2 + ".png")));
         this.sprite.setSize(32, 32);
+
+        this.canBeFilled = material.canBeFilled;
+        this.canBeCrafted = material.canBeCrafted;
+        this.isOre = material.isOre;
+        this.isSeed = material.isSeed;
+        this.discovered = material.discovered;
+        this.obtainMethod = material.obtainMethod;
+        this.canBeJuiced = material.canBeJuiced;
+
+        if(material.canBeCrafted) {
+            this.recipe = material.recipe;
+        }
+        if(material.canBeFilled) {
+            this.liquidFill = material.liquidFill;
+        }
+        if(material.isOre) {
+            this.smeltInto = material.smeltInto;
+        }
+        if(material.isSeed) {
+            this.seedDrop = material.seedDrop;
+        }
+        if(material.canBeJuiced) {
+            this.juicedInto = material.juicedInto;
+        }
     }
 
     public void render(SpriteBatch batch) {
@@ -83,6 +106,9 @@ public class Material {
         material.canBeCrafted = canBeCrafted;
         material.isOre = isOre;
         material.isSeed = isSeed;
+        material.discovered = discovered;
+        material.obtainMethod = obtainMethod;
+        material.canBeJuiced = canBeJuiced;
 
         if(canBeCrafted) {
             material.recipe = recipe;
@@ -92,11 +118,9 @@ public class Material {
         }
         if(isOre) {
             material.smeltInto = smeltInto;
-            material.smeltNumber = smeltNumber;
         }
         if(isSeed) {
             material.seedDrop = seedDrop;
-            material.foodNumber = foodNumber;
         }
         return material;
     }
@@ -132,14 +156,12 @@ public class Material {
     Material setSmelting(Material ingot, int smeltNumber) {
         this.isOre = true;
         this.smeltInto = ingot;
-        this.smeltNumber = smeltNumber;
         return this;
     }
 
     Material setSeedDrop(Material food, int foodNumber) {
         this.isSeed = true;
         this.seedDrop = food;
-        this.foodNumber = foodNumber;
         return this;
     }
 
@@ -156,6 +178,7 @@ public class Material {
 
     Material setJuicingRecipe(Material juicedInto) {
         this.juicedInto = juicedInto;
+        this.canBeJuiced = true;
         return this;
     }
 }

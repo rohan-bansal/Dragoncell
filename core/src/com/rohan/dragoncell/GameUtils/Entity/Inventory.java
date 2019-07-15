@@ -14,6 +14,7 @@ import com.rohan.dragoncell.GameScenes.MainScreen;
 import com.rohan.dragoncell.GameUtils.ItemStack;
 import com.rohan.dragoncell.GameUtils.Material;
 import com.rohan.dragoncell.GameUtils.ObtainMethods;
+import org.omg.CORBA.MARSHAL;
 
 import java.util.ArrayList;
 
@@ -70,11 +71,13 @@ public class Inventory {
 
     public void addItem(Material item, int... count) {
         Gdx.app.log("Inventory", item.name + " added to inventory");
-        item.setCenter(slots.get(slotToFill - 1).getX() + 25, slots.get(slotToFill - 1).getY() + 25);
+        Material item_ = new Material(item);
+        item_ = item.setVariables(item_);
+        item_.setCenter(slots.get(slotToFill - 1).getX() + 25, slots.get(slotToFill - 1).getY() + 25);
 
-        for(ItemStack item_ : inventory) {
-            if(item_.stackedItem.name.equals(item.name)) {
-                item_.addItem();
+        for(ItemStack item__ : inventory) {
+            if(item__.stackedItem.name.equals(item.name)) {
+                item__.addItem();
                 refreshInventory();
                 return;
             }
@@ -84,11 +87,11 @@ public class Inventory {
         }
 
         if(count.length > 0) {
-            item.slotNumber = slotToFill - 1;
-            inventory.add(new ItemStack(item, count[0]));
+            item_.slotNumber = slotToFill - 1;
+            inventory.add(new ItemStack(item_, count[0]));
         } else {
-            item.slotNumber = slotToFill - 1;
-            inventory.add(new ItemStack(item, 1));
+            item_.slotNumber = slotToFill - 1;
+            inventory.add(new ItemStack(item_, 1));
         }
 
         refreshInventory();
@@ -222,10 +225,12 @@ public class Inventory {
                     if (item.count > 1) {
                         item.count -= 1;
                         followMaterial = new Material(item.stackedItem.name, item.stackedItem.description, item.stackedItem.ID, item.stackedItem.rarity);
+                        followMaterial = item.stackedItem.setVariables(followMaterial);
                         followMaterial.isFollowingMouse = true;
                         slotNumberForFollow = item.stackedItem.slotNumber;
                     } else {
                         followMaterial = new Material(item.stackedItem.name, item.stackedItem.description, item.stackedItem.ID, item.stackedItem.rarity);
+                        followMaterial = item.stackedItem.setVariables(followMaterial);
                         followMaterial.isFollowingMouse = true;
                         item.stackedItem.getSprite().setAlpha(0);
                         slotNumberForFollow = item.stackedItem.slotNumber;
@@ -233,21 +238,56 @@ public class Inventory {
                 }
             }
         } else {
-            for(Sprite slot : MainScreen.crafting.craftingSlots) {
-                if (slot.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
-                    if(followMaterial.getSprite().getBoundingRectangle().overlaps(slot.getBoundingRectangle())) {
-                        Gdx.app.log("Crafting", "Material attempted to drop into slot " + (MainScreen.crafting.craftingSlots.indexOf(slot) + 1));
-                        if(!MainScreen.crafting.addToSlot(MainScreen.crafting.craftingSlots.indexOf(slot) + 1)) {
-                            if(inventory.get(slotNumberForFollow - 1).stackedItem.getSprite().getColor().a == 0) {
-                                inventory.remove(inventory.get(slotNumberForFollow - 1));
-                                slotNumberForFollow = 0;
+            if(MainScreen.headsUp.craftingActive) {
+                for(Sprite slot : MainScreen.crafting.craftingSlots) {
+                    if (slot.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+                        if(followMaterial.getSprite().getBoundingRectangle().overlaps(slot.getBoundingRectangle())) {
+                            Gdx.app.log("Crafting", "Material attempted to drop into slot " + (MainScreen.crafting.craftingSlots.indexOf(slot) + 1));
+                            if(!MainScreen.crafting.addToSlot(MainScreen.crafting.craftingSlots.indexOf(slot) + 1)) {
+                                if(inventory.get(slotNumberForFollow - 1).stackedItem.getSprite().getColor().a == 0) {
+                                    inventory.remove(inventory.get(slotNumberForFollow - 1));
+                                    slotNumberForFollow = 0;
+                                }
                             }
+                            refreshInventory();
+                            return;
                         }
-                        refreshInventory();
-                        return;
                     }
                 }
             }
+            if(MainScreen.headsUp.forgeActive) {
+                for(Sprite slot : MainScreen.forge.forgeSlots) {
+                    if (slot.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+                        if(followMaterial.getSprite().getBoundingRectangle().overlaps(slot.getBoundingRectangle())) {
+                            Gdx.app.log("Forge", (MainScreen.forge.forgeSlots.indexOf(slot) + 1) + "");
+                            if(!MainScreen.forge.addToForgeSlot(MainScreen.forge.forgeSlots.indexOf(slot) + 1)) {
+                                if(inventory.get(slotNumberForFollow - 1).stackedItem.getSprite().getColor().a == 0) {
+                                    inventory.remove(inventory.get(slotNumberForFollow - 1));
+                                    slotNumberForFollow = 0;
+                                }
+                            }
+                            refreshInventory();
+                            return;
+                        }
+                    }
+                }
+                for(Sprite slot : MainScreen.forge.fuelSlots) {
+                    if (slot.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+                        if(followMaterial.getSprite().getBoundingRectangle().overlaps(slot.getBoundingRectangle())) {
+                            Gdx.app.log("ForgeFuel", "Material attempted to drop into slot " + (MainScreen.forge.fuelSlots.indexOf(slot) + 1));
+                            if(!MainScreen.forge.addToFuelSlot(MainScreen.forge.fuelSlots.indexOf(slot) + 1)) {
+                                if(inventory.get(slotNumberForFollow - 1).stackedItem.getSprite().getColor().a == 0) {
+                                    inventory.remove(inventory.get(slotNumberForFollow - 1));
+                                    slotNumberForFollow = 0;
+                                }
+                            }
+                            refreshInventory();
+                            return;
+                        }
+                    }
+                }
+            }
+
             dropBack();
         }
     }

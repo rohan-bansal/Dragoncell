@@ -16,14 +16,14 @@ import java.util.HashMap;
 
 public class MaterialsList {
 
-    public final Material STICK = new Material("Wooden Stick", "Can be obtained from trees or carving", 1, 1);
+    public final Material STICK = new Material("Wooden Stick", "Can be obtained from trees or carving", 1, 1).setFuel(true);
     public final Material STONE = new Material("Stone", "Hard material obtained from mining", 2, 1);
     public final Material AMBER = new Material("Amber", "Might contain a mosquito", 3, 3);
-    public final Material DIRT = new Material("Dirt", "Diggy diggy hole", 4, 1);
+    public final Material DIRT = new Material("Dirt", "Diggy diggy hole", 4, 1).setFuel(true);
     public final Material WOOD = new Material("Wood", "Obtained from trees through sawing", 5, 1);
     public final Material SASMITE_ORE = new Material("Sasmite Ore", "Created from Earth's seismic motions", 6, 3);
     public final Material SASMITE_BAR = new Material("Sasmite Bar", "Very hard and shock resistant metal", 7, 3);
-    public final Material COAL = new Material("Coal", "Powers almost everything", 8, 1);
+    public final Material COAL = new Material("Coal", "Powers almost everything", 8, 1).setFuel(true);
     public final Material CRIMSTONE_ORE = new Material("Crimstone Ore", "Epic mining drop", 9, 4);
     public final Material CRIMSTONE_BAR = new Material("Crimstone Bar", "Contains the essence of the Earth's core", 10, 4);
     public final Material IRON_ORE = new Material("Iron Ore", "One of the most abundant ores", 11, 2);
@@ -36,7 +36,7 @@ public class MaterialsList {
     public final Material BLACKBERRY = new Material("Blackberry", "Found in abundance on bushes", 18, 1);
     public final Material GREEN_APPLE = new Material("Green Apple", "Commonly found on trees", 19, 1);
     public final Material CARROT = new Material("Carrot", "Found near rivers", 20, 1);
-    public final Material HARDENED_WOOD = new Material("Hardened Wood", "Can hold much more weight", 21, 1);
+    public final Material HARDENED_WOOD = new Material("Hardened Wood", "Can hold much more weight", 21, 1).setFuel(true);
     public final Material CARROT_SEEDS = new Material("Carrot Seeds", "Grows multiple carrots", 22, 2);
     public final Material WHEAT = new Material("Wheat", "Most abundant crop in the world", 23, 1);
     public final Material COPPER_ORE = new Material("Copper Ore", "Stands out with its gold sheen", 24, 2);
@@ -55,7 +55,7 @@ public class MaterialsList {
     public final Material THICK_GLASS = new Material("Thick Glass", "2 inches thicker", 37, 2);
     public final Material STEEL_INGOT = new Material("Steel Ingot", "Industrial grade metal", 38, 2);
     public final Material NAILS = new Material("Nails", "Hold a lot of things together", 39, 2);
-    public final Material OIL = new Material("Oil", "Very slick", 40, 3);
+    public final Material OIL = new Material("Oil", "Very slick", 40, 3).setFuel(true);
     public final Material CARROT_JUICE = new Material("Carrot Juice", "21 carrots in a bottle", 41, 1);
     public final Material APPLE_JUICE = new Material("Apple Cider", "Squashed apples", 42, 1);
     public final Material BERRY_JUICE = new Material("Berry Juice", "Tastes very good", 43, 1);

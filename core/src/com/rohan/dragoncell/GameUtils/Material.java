@@ -29,6 +29,8 @@ public class Material {
     public boolean isFuel = false;
     public int slotNumber = 0;
 
+    public int fuelPos = 0, forgePos = 0;
+
     public ArrayList<Material> recipe = new ArrayList<Material>();
 
     public Material smeltInto;

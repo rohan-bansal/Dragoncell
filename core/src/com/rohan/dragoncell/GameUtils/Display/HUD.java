@@ -120,11 +120,7 @@ public class HUD {
             if (clearIcon.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
                 clearIconHighlight.draw(batch);
                 if (Gdx.input.justTouched()) {
-                    if (craftingActive) {
-                        MainScreen.crafting.clearGrid();
-                    } else if (forgeActive) {
-                        MainScreen.forge.clearGrid();
-                    }
+                    MainScreen.crafting.clearGrid();
                 }
             } else {
                 clearIcon.draw(batch);
@@ -159,7 +155,7 @@ public class HUD {
                 } else {
                     craftingActive = false;
                     clearIconActive = false;
-                    finishIconActive = true;
+                    finishIconActive = false;
                 }
             }
         } else if(materialsBookIcon.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {

@@ -1,5 +1,6 @@
 package com.rohan.dragoncell.GameUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ObtainMethods {
@@ -30,4 +31,15 @@ public class ObtainMethods {
         put(6, "Mystic");
     }};
 
+    public static final HashMap<String, Float> fuel = new HashMap<String, Float>() {{
+            put("Coal", 20f);
+            put("Wood", 30f);
+            put("Hardened Wood", 25f);
+            put("Wooden Stick", 35f);
+        }};
+
+    public static double round (double value, int precision) {
+        int scale = (int) Math.pow(10, precision);
+        return (double) Math.round(value * scale) / scale;
+    }
 }

@@ -23,7 +23,7 @@ public class MainScreen implements Screen {
     private MaterialsList materials;
     private Player player;
     private SpriteBatch mainBatch = new SpriteBatch();
-    private HUD headsUp;
+    public static HUD headsUp;
     private ViewCam camera;
     public static Crafting crafting;
     public static Forge forge;
@@ -92,6 +92,10 @@ public class MainScreen implements Screen {
         headsUp.render(delta);
 
         player.render();
+
+        if(forge.smeltingActive && !headsUp.forgeActive) {
+            forge.threadTime();
+        }
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.U)) {
             player.getInventory().refreshInventory();

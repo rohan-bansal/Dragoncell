@@ -7,22 +7,30 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.physics.box2d.World;
 import com.rohan.dragoncell.GameScenes.MainScreen;
 import com.rohan.dragoncell.GameUtils.Entity.Player;
+
+import java.util.HashMap;
 
 public class HUD {
 
     private Player player;
     private SpriteBatch batch = new SpriteBatch();
 
-    private Texture heart, emptyHeart, inventory, chest, crafting_, recipeBook, forge_;
-    private Sprite craftingIcon, clearIcon, materialsBookIcon, forgeIcon, clearIconHighlight, finishIcon, finishIconHighlight;
+    private Texture heart, emptyHeart, inventory, chest, crafting_, recipeBook, forge_, collection_;
+    private Sprite craftingIcon, clearIcon, materialsBookIcon, forgeIcon, collectionIcon, clearIconHighlight, finishIcon, finishIconHighlight;
+    private Sprite alert_ = new Sprite(new Texture(Gdx.files.internal("Interface/World/Collection/alert.png")));
     private boolean clearIconActive = true;
     private boolean finishIconActive = true;
     public boolean craftingActive = true;
     public boolean forgeActive = false;
+    public boolean collectionActive = false;
     public boolean matBookActive = true;
+
+    public HashMap<String, String> alert = new HashMap<String, String>();
+    private BitmapFont alertDrawer = new BitmapFont(Gdx.files.internal("Fonts/ari2.fnt"), Gdx.files.internal("Fonts/ari2.png"), false);
+
+    private float animTime = 0f;
 
 
     private GlyphLayout layout = new GlyphLayout();
@@ -39,8 +47,10 @@ public class HUD {
         chest = new Texture(Gdx.files.internal("Interface/HUD/chestInventory.png"));
         crafting_ = new Texture(Gdx.files.internal("Interface/HUD/workbench_view.png"));
         forge_ = new Texture(Gdx.files.internal("Interface/HUD/forge_view.png"));
+        collection_ = new Texture(Gdx.files.internal("Interface/HUD/Collection/woodland.png"));
         recipeBook = new Texture(Gdx.files.internal("Interface/HUD/recipeBook.png"));
         craftingIcon = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/craftingIcon.png")));
+        collectionIcon = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/collectionIcon.png")));
         clearIcon = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/clear.png")));
         forgeIcon = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/forgeIcon.png")));
         materialsBookIcon = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/materialsBookIcon.png")));
@@ -51,6 +61,7 @@ public class HUD {
         craftingIcon.setPosition(549, 400);
         forgeIcon.setPosition(549, 370);
         materialsBookIcon.setPosition(549,430);
+        collectionIcon.setPosition(549, 340);
 
         inventory_.setColor(Color.TAN);
         inventory_.getData().setScale(2);
@@ -60,6 +71,34 @@ public class HUD {
 
         recipe_.setColor(Color.TAN);
         recipe_.getData().setScale(1f);
+
+        alert_.setPosition(-220, 10);
+        alertDrawer.setColor(Color.GOLDENROD);
+        alertDrawer.getData().setScale(0.5f);
+    }
+
+    public void changeCollectionScene(int area) {
+
+        switch(area) {
+            case 1:
+                collection_ = new Texture(Gdx.files.internal("Interface/HUD/Collection/woodland.png"));
+                break;
+            case 2:
+                collection_ = new Texture(Gdx.files.internal("Interface/HUD/Collection/woodland_river.png"));
+                break;
+            case 3:
+                collection_ = new Texture(Gdx.files.internal("Interface/HUD/Collection/desert.png"));
+                break;
+            case 4:
+                collection_ = new Texture(Gdx.files.internal("Interface/HUD/Collection/beach.png"));
+                break;
+            case 5:
+                collection_ = new Texture(Gdx.files.internal("Interface/HUD/Collection/oreland.png"));
+                break;
+            case 6:
+                collection_ = new Texture(Gdx.files.internal("Interface/HUD/Collection/island.png"));
+                break;
+        }
     }
 
     public void render(float delta) {
@@ -70,6 +109,7 @@ public class HUD {
         craftingIcon.draw(batch);
         forgeIcon.draw(batch);
         materialsBookIcon.draw(batch);
+        collectionIcon.draw(batch);
 
         checkClicks();
 
@@ -114,6 +154,9 @@ public class HUD {
 
             layout.setText(crafting, "Forge");
             crafting.draw(batch, "Forge", 20 + (forge_.getWidth() / 2) - layout.width / 2, 480);
+        } else if(collectionActive) {
+            batch.draw(collection_, 20, 10);
+            MainScreen.collectionView.render(batch);
         }
 
         if(clearIconActive) {
@@ -140,6 +183,33 @@ public class HUD {
         layout.setText(inventory_, "Inventory");
         inventory_.draw(batch, "Inventory", 570 + (inventory.getWidth() / 2) - layout.width / 2, 770);
 
+        if(alert.size() != 0) {
+            alertDrawer.setColor(Color.GOLDENROD);
+            alertDrawer.getData().setScale(0.5f);
+
+            alert_.draw(batch);
+            layout.setText(alertDrawer, alert.get("alert_text"));
+            alertDrawer.draw(batch, alert.get("alert_text"), alert_.getX() + 20 + (alert_.getWidth() / 2) - layout.width / 2, 55);
+
+            alertDrawer.setColor(Color.TAN);
+            alertDrawer.getData().setScale(0.4f);
+
+            layout.setText(alertDrawer, alert.get("alert_description"));
+            alertDrawer.draw(batch, alert.get("alert_description"), alert_.getX() + 10 + (alert_.getWidth() / 2) - layout.width / 2, 35);
+
+            animTime += Gdx.graphics.getDeltaTime();
+
+            if(alert_.getX() >= 15) {
+                if(animTime > 5) {
+                    alert.clear();
+                    alert_.setPosition(-220, 10);
+                    animTime = 0f;
+                }
+            } else {
+                alert_.setX(alert_.getX() + 2.5f);
+            }
+        }
+
         batch.end();
 
     }
@@ -150,6 +220,7 @@ public class HUD {
                 if(!craftingActive) {
                     craftingActive = true;
                     forgeActive = false;
+                    collectionActive = false;
                     clearIconActive = true;
                     finishIconActive = true;
                 } else {
@@ -171,11 +242,24 @@ public class HUD {
                 if(!forgeActive) {
                     forgeActive = true;
                     craftingActive = false;
+                    collectionActive = false;
                     clearIconActive = false;
                     finishIconActive = false;
                 } else {
                     forgeActive = false;
                     clearIconActive = false;
+                }
+            }
+        } else if(collectionIcon.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+            if (Gdx.input.justTouched()) {
+                if (!collectionActive) {
+                    forgeActive = false;
+                    craftingActive = false;
+                    clearIconActive = false;
+                    finishIconActive = false;
+                    collectionActive = true;
+                } else {
+                    collectionActive = false;
                 }
             }
         }

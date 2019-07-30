@@ -32,13 +32,15 @@ public class Inventory {
     private Sprite select = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/invSlot3.jpg")));
     private SpriteBatch invBatch = new SpriteBatch();
 
-    public Material followMaterial = null;
+    public ItemStack followMaterial = null;
     private int slotNumberForFollow = 0;
     private ItemStack hoveredMaterial = null;
 
     private BitmapFont nameDrawer = new BitmapFont(Gdx.files.internal("Fonts/turok2.fnt"), Gdx.files.internal("Fonts/turok2.png"), false);
 
     private BitmapFont itemCounter = new BitmapFont(Gdx.files.internal("Fonts/Retron2.fnt"), Gdx.files.internal("Fonts/Retron2.png"), false);
+    private BitmapFont followItemCounter = new BitmapFont(Gdx.files.internal("Fonts/Retron2.fnt"), Gdx.files.internal("Fonts/Retron2.png"), false);
+
     GlyphLayout layout = new GlyphLayout();
 
 
@@ -77,7 +79,11 @@ public class Inventory {
 
         for(ItemStack item__ : inventory) {
             if(item__.stackedItem.name.equals(item.name)) {
-                item__.addItem();
+                if(count.length > 0) {
+                    item__.count += count[0];
+                } else {
+                    item__.addItem();
+                }
                 refreshInventory();
                 return;
             }
@@ -117,13 +123,19 @@ public class Inventory {
     }
 
     public void dropBack() {
-        if(slotNumberForFollow != 0 && followMaterial != null  && followMaterial.isFollowingMouse) {
+        if(slotNumberForFollow != 0 && followMaterial != null  && followMaterial.stackedItem.isFollowingMouse) {
             if(inventory.get(slotNumberForFollow - 1).stackedItem.getSprite().getColor().a == 0) {
                 inventory.get(slotNumberForFollow - 1).stackedItem.getSprite().setAlpha(1);
+                if(followMaterial.count > 1) {
+                    inventory.get(slotNumberForFollow - 1).count += followMaterial.count - 1;
+                }
                 slotNumberForFollow = 0;
+                Gdx.app.log("SLOT", "number reset");
+
             } else {
-                inventory.get(slotNumberForFollow - 1).count += 1;
+                inventory.get(slotNumberForFollow - 1).count += followMaterial.count;
                 slotNumberForFollow = 0;
+                Gdx.app.log("SLOT", "number reset");
             }
 
             followMaterial = null;
@@ -138,9 +150,12 @@ public class Inventory {
         checkSlotSelected();
         renderInventory();
 
-        if(followMaterial != null && followMaterial.isFollowingMouse) {
-            followMaterial.render(invBatch);
-            followMaterial.setCenter(Gdx.input.getX(), 800 - Gdx.input.getY());
+        if(followMaterial != null && followMaterial.stackedItem.isFollowingMouse) {
+            if(followMaterial.count > 1) {
+                itemCounter.draw(invBatch, followMaterial.count + "", followMaterial.stackedItem.getSprite().getX() + 26, followMaterial.stackedItem.getSprite().getY() + 8);
+            }
+            followMaterial.stackedItem.render(invBatch);
+            followMaterial.stackedItem.setCenter(Gdx.input.getX(), 800 - Gdx.input.getY());
         }
 
         invBatch.end();
@@ -224,30 +239,60 @@ public class Inventory {
                 if(item.stackedItem.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
                     if (item.count > 1) {
                         item.count -= 1;
-                        followMaterial = new Material(item.stackedItem.name, item.stackedItem.description, item.stackedItem.ID, item.stackedItem.rarity);
-                        followMaterial = item.stackedItem.setVariables(followMaterial);
-                        followMaterial.isFollowingMouse = true;
+                        followMaterial = new ItemStack(new Material(item.stackedItem.name, item.stackedItem.description, item.stackedItem.ID, item.stackedItem.rarity), 1);
+                        followMaterial.stackedItem = item.stackedItem.setVariables(followMaterial.stackedItem);
+                        followMaterial.stackedItem.isFollowingMouse = true;
                         slotNumberForFollow = item.stackedItem.slotNumber;
                     } else {
-                        followMaterial = new Material(item.stackedItem.name, item.stackedItem.description, item.stackedItem.ID, item.stackedItem.rarity);
-                        followMaterial = item.stackedItem.setVariables(followMaterial);
-                        followMaterial.isFollowingMouse = true;
+                        followMaterial = new ItemStack(new Material(item.stackedItem.name, item.stackedItem.description, item.stackedItem.ID, item.stackedItem.rarity), 1);
+                        followMaterial.stackedItem = item.stackedItem.setVariables(followMaterial.stackedItem);
+                        followMaterial.stackedItem.isFollowingMouse = true;
                         item.stackedItem.getSprite().setAlpha(0);
                         slotNumberForFollow = item.stackedItem.slotNumber;
                     }
                 }
             }
         } else {
+            for(ItemStack item : inventory) {
+                if(item.stackedItem.getSprite().getBoundingRectangle().overlaps(followMaterial.stackedItem.getSprite().getBoundingRectangle())) {
+                    if(item.stackedItem.name.equals(followMaterial.stackedItem.name)) {
+                        if(item.stackedItem.getSprite().getColor().a != 0) {
+                            if (item.count > 1) {
+                                item.count -= 1;
+                                followMaterial.count += 1;
+                                slotNumberForFollow = item.stackedItem.slotNumber;
+                                return;
+                            } else {
+                                followMaterial.count += 1;
+                                item.stackedItem.getSprite().setAlpha(0);
+                                slotNumberForFollow = item.stackedItem.slotNumber;
+                                return;
+                            }
+                        }
+
+                    }
+
+                }
+            }
             if(MainScreen.headsUp.craftingActive) {
                 for(Sprite slot : MainScreen.crafting.craftingSlots) {
                     if (slot.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
-                        if(followMaterial.getSprite().getBoundingRectangle().overlaps(slot.getBoundingRectangle())) {
+                        if(followMaterial.stackedItem.getSprite().getBoundingRectangle().overlaps(slot.getBoundingRectangle())) {
                             Gdx.app.log("Crafting", "Material attempted to drop into slot " + (MainScreen.crafting.craftingSlots.indexOf(slot) + 1));
                             if(!MainScreen.crafting.addToSlot(MainScreen.crafting.craftingSlots.indexOf(slot) + 1)) {
-                                if(inventory.get(slotNumberForFollow - 1).stackedItem.getSprite().getColor().a == 0) {
-                                    inventory.remove(inventory.get(slotNumberForFollow - 1));
-                                    slotNumberForFollow = 0;
+                                if(followMaterial.count == 1) {
+                                    if(inventory.get(slotNumberForFollow - 1).stackedItem.getSprite().getColor().a == 0) {
+                                        inventory.remove(inventory.get(slotNumberForFollow - 1));
+                                        slotNumberForFollow = 0;
+                                        followMaterial = null;
+                                    } else {
+                                        slotNumberForFollow = 0;
+                                        followMaterial = null;
+                                    }
+                                } else {
+                                    followMaterial.count -= 1;
                                 }
+
                             }
                             refreshInventory();
                             return;
@@ -258,7 +303,7 @@ public class Inventory {
             if(MainScreen.headsUp.forgeActive) {
                 for(Sprite slot : MainScreen.forge.forgeSlots) {
                     if (slot.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
-                        if(followMaterial.getSprite().getBoundingRectangle().overlaps(slot.getBoundingRectangle())) {
+                        if(followMaterial.stackedItem.getSprite().getBoundingRectangle().overlaps(slot.getBoundingRectangle())) {
                             Gdx.app.log("Forge", (MainScreen.forge.forgeSlots.indexOf(slot) + 1) + "");
                             if(!MainScreen.forge.addToForgeSlot(MainScreen.forge.forgeSlots.indexOf(slot) + 1)) {
                                 if(inventory.get(slotNumberForFollow - 1).stackedItem.getSprite().getColor().a == 0) {
@@ -273,7 +318,7 @@ public class Inventory {
                 }
                 for(Sprite slot : MainScreen.forge.fuelSlots) {
                     if (slot.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
-                        if(followMaterial.getSprite().getBoundingRectangle().overlaps(slot.getBoundingRectangle())) {
+                        if(followMaterial.stackedItem.getSprite().getBoundingRectangle().overlaps(slot.getBoundingRectangle())) {
                             Gdx.app.log("ForgeFuel", "Material attempted to drop into slot " + (MainScreen.forge.fuelSlots.indexOf(slot) + 1));
                             if(!MainScreen.forge.addToFuelSlot(MainScreen.forge.fuelSlots.indexOf(slot) + 1)) {
                                 if(inventory.get(slotNumberForFollow - 1).stackedItem.getSprite().getColor().a == 0) {

@@ -36,7 +36,30 @@ public class ObtainMethods {
             put("Wood", 30f);
             put("Hardened Wood", 25f);
             put("Wooden Stick", 35f);
-        }};
+    }};
+
+    // 1 woodland
+    // 2 woodland river
+    // 3 desert
+    // 4 beach
+    // 5 ore land
+    // 6 island
+
+    // room #, up, right, down, left
+
+    // biome type, room #
+
+    public static final HashMap<Integer, String[]> areas = new HashMap<Integer, String[]>() {{
+        put(1, new String[] {"3 2", "2 3", "5 4", "5 5"});
+        put(2, new String[] {"3 6", "1 7", "1 1", "4 8"});
+        put(3, new String[] {"2 2", "2 3", "5 4", "1 1"});
+        put(4, new String[] {"1 1", "2 3", "5 4", "5 5"});
+        put(5, new String[] {"2 2", "1 1", "5 4", "5 5"});
+        put(6, new String[] {"5 11", "5 11", "3 2", "4 8"});
+        put(7, new String[] {"5 9", "5 10", "2 3", "3 2"});
+        put(8, new String[] {"4 8", "3 2", "4 8", "  "});
+
+    }};
 
     public static double round (double value, int precision) {
         int scale = (int) Math.pow(10, precision);

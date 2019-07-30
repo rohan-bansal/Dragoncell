@@ -10,10 +10,7 @@ import com.rohan.dragoncell.FileUtils.ModInputProcessor;
 import com.rohan.dragoncell.FileUtils.SoundEffects;
 import com.rohan.dragoncell.GameUtils.Display.HUD;
 import com.rohan.dragoncell.GameUtils.Display.ViewCam;
-import com.rohan.dragoncell.GameUtils.Entity.Crafting;
-import com.rohan.dragoncell.GameUtils.Entity.Forge;
-import com.rohan.dragoncell.GameUtils.Entity.MaterialsBook;
-import com.rohan.dragoncell.GameUtils.Entity.Player;
+import com.rohan.dragoncell.GameUtils.Entity.*;
 import com.rohan.dragoncell.GameUtils.Material;
 import com.rohan.dragoncell.GameUtils.MaterialsList;
 
@@ -28,6 +25,7 @@ public class MainScreen implements Screen {
     public static Crafting crafting;
     public static Forge forge;
     public static MaterialsBook materialsBook;
+    public static Collection collectionView;
 
 
     private boolean loadData = false;
@@ -49,20 +47,23 @@ public class MainScreen implements Screen {
         crafting = new Crafting(player.getInventory(), materials);
         forge = new Forge(player.getInventory(), materials);
         materialsBook = new MaterialsBook(materials);
+        collectionView = new Collection(materials, player);
 
         Gdx.app.log("World", "Materials and Recipes Loaded");
 
-        player.getInventory().addItem(new Material(materials.AMBER));
         player.getInventory().addItem(new Material(materials.STICK));
         player.getInventory().addItem(new Material(materials.STICK));
         player.getInventory().addItem(new Material(materials.WOOD));
         player.getInventory().addItem(new Material(materials.FLINT));
         player.getInventory().addItem(new Material(materials.IRON_INGOT));
-        player.getInventory().addItem(new Material(materials.SASMITE_BAR));
+        player.getInventory().addItem(new Material(materials.STONE));
+        player.getInventory().addItem(new Material(materials.STONE));
         player.getInventory().addItem(new Material(materials.STONE));
         player.getInventory().addItem(new Material(materials.STICK));
         player.getInventory().addItem(new Material(materials.STONE));
         player.getInventory().addItem(new Material(materials.COPPER_ORE));
+        player.getInventory().addItem(new Material(materials.COAL));
+        player.getInventory().addItem(new Material(materials.COAL));
         player.getInventory().addItem(new Material(materials.COAL));
         player.getInventory().addItem(new Material(materials.COAL));
         player.getInventory().addItem(new Material(materials.STICK));
@@ -91,7 +92,7 @@ public class MainScreen implements Screen {
         camera.render();
         headsUp.render(delta);
 
-        player.render();
+        player.renderInventory();
 
         if(forge.smeltingActive && !headsUp.forgeActive) {
             forge.threadTime();
@@ -101,6 +102,8 @@ public class MainScreen implements Screen {
             player.getInventory().refreshInventory();
         } else if(Gdx.input.isKeyJustPressed(Input.Keys.I)) {
             Gdx.app.log("Main", Gdx.input.getX() + " | " + (800 - Gdx.input.getY()));
+        } else if(Gdx.input.isKeyJustPressed(Input.Keys.O)) {
+            collectionView.refreshView();
         }
 
     }

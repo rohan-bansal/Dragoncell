@@ -106,7 +106,8 @@ public class Crafting {
     }
 
     public boolean addToSlot(int slot) {
-        Material temp = new Material(inventory.followMaterial.name, inventory.followMaterial.description, inventory.followMaterial.ID, inventory.followMaterial.rarity);
+        Material temp = new Material(inventory.followMaterial.stackedItem.name,
+                inventory.followMaterial.stackedItem.description, inventory.followMaterial.stackedItem.ID, inventory.followMaterial.stackedItem.rarity);
         temp.setCenter(slotPositions.get(slot).x, slotPositions.get(slot).y);
 
         for(Material material : craftingItems) {
@@ -115,9 +116,15 @@ public class Crafting {
                 return true;
             }
         }
+
         Gdx.app.log("Crafting", "Drop Successful");
         craftingItems.add(temp);
-        inventory.followMaterial = null;
+
+        /*if(inventory.followMaterial.count > 1) {
+            inventory.followMaterial.count -= 1;
+        } else {
+            inventory.followMaterial = null;
+        }*/
         return false;
     }
 

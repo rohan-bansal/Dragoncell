@@ -51,7 +51,7 @@ public class MaterialsList {
     public final Material PAPER = new Material("Paper", "The pen is mightier than the sword", 33, 2);
     public final Material RUBBER = new Material("Rubber", "The material of the future", 34, 4);
     public final Material WOODEN_BOWL = new Material("Wooden Bowl", "Can hold items", 35, 1);
-    public final Material WELDED_SAND = new Material("Welded Sand", "Extremely packed sand. Very heavy", 36, 2).setDiscovered(true);
+    public final Material WELDED_SAND = new Material("Welded Sand", "Extremely packed sand. Very heavy", 36, 2);
     public final Material THICK_GLASS = new Material("Thick Glass", "2 inches thicker", 37, 2);
     public final Material STEEL_INGOT = new Material("Steel Ingot", "Industrial grade metal", 38, 2);
     public final Material NAILS = new Material("Nails", "Hold a lot of things together", 39, 2);
@@ -59,6 +59,8 @@ public class MaterialsList {
     public final Material CARROT_JUICE = new Material("Carrot Juice", "21 carrots in a bottle", 41, 1);
     public final Material APPLE_JUICE = new Material("Apple Cider", "Squashed apples", 42, 1);
     public final Material BERRY_JUICE = new Material("Berry Juice", "Tastes very good", 43, 1);
+    public final Material CHERRY = new Material("Cherry", "Can be made into elixirs", 44, 1);
+    public final Material CHERRY_JUICE = new Material("Cherry Juice", "One of many elixirs", 45, 1);
 
 
     public ArrayList<Material> materialList = new ArrayList<Material>();
@@ -71,7 +73,7 @@ public class MaterialsList {
         try {
             for(Field field : fields) {
                 if (field.getType() == Material.class) {
-                    ((Material) field.get(this)).discovered = true;
+                    //((Material) field.get(this)).discovered = true;
                     materialList.add((Material) field.get(this));
                     discoveredMaterials.put(((Material) field.get(this)).name, ((Material) field.get(this)).discovered);
                 }
@@ -103,14 +105,15 @@ public class MaterialsList {
         CRIMSTONE_ORE.setObtainMethod(ObtainMethods.MINING).setSmelting(CRIMSTONE_BAR, 1);
         CRIMSTONE_BAR.setObtainMethod(ObtainMethods.MINING);
         IRON_ORE.setObtainMethod(ObtainMethods.MINING).setSmelting(IRON_INGOT, 1);
-        IRON_INGOT.setObtainMethod(ObtainMethods.MINING).setDiscovered(true);
+        IRON_INGOT.setObtainMethod(ObtainMethods.MINING);
         SEEDS.setObtainMethod(ObtainMethods.FARMING).setSeedDrop(WHEAT, 3).setRecipe(new Material[] {WHEAT, WHEAT, WHEAT});
         TORCH.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {STICK, COAL, FIRESTARTER}).setDiscovered(true);
         FLINT.setObtainMethod(ObtainMethods.SHOVEL).setDiscovered(true);
-        FIRESTARTER.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {FLINT, IRON_INGOT, STICK}).setDiscovered(true);
+        FIRESTARTER.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {FLINT, IRON_INGOT, STICK});
         HARDENED_STONE.setObtainMethod(ObtainMethods.FORGE);
         BLACKBERRY.setObtainMethod(ObtainMethods.TREE).setJuicingRecipe(BERRY_JUICE);
         GREEN_APPLE.setObtainMethod(ObtainMethods.TREE).setJuicingRecipe(APPLE_JUICE);
+        CHERRY.setObtainMethod(ObtainMethods.TREE).setJuicingRecipe(CHERRY_JUICE);
         CARROT.setObtainMethod(ObtainMethods.FARMING).setJuicingRecipe(CARROT_JUICE);
         HARDENED_WOOD.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {WOOD, WOOD, WOOD});
         CARROT_SEEDS.setObtainMethod(ObtainMethods.FARMING).setSeedDrop(CARROT, 2).setRecipe(new Material[] {CARROT, CARROT, CARROT});
@@ -135,6 +138,7 @@ public class MaterialsList {
         CARROT_JUICE.setObtainMethod(ObtainMethods.JUICER);
         APPLE_JUICE.setObtainMethod(ObtainMethods.JUICER);
         BERRY_JUICE.setObtainMethod(ObtainMethods.JUICER);
+        CHERRY_JUICE.setObtainMethod(ObtainMethods.JUICER);
 
     }
 }

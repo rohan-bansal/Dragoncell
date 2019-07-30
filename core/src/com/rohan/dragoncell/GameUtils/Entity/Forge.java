@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.rohan.dragoncell.FileUtils.GifDecoder;
 import com.rohan.dragoncell.FileUtils.Tuple;
+import com.rohan.dragoncell.GameUtils.ItemStack;
 import com.rohan.dragoncell.GameUtils.Material;
 import com.rohan.dragoncell.GameUtils.MaterialsList;
 import com.rohan.dragoncell.GameUtils.ObtainMethods;
@@ -19,11 +20,12 @@ public class Forge {
 
     public ArrayList<Sprite> forgeSlots = new ArrayList<Sprite>();
     public ArrayList<Sprite> fuelSlots = new ArrayList<Sprite>();
-    private ArrayList<Material> forgeItems = new ArrayList<Material>();
-    private ArrayList<Material> fuelItems = new ArrayList<Material>();
-    private ArrayList<Material> forgeItemsToRemove = new ArrayList<Material>();
-    private ArrayList<Material> fuelItemsToRemove = new ArrayList<Material>();
-    private ArrayList<Material> smeltedItemsToRemove = new ArrayList<Material>();
+    private ArrayList<ItemStack> forgeItems = new ArrayList<ItemStack>();
+    private ArrayList<ItemStack> fuelItems = new ArrayList<ItemStack>();
+    private ArrayList<ItemStack> forgeItemsToRemove = new ArrayList<ItemStack>();
+    private ArrayList<ItemStack> fuelItemsToRemove = new ArrayList<ItemStack>();
+    private ArrayList<ItemStack> smeltedItemsToRemove = new ArrayList<ItemStack>();
+    private BitmapFont itemCounter = new BitmapFont(Gdx.files.internal("Fonts/Retron2.fnt"), Gdx.files.internal("Fonts/Retron2.png"), false);
 
     private BitmapFont timeDrawer = new BitmapFont(Gdx.files.internal("Fonts/ari2.fnt"), Gdx.files.internal("Fonts/ari2.png"), false);
     GlyphLayout layout = new GlyphLayout();
@@ -33,7 +35,7 @@ public class Forge {
 
     private ArrayList<Sprite> clearIcons = new ArrayList<Sprite>();
     private float stateTime = 0f;
-    private ArrayList<Material> smeltedMaterial = new ArrayList<Material>();
+    private ArrayList<ItemStack> smeltedMaterial = new ArrayList<ItemStack>();
 
     private HashMap<Integer, Tuple<Integer, Integer>> forgeSlotPositions = new HashMap<Integer, Tuple<Integer, Integer>>();
     private HashMap<Integer, Tuple<Integer, Integer>> fuelSlotPositions = new HashMap<Integer, Tuple<Integer, Integer>>();
@@ -99,22 +101,23 @@ public class Forge {
         }
 
         timeDrawer.getData().setScale(0.5f);
+        itemCounter.getData().setScale(0.5f);
     }
 
     public boolean addToForgeSlot(int slot) {
-        Material temp = new Material(inventory.followMaterial);
-        temp.setCenter(forgeSlotPositions.get(slot).x, forgeSlotPositions.get(slot).y);
-        temp.forgePos = slot;
+        ItemStack temp = new ItemStack(new Material(inventory.followMaterial.stackedItem), inventory.followMaterial.count);
+        temp.stackedItem.setCenter(forgeSlotPositions.get(slot).x, forgeSlotPositions.get(slot).y);
+        temp.stackedItem.forgePos = slot;
 
-        if(!temp.isOre) {
+        if(!temp.stackedItem.isOre) {
            return true;
         }
-        if(temp.getSprite().getY() < 250) {
+        if(temp.stackedItem.getSprite().getY() < 250) {
             return true;
         }
 
-        for(Material material : forgeItems) {
-            if(material.getSprite().getX() == temp.getSprite().getX() && material.getSprite().getY() == temp.getSprite().getY()) {
+        for(ItemStack material : forgeItems) {
+            if(material.stackedItem.getSprite().getX() == temp.stackedItem.getSprite().getX() && material.stackedItem.getSprite().getY() == temp.stackedItem.getSprite().getY()) {
                 Gdx.app.log("Forge", "Forge Drop Failed");
                 return true;
             }
@@ -126,22 +129,22 @@ public class Forge {
     }
 
     public boolean addToFuelSlot(int slot) {
-        Material temp = new Material(inventory.followMaterial);
-        temp.setCenter(fuelSlotPositions.get(slot).x, fuelSlotPositions.get(slot).y);
-        temp.fuelPos = slot;
+        ItemStack temp = new ItemStack(new Material(inventory.followMaterial.stackedItem), inventory.followMaterial.count);
+        temp.stackedItem.setCenter(fuelSlotPositions.get(slot).x, fuelSlotPositions.get(slot).y);
+        temp.stackedItem.fuelPos = slot;
 
-        if(!ObtainMethods.fuel.keySet().contains(temp.name)) {
+        if(!ObtainMethods.fuel.keySet().contains(temp.stackedItem.name)) {
             return true;
         }
 
-        for(Material material : fuelItems) {
-            if(material.getSprite().getX() == temp.getSprite().getX() && material.getSprite().getY() == temp.getSprite().getY()) {
+        for(ItemStack material : fuelItems) {
+            if(material.stackedItem.getSprite().getX() == temp.stackedItem.getSprite().getX() && material.stackedItem.getSprite().getY() == temp.stackedItem.getSprite().getY()) {
                 Gdx.app.log("Forge", "Fuel Drop Failed");
                 return true;
             }
         }
 
-        smeltTime.put(slot, ObtainMethods.fuel.get(temp.name));
+        smeltTime.put(slot, ObtainMethods.fuel.get(temp.stackedItem.name));
 
         Gdx.app.log("Forge", "Fuel Drop Successful");
         fuelItems.add(temp);
@@ -176,16 +179,16 @@ public class Forge {
                 clear_highlight.setPosition(icon.getX(), icon.getY());
                 clear_highlight.draw(batch);
                 if(Gdx.input.justTouched()) {
-                    for(Material m : fuelItems) {
-                        if(m.fuelPos == clearIcons.indexOf(icon) + 1) {
-                            inventory.addItem(m);
+                    for(ItemStack m : fuelItems) {
+                        if(m.stackedItem.fuelPos == clearIcons.indexOf(icon) + 1) {
+                            inventory.addItem(m.stackedItem, m.count);
                             fuelItemsToRemove.add(m);
                         }
                     }
-                    for(Material m : forgeItems) {
-                        if(m.forgePos == clearIcons.indexOf(icon) + 1) {
-                            inventory.addItem(m);
-                            smeltTime.put(m.forgePos, 20f);
+                    for(ItemStack m : forgeItems) {
+                        if(m.stackedItem.forgePos == clearIcons.indexOf(icon) + 1) {
+                            inventory.addItem(m.stackedItem, m.count);
+                            smeltTime.put(m.stackedItem.forgePos, 20f);
                             forgeItemsToRemove.add(m);
                         }
                     }
@@ -196,19 +199,28 @@ public class Forge {
             }
         }
 
-        for(Material forgeItem : forgeItems) {
-            forgeItem.render(batch);
-            for(Material f : fuelItems) {
-                if(f.fuelPos == forgeItem.forgePos) {
-                    batch.draw(smeltAnimation.getKeyFrame(stateTime), forgeItem.getSprite().getX() - 7, forgeItem.getSprite().getY() - 50);
-                    smeltTime.put(forgeItem.forgePos, smeltTime.get(forgeItem.forgePos) - 0.015f);
+        for(ItemStack forgeItem : forgeItems) {
+            forgeItem.stackedItem.render(batch);
+            if(forgeItem.count > 1) {
+                itemCounter.draw(batch, forgeItem.count + "", forgeItem.stackedItem.getSprite().getX() + 26, forgeItem.stackedItem.getSprite().getY() + 8);
+            }
+            for(ItemStack f : fuelItems) {
+                if(f.stackedItem.fuelPos == forgeItem.stackedItem.forgePos) {
+                    batch.draw(smeltAnimation.getKeyFrame(stateTime), forgeItem.stackedItem.getSprite().getX() - 7, forgeItem.stackedItem.getSprite().getY() - 50);
 
-                    layout.setText(timeDrawer, ObtainMethods.round((double) smeltTime.get(forgeItem.forgePos), 1) + "");
-                    timeDrawer.draw(batch, ObtainMethods.round((double) smeltTime.get(forgeItem.forgePos), 1) + "", forgeItem.getSprite().getX() - 30, forgeItem.getSprite().getY() - 30);
+                    smeltTime.put(forgeItem.stackedItem.forgePos, smeltTime.get(forgeItem.stackedItem.forgePos) - 0.015f);
 
-                    if(smeltTime.get(forgeItem.forgePos) <= 0) {
-                        smeltTime.put(forgeItem.forgePos, 20f);
-                        smeltItem(forgeItem.forgePos);
+                    layout.setText(timeDrawer, ObtainMethods.round((double) smeltTime.get(forgeItem.stackedItem.forgePos), 1) + "");
+                    timeDrawer.draw(batch, ObtainMethods.round((double) smeltTime.get(forgeItem.stackedItem.forgePos), 1) + "",
+                            forgeItem.stackedItem.getSprite().getX() - 30, forgeItem.stackedItem.getSprite().getY() - 30);
+
+                    if(smeltTime.get(forgeItem.stackedItem.forgePos) <= 0) {
+                        if(f.count > 1) {
+                            smeltTime.put(forgeItem.stackedItem.forgePos, ObtainMethods.fuel.get(f.stackedItem.name));
+                        } else {
+                            smeltTime.put(forgeItem.stackedItem.forgePos, 20f);
+                        }
+                        smeltItem(forgeItem.stackedItem.forgePos);
                     }
                 }
             }
@@ -220,28 +232,34 @@ public class Forge {
             smeltingActive = false;
         }
 
-        for(Material fuelItem : fuelItems) {
-            fuelItem.render(batch);
+        for(ItemStack fuelItem : fuelItems) {
+            fuelItem.stackedItem.render(batch);
+            if(fuelItem.count > 1) {
+                itemCounter.draw(batch, fuelItem.count + "", fuelItem.stackedItem.getSprite().getX() + 26, fuelItem.stackedItem.getSprite().getY() + 8);
+            }
         }
 
-        for(Material fuelItem : fuelItemsToRemove) {
+        for(ItemStack fuelItem : fuelItemsToRemove) {
             fuelItems.remove(fuelItem);
         }
 
-        for(Material forgeItem : forgeItemsToRemove) {
+        for(ItemStack forgeItem : forgeItemsToRemove) {
             forgeItems.remove(forgeItem);
         }
 
-        for(Material item : smeltedItemsToRemove) {
+        for(ItemStack item : smeltedItemsToRemove) {
             smeltedMaterial.remove(item);
         }
 
         if(smeltedMaterial.size() != 0) {
-            for(Material m : smeltedMaterial) {
-                m.render(batch);
-                if(m.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+            for(ItemStack m : smeltedMaterial) {
+                m.stackedItem.render(batch);
+                if(m.count > 1) {
+                    itemCounter.draw(batch, m.count + "", m.stackedItem.getSprite().getX() + 26, m.stackedItem.getSprite().getY() + 8);
+                }
+                if(m.stackedItem.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
                     if(Gdx.input.justTouched()) {
-                        inventory.addItem(m);
+                        inventory.addItem(m.stackedItem, m.count);
                         smeltedItemsToRemove.add(m);
                     }
                 }
@@ -251,13 +269,17 @@ public class Forge {
     }
 
     public void threadTime() {
-        for(Material forgeItem : forgeItems) {
-            for(Material f : fuelItems) {
-                if(f.fuelPos == forgeItem.forgePos) {
-                    smeltTime.put(forgeItem.forgePos, smeltTime.get(forgeItem.forgePos) - 0.015f);
-                    if(smeltTime.get(forgeItem.forgePos) <= 0) {
-                        smeltTime.put(forgeItem.forgePos, 20f);
-                        smeltItem(forgeItem.forgePos);
+        for(ItemStack forgeItem : forgeItems) {
+            for(ItemStack f : fuelItems) {
+                if(f.stackedItem.fuelPos == forgeItem.stackedItem.forgePos) {
+                    smeltTime.put(forgeItem.stackedItem.forgePos, smeltTime.get(forgeItem.stackedItem.forgePos) - 0.015f);
+                    if(smeltTime.get(forgeItem.stackedItem.forgePos) <= 0) {
+                        if(f.count > 1) {
+                            smeltTime.put(forgeItem.stackedItem.forgePos, ObtainMethods.fuel.get(f.stackedItem.name));
+                        } else {
+                            smeltTime.put(forgeItem.stackedItem.forgePos, 20f);
+                        }
+                        smeltItem(forgeItem.stackedItem.forgePos);
                     }
                 }
             }
@@ -266,18 +288,36 @@ public class Forge {
 
     private void smeltItem(int forgePos) {
         Material tempMaterial = null;
-        for(Material m : forgeItems) {
-            if(m.forgePos == forgePos) {
-                tempMaterial = new Material(m.smeltInto);
-                forgeItemsToRemove.add(m);
+        for(ItemStack m : forgeItems) {
+            if(m.stackedItem.forgePos == forgePos) {
+                tempMaterial = new Material(m.stackedItem.smeltInto);
+                if(m.count == 1) {
+                    forgeItemsToRemove.add(m);
+                } else {
+                    m.count -= 1;
+                }
             }
         }
         tempMaterial.setCenter(forgeSlots.get((forgePos - 1) + 4).getX() + 25, forgeSlots.get((forgePos - 1) + 4).getY() + 25);
-        smeltedMaterial.add(tempMaterial);
 
-        for(Material f : fuelItems) {
-            if(f.fuelPos == forgePos) {
-                fuelItemsToRemove.add(f);
+        boolean countAdd = false;
+        for(ItemStack item_ : smeltedMaterial) {
+            if(item_.stackedItem.getSprite().getX() == tempMaterial.getSprite().getX()) {
+                item_.count += 1;
+                countAdd = true;
+            }
+        }
+        if(!countAdd) {
+            smeltedMaterial.add(new ItemStack(tempMaterial, 1));
+        }
+
+        for(ItemStack f : fuelItems) {
+            if(f.stackedItem.fuelPos == forgePos) {
+                if(f.count == 1) {
+                    fuelItemsToRemove.add(f);
+                } else {
+                    f.count -= 1;
+                }
             }
         }
     }

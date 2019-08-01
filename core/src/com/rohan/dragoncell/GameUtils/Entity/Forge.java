@@ -109,7 +109,7 @@ public class Forge {
         temp.stackedItem.setCenter(forgeSlotPositions.get(slot).x, forgeSlotPositions.get(slot).y);
         temp.stackedItem.forgePos = slot;
 
-        if(!temp.stackedItem.isOre) {
+        if(!ObtainMethods.ore.contains(temp.stackedItem.name.toLowerCase())) {
            return true;
         }
         if(temp.stackedItem.getSprite().getY() < 250) {

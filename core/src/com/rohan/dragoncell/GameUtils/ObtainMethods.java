@@ -1,5 +1,7 @@
 package com.rohan.dragoncell.GameUtils;
 
+import com.badlogic.gdx.graphics.Color;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -38,16 +40,34 @@ public class ObtainMethods {
             put("Wooden Stick", 35f);
     }};
 
+    public static final ArrayList<String> ore = new ArrayList<String>() {{
+        add("stone");
+        add("copper ore");
+        add("iron ore");
+        add("sasmite ore");
+        add("crimstone ore");
+        add("sand");
+        add("welded sand");
+    }};
+
     // 1 woodland
     // 2 woodland river
     // 3 desert
     // 4 beach
-    // 5 ore land
+    // 5 orefield
     // 6 island
 
     // room #, up, right, down, left
 
     // biome type, room #
+
+    public static Color convert(long hex) {
+        float a = (hex & 0xFF000000L) >> 24;
+        float r = (hex & 0xFF0000L) >> 16;
+        float g = (hex & 0xFF00L) >> 8;
+        float b = (hex & 0xFFL);
+        return new Color(r / 255f, g / 255f, b / 255f, a / 255f);
+    }
 
     public static final HashMap<Integer, String[]> areas = new HashMap<Integer, String[]>() {{
         put(1, new String[] {"3 2", "2 3", "5 4", "5 5"});
@@ -59,6 +79,15 @@ public class ObtainMethods {
         put(7, new String[] {"5 9", "5 10", "2 3", "3 2"});
         put(8, new String[] {"4 8", "3 2", "4 8", "  "});
 
+    }};
+
+    public static final HashMap<Integer, String> getBiomeByInt = new HashMap<Integer, String>() {{
+        put(1, "Woodland");
+        put(2, "Woodland River");
+        put(3, "Desert");
+        put(4, "Beach");
+        put(5, "Ore Field");
+        put(6, "Island");
     }};
 
     public static double round (double value, int precision) {

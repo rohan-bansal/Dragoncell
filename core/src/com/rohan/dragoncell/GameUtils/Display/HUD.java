@@ -17,7 +17,8 @@ public class HUD {
     private Player player;
     private SpriteBatch batch = new SpriteBatch();
 
-    private Texture heart, emptyHeart, inventory, chest, crafting_, recipeBook, forge_, collection_;
+    private Texture heart, emptyHeart, inventory, chest, crafting_, recipeBook, forge_;
+    public Texture collection_;
     private Sprite craftingIcon, clearIcon, materialsBookIcon, forgeIcon, collectionIcon, clearIconHighlight, finishIcon, finishIconHighlight;
     private Sprite alert_ = new Sprite(new Texture(Gdx.files.internal("Interface/World/Collection/alert.png")));
     private boolean clearIconActive = true;

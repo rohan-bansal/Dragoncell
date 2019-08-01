@@ -3,6 +3,7 @@ package com.rohan.dragoncell.GameUtils.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -10,8 +11,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FileTextureData;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.rohan.dragoncell.GameScenes.MainScreen;
 import com.rohan.dragoncell.GameUtils.Entity.Object.BreakableObject;
+import com.rohan.dragoncell.GameUtils.ItemStack;
 import com.rohan.dragoncell.GameUtils.Material;
 import com.rohan.dragoncell.GameUtils.MaterialsList;
 import com.rohan.dragoncell.GameUtils.ObtainMethods;
@@ -26,9 +29,11 @@ public class Collection {
     private Player player;
     private MaterialsList materials;
     private ArrayList<BreakableObject> trees = new ArrayList<BreakableObject>();
+    private ArrayList<BreakableObject> desert = new ArrayList<BreakableObject>();
     private ArrayList<BreakableObject> ores = new ArrayList<BreakableObject>();
     private ArrayList<BreakableObject> treesToRemove = new ArrayList<BreakableObject>();
     private ArrayList<BreakableObject> oresToRemove = new ArrayList<BreakableObject>();
+    private ArrayList<BreakableObject> desertToRemove = new ArrayList<BreakableObject>();
     private Random rand = new Random();
     private Sprite axeIcon = new Sprite(new Texture(Gdx.files.internal("Interface/World/Collection/axe.png")));
     private Sprite hammerIcon = new Sprite(new Texture(Gdx.files.internal("Interface/World/Collection/hammer.png")));
@@ -65,14 +70,29 @@ public class Collection {
             }
         }
 
+        for(BreakableObject cactus : desert) {
+            if(biomeType == 3) {
+                cactus.render(batch);
+            }
+        }
+
         player.renderPlayer(batch);
+
+        int pixel = ScreenUtils.getFrameBufferPixmap(0,0, 1000, 800).getPixel(Math.round(player.position.x), Math.round(player.position.y));
+        Color color = new Color(pixel);
+        if(color.r * 255 == 0.0 && color.g * 255 == 74.0 && color.b * 255 == 127.0) {
+            player.speed = 0.4f;
+        } else {
+            player.speed = 1.5f;
+        }
 
         Rectangle tempRect = new Rectangle(player.position.x, player.position.y, player.currentFrame.getRegionWidth(), player.currentFrame.getRegionHeight());
         if(biomeType == 1 || biomeType == 2) {
             treeBiome(batch, tempRect);
         } else if(biomeType == 5) {
             oreBiome(batch, tempRect);
-
+        } else if(biomeType == 3) {
+            desertBiome(batch, tempRect);
         }
 
         for(BreakableObject t : treesToRemove) {
@@ -83,8 +103,14 @@ public class Collection {
             ores.remove(t);
         }
 
+        for(BreakableObject t : desertToRemove) {
+            desert.remove(t);
+        }
+
+
         treesToRemove.clear();
         oresToRemove.clear();
+        desertToRemove.clear();
 
     }
 
@@ -124,6 +150,37 @@ public class Collection {
         }
     }
 
+    private void desertBiome(SpriteBatch batch, Rectangle tempRect) {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+            for (BreakableObject cact : desert) {
+                if (tempRect.overlaps(cact.sprite.getBoundingRectangle())) {
+                    if (cact.hits == 7) {
+                        desertToRemove.add(cact);
+                        String path = ((FileTextureData) cact.sprite.getTexture().getTextureData()).getFileHandle().path();
+                        if (path.contains("cactus")) {
+                            player.getInventory().addItem(new Material(materials.CACTUS));
+                            discoveredItem(materials.CACTUS);
+                        }
+                    } else {
+                        cact.hits += 1;
+                    }
+                }
+            }
+        }
+        for(BreakableObject object_ : desert) {
+            if(biomeType == 3) {
+                Rectangle tempRect_ = new Rectangle(player.position.x, player.position.y, player.currentFrame.getRegionWidth(), player.currentFrame.getRegionHeight());
+                if (tempRect_.overlaps(object_.sprite.getBoundingRectangle())) {
+                    axeIcon.setCenter(object_.sprite.getX() + (object_.sprite.getWidth() / 2), object_.sprite.getY() + 75);
+                    axeIcon.draw(batch);
+                    if(object_.hits != 0) {
+                        nameDrawer.draw(batch, object_.hits + "", object_.sprite.getX() + 35, object_.sprite.getY() + 45);
+                    }
+                }
+            }
+        }
+    }
+
     private void oreBiome(SpriteBatch batch, Rectangle tempRect) {
         if(Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             for (BreakableObject ore_ : ores) {
@@ -149,6 +206,9 @@ public class Collection {
                         } else if (path.contains("copper")) {
                             player.getInventory().addItem(new Material(materials.COPPER_ORE));
                             discoveredItem(materials.COPPER_ORE);
+                        } else if (path.contains("amber")) {
+                            player.getInventory().addItem(new Material(materials.AMBER));
+                            discoveredItem(materials.AMBER);
                         }
                     } else {
                         ore_.hits += 1;
@@ -177,32 +237,50 @@ public class Collection {
         if(areas.get(areaNumber) != null) {
             if(player.position.x > 490) { // right
 
-                biomeType = Integer.parseInt(areas.get(areaNumber)[1].split(" ")[0]);
-                areaNumber = Integer.parseInt(areas.get(areaNumber)[1].split(" ")[1]);
+                if(checkPossible(1)) {
+                    biomeType = Integer.parseInt(areas.get(areaNumber)[1].split(" ")[0]);
+                    areaNumber = Integer.parseInt(areas.get(areaNumber)[1].split(" ")[1]);
 
-                MainScreen.headsUp.changeCollectionScene(biomeType);
-                player.position.x = 50;
+                    MainScreen.headsUp.changeCollectionScene(biomeType);
+                    player.position.x = 50;
+                }
+
             } else if(player.position.x < 40) { // left
 
-                biomeType = Integer.parseInt(areas.get(areaNumber)[3].split(" ")[0]);
-                areaNumber = Integer.parseInt(areas.get(areaNumber)[3].split(" ")[1]);
+                if(checkPossible(3)) {
+                    biomeType = Integer.parseInt(areas.get(areaNumber)[3].split(" ")[0]);
+                    areaNumber = Integer.parseInt(areas.get(areaNumber)[3].split(" ")[1]);
 
-                MainScreen.headsUp.changeCollectionScene(biomeType);
-                player.position.x = 480;
+                    MainScreen.headsUp.changeCollectionScene(biomeType);
+                    player.position.x = 480;
+                }
+
             } else if(player.position.y < 40) { // down
 
-                biomeType = Integer.parseInt(areas.get(areaNumber)[2].split(" ")[0]);
-                areaNumber = Integer.parseInt(areas.get(areaNumber)[2].split(" ")[1]);
+                if(checkPossible(2)) {
+                    biomeType = Integer.parseInt(areas.get(areaNumber)[2].split(" ")[0]);
+                    areaNumber = Integer.parseInt(areas.get(areaNumber)[2].split(" ")[1]);
 
-                MainScreen.headsUp.changeCollectionScene(biomeType);
-                player.position.y = 430;
+                    MainScreen.headsUp.changeCollectionScene(biomeType);
+                    player.position.y = 430;
+                }
+
             } else if(player.position.y > 439) { // up
 
-                biomeType = Integer.parseInt(areas.get(areaNumber)[0].split(" ")[0]);
-                areaNumber = Integer.parseInt(areas.get(areaNumber)[0].split(" ")[1]);
+                if(checkPossible(0)) {
+                    biomeType = Integer.parseInt(areas.get(areaNumber)[0].split(" ")[0]);
+                    areaNumber = Integer.parseInt(areas.get(areaNumber)[0].split(" ")[1]);
 
-                MainScreen.headsUp.changeCollectionScene(biomeType);
-                player.position.y = 50;
+                    MainScreen.headsUp.changeCollectionScene(biomeType);
+                    player.position.y = 50;
+                }
+
+            }
+
+            if(biomeType == 2) {
+                for(BreakableObject tree : trees) {
+                    recursivePosChange(tree, 1);
+                }
             }
         } else {
             Gdx.app.log("Collection", "Scene Loading Error");
@@ -211,19 +289,116 @@ public class Collection {
 
     }
 
-    private void discoveredItem(Material material) {
-        if(!material.discovered) {
-            material.discovered = true;
-            MainScreen.headsUp.alert.put("alert_text", "New Material Chain");
-            MainScreen.headsUp.alert.put("alert_description", material.name + " : ID #" + material.ID);
-            unlockItems(material);
-            /*for(Material material_ : materials.materialList) {
-                if(material_.recipe.contains(material) || material.smeltInto == material_ || material.seedDrop == material_ || material.juicedInto == material_
-                    || material_.grinderRecipe.contains(material)) {
-                    material_.discovered = true;
+    private boolean checkPossible(int biome) {
+        int tempBiomeType = Integer.parseInt(areas.get(areaNumber)[biome].split(" ")[0]);
+        if(ObtainMethods.getBiomeByInt.get(tempBiomeType).equals("Desert")) {
+            if (!player.desertUnlocked) {
+                for (ItemStack item : player.getInventory().getInventory()) {
+                    if (item.stackedItem.name.equals(materials.getMaterialByID(Integer.parseInt(player.desertRequirement[0])).name)) {
+                        if (item.count >= Integer.parseInt(player.desertRequirement[1])) {
+                            player.desertUnlocked = true;
+                            if(item.count > Integer.parseInt(player.desertRequirement[1])) {
+                                item.count -= Integer.parseInt(player.desertRequirement[1]);
+                            } else {
+                                player.getInventory().materialsToRemove.add(item);
+                            }
+                            player.getInventory().refreshInventory();
+                            Gdx.app.log("Collection", "Unlocked Desert Area");
+                            discoveredItem(materials.WATER, "Desert");
+                            return true;
+                        }
+                    }
                 }
-            }*/
+                discoveredItem(materials.WATER, "Area Locked", materials.getMaterialByID(Integer.parseInt(player.desertRequirement[0])).name + ": " +
+                        Integer.parseInt(player.desertRequirement[1]));
+            } else {
+                return true;
+            }
+        } else if(ObtainMethods.getBiomeByInt.get(tempBiomeType).equals("Beach")) {
+            if (!player.beachUnlocked) {
+                for (ItemStack item : player.getInventory().getInventory()) {
+                    if (item.stackedItem.name.equals(materials.getMaterialByID(Integer.parseInt(player.beachRequirement[0])).name)) {
+                        if (item.count >= Integer.parseInt(player.beachRequirement[1])) {
+                            player.beachUnlocked = true;
+                            if(item.count > Integer.parseInt(player.beachRequirement[1])) {
+                                item.count -= Integer.parseInt(player.beachRequirement[1]);
+                            } else {
+                                player.getInventory().materialsToRemove.add(item);
+                            }
+                            player.getInventory().refreshInventory();
+                            Gdx.app.log("Collection", "Unlocked Beach Area");
+                            discoveredItem(materials.WATER, "Beach");
+                            return true;
+                        }
+                    }
+                }
+                discoveredItem(materials.WATER, "Area Locked", materials.getMaterialByID(Integer.parseInt(player.beachRequirement[0])).name + ": " +
+                        Integer.parseInt(player.beachRequirement[1]));
+            } else {
+                return true;
+            }
+        } else if(ObtainMethods.getBiomeByInt.get(tempBiomeType).equals("Ore Field")) {
+
+            if(!player.oreFieldUnlocked) {
+                player.oreFieldUnlocked = true;
+                discoveredItem(materials.WATER, "Ore Field");
+                return true;
+            } else {
+                return true;
+            }
+        } else {
+            Gdx.app.log("Collection", ObtainMethods.getBiomeByInt.get(tempBiomeType));
+            return true;
         }
+        return false;
+    }
+
+    private void recursivePosChange(BreakableObject object, int scenario) {
+        if(scenario == 1) {
+            if(object.sprite.getY() < 325 && object.sprite.getY() > 175) {
+                object.sprite.setPosition(rand.nextInt((460 - 40) + 1) + 40, rand.nextInt((400 - 30) + 1) + 30);
+                recursivePosChange(object, 1);
+            }
+        } else if(scenario == 2) {
+            for(BreakableObject tree : trees) {
+                if(tree.sprite.getBoundingRectangle().overlaps(object.sprite.getBoundingRectangle())) {
+                    object.sprite.setPosition(rand.nextInt((460 - 40) + 1) + 40, rand.nextInt((400 - 30) + 1) + 30);
+                    recursivePosChange(object, 2);
+                }
+            }
+        } else if(scenario == 3) {
+            for(BreakableObject ore : ores) {
+                if(ore.sprite.getBoundingRectangle().overlaps(object.sprite.getBoundingRectangle())) {
+                    object.sprite.setPosition(rand.nextInt((460 - 40) + 1) + 40, rand.nextInt((400 - 30) + 1) + 30);
+                    recursivePosChange(object, 3);
+                }
+            }
+        } else if(scenario == 4) {
+            for(BreakableObject cact : desert) {
+                if(cact.sprite.getBoundingRectangle().overlaps(object.sprite.getBoundingRectangle())) {
+                    object.sprite.setPosition(rand.nextInt((460 - 40) + 1) + 40, rand.nextInt((400 - 30) + 1) + 30);
+                    recursivePosChange(object, 3);
+                }
+            }
+        }
+    }
+
+    private void discoveredItem(Material material, String... discoveredBiome) {
+        if(discoveredBiome.length == 1) {
+            MainScreen.headsUp.alert.put("alert_text", "New Area Unlocked");
+            MainScreen.headsUp.alert.put("alert_description", discoveredBiome[0]);
+        } else if(discoveredBiome.length == 2) {
+            MainScreen.headsUp.alert.put("alert_text", discoveredBiome[0]);
+            MainScreen.headsUp.alert.put("alert_description", discoveredBiome[1]);
+        } else {
+            if(!material.discovered) {
+                material.discovered = true;
+                MainScreen.headsUp.alert.put("alert_text", "New Material Chain");
+                MainScreen.headsUp.alert.put("alert_description", material.name + " : ID #" + material.ID);
+                unlockItems(material);
+            }
+        }
+
     }
 
     private void unlockItems(Material material) {
@@ -239,6 +414,7 @@ public class Collection {
     public void refreshView() {
         trees.clear();
         ores.clear();
+        desert.clear();
 
         for(int x = 0; x < 5; x++) {
             BreakableObject tempTree = null;
@@ -251,41 +427,46 @@ public class Collection {
                 tempTree = new BreakableObject("Interface/World/Collection/tree4.png");
             }
             tempTree.sprite.setPosition(rand.nextInt((460 - 40) + 1) + 40, rand.nextInt((400 - 30) + 1) + 30);
-            for(BreakableObject tree : trees) {
-                if(tree.sprite.getBoundingRectangle().overlaps(tempTree.sprite.getBoundingRectangle())) {
-                    tempTree.sprite.setPosition(rand.nextInt((460 - 40) + 1) + 40, rand.nextInt((400 - 30) + 1) + 30);
-                }
-            }
+            recursivePosChange(tempTree, 2);
+
             trees.add(tempTree);
         }
+
+        for(int x = 0; x < 10; x++) {
+            BreakableObject tempCact = new BreakableObject("Interface/World/Collection/cactus.png");
+            tempCact.sprite.setPosition(rand.nextInt((460 - 40) + 1) + 40, rand.nextInt((400 - 30) + 1) + 30);
+            recursivePosChange(tempCact, 4);
+
+            desert.add(tempCact);
+        }
+
         for(int x = 0; x < 15; x++) {
             BreakableObject tempOre = null;
             int spawnPercentage = rand.nextInt(100);
-            if(spawnPercentage <= 30) {
+            if(spawnPercentage <= 40) {
                 tempOre = new BreakableObject("Materials/stone.png");
                 tempOre.sprite.setSize(32, 32);
-            } else if(spawnPercentage <= 55) {
+            } else if(spawnPercentage <= 60) {
                 tempOre = new BreakableObject("Materials/coal.png");
                 tempOre.sprite.setSize(32, 32);
-            } else if(spawnPercentage <= 70) {
+            } else if(spawnPercentage <= 75) {
                 tempOre = new BreakableObject("Materials/iron_ore.png");
                 tempOre.sprite.setSize(32, 32);
-            } else if(spawnPercentage <= 85) {
+            } else if(spawnPercentage <= 77) {
+                tempOre = new BreakableObject("Materials/amber.png");
+                tempOre.sprite.setSize(32, 32);
+            } else if(spawnPercentage <= 90) {
                 tempOre = new BreakableObject("Materials/copper_ore.png");
                 tempOre.sprite.setSize(32, 32);
-            } else if(spawnPercentage <= 95) {
+            } else if(spawnPercentage <= 97) {
                 tempOre = new BreakableObject("Materials/sasmite_ore.png");
                 tempOre.sprite.setSize(32, 32);
             } else if(spawnPercentage <= 100) {
                 tempOre = new BreakableObject("Materials/crimstone_ore.png");
                 tempOre.sprite.setSize(32, 32);
             }
-            tempOre.sprite.setPosition(rand.nextInt((460 - 40) + 1) + 40, rand.nextInt((400 - 30) + 1) + 30);
-            for(BreakableObject ore : ores) {
-                if(ore.sprite.getBoundingRectangle().overlaps(tempOre.sprite.getBoundingRectangle())) {
-                    tempOre.sprite.setPosition(rand.nextInt((460 - 40) + 1) + 40, rand.nextInt((400 - 30) + 1) + 30);
-                }
-            }
+            tempOre.sprite.setPosition(rand.nextInt((460 - 40) + 1) + 40, rand.nextInt((440 - 30) + 1) + 30);
+            recursivePosChange(tempOre, 3);
             ores.add(tempOre);
         }
     }

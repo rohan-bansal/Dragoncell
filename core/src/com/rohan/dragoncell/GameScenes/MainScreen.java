@@ -52,6 +52,7 @@ public class MainScreen implements Screen {
         Gdx.app.log("World", "Materials and Recipes Loaded");
 
         player.getInventory().addItem(new Material(materials.STICK));
+        player.getInventory().addItem(new Material(materials.IRON_ORE), 19);
         player.getInventory().addItem(new Material(materials.STICK));
         player.getInventory().addItem(new Material(materials.WOOD));
         player.getInventory().addItem(new Material(materials.FLINT));
@@ -74,6 +75,7 @@ public class MainScreen implements Screen {
         player.getInventory().addItem(new Material(materials.CARROT));
         player.getInventory().addItem(new Material(materials.CARROT));
         player.getInventory().addItem(new Material(materials.CARROT));
+        player.getInventory().addItem(new Material(materials.WELDED_SAND));
 
     }
 

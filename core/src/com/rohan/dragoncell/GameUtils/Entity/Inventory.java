@@ -24,7 +24,7 @@ public class Inventory {
 
     private ArrayList<ItemStack> inventory = new ArrayList<ItemStack>();
     private ArrayList<Sprite> slots = new ArrayList<Sprite>();
-    private ArrayList<ItemStack> materialsToRemove = new ArrayList<ItemStack>();
+    public ArrayList<ItemStack> materialsToRemove = new ArrayList<ItemStack>();
     private int slotHovered = 1;
     private int slotSelected = 1;
     private int slotToFill;
@@ -335,5 +335,9 @@ public class Inventory {
 
             dropBack();
         }
+    }
+
+    public ArrayList<ItemStack> getInventory() {
+        return inventory;
     }
 }

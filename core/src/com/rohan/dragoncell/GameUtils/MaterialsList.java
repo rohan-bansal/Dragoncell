@@ -51,8 +51,8 @@ public class MaterialsList {
     public final Material PAPER = new Material("Paper", "The pen is mightier than the sword", 33, 2);
     public final Material RUBBER = new Material("Rubber", "The material of the future", 34, 4);
     public final Material WOODEN_BOWL = new Material("Wooden Bowl", "Can hold items", 35, 1);
-    public final Material WELDED_SAND = new Material("Welded Sand", "Extremely packed sand. Very heavy", 36, 2);
-    public final Material THICK_GLASS = new Material("Thick Glass", "2 inches thicker", 37, 2);
+    public final Material THICK_GLASS = new Material("Thick Glass", "2 inches thicker", 36, 2);
+    public final Material WELDED_SAND = new Material("Welded Sand", "Extremely packed sand. Very heavy", 37, 2);
     public final Material STEEL_INGOT = new Material("Steel Ingot", "Industrial grade metal", 38, 2);
     public final Material NAILS = new Material("Nails", "Hold a lot of things together", 39, 2);
     public final Material OIL = new Material("Oil", "Very slick", 40, 3).setFuel(true);
@@ -61,6 +61,10 @@ public class MaterialsList {
     public final Material BERRY_JUICE = new Material("Berry Juice", "Tastes very good", 43, 1);
     public final Material CHERRY = new Material("Cherry", "Can be made into elixirs", 44, 1);
     public final Material CHERRY_JUICE = new Material("Cherry Juice", "One of many elixirs", 45, 1);
+    public final Material CACTUS = new Material("Cactus", "The sharpest plant", 46, 2);
+    public final Material CACTUS_RESIN = new Material("Cactus Resin", "The sticky juice of a cactus", 47, 2);
+    public final Material STABILIZED_WOOD = new Material("Stabilized Wood", "Industrial grade hardened wood", 48, 2);
+
 
 
     public ArrayList<Material> materialList = new ArrayList<Material>();
@@ -139,6 +143,9 @@ public class MaterialsList {
         APPLE_JUICE.setObtainMethod(ObtainMethods.JUICER);
         BERRY_JUICE.setObtainMethod(ObtainMethods.JUICER);
         CHERRY_JUICE.setObtainMethod(ObtainMethods.JUICER);
+        CACTUS.setObtainMethod(ObtainMethods.TREE).setJuicingRecipe(CACTUS_RESIN);
+        CACTUS_RESIN.setObtainMethod(ObtainMethods.JUICER);
+        STABILIZED_WOOD.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {HARDENED_WOOD, HARDENED_WOOD, CACTUS_RESIN});
 
     }
 }

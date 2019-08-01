@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.HashMap;
+
 public class Player {
 
     private Inventory inventory;
@@ -15,6 +17,7 @@ public class Player {
     public int hearts = 20;
     public int health = 20;
     public int coins = 0;
+    public float speed = 1.5f;
 
     private float stateTime;
     private boolean flip;
@@ -25,6 +28,12 @@ public class Player {
     private Animation<TextureRegion> walkAnim;
     public Vector2 position;
     private int animState;
+
+    public boolean desertUnlocked = false;
+    public boolean oreFieldUnlocked = false;
+    public boolean beachUnlocked = false;
+    public String[] desertRequirement = new String[] {"11", "20"};
+    public String[] beachRequirement = new String[] {"37", "10"};
 
     public Player() {
 
@@ -74,21 +83,21 @@ public class Player {
 
         if(Gdx.input.isKeyPressed(Input.Keys.W) && position.y < 440) {
             stateTime += Gdx.graphics.getDeltaTime();
-            position.y += 1.5;
+            position.y += speed;
         } else
         if(Gdx.input.isKeyPressed(Input.Keys.A) && position.x > 40) {
             stateTime += Gdx.graphics.getDeltaTime();
             horidirection = "left";
-            position.x -= 1.5;
+            position.x -= speed;
         } else
         if(Gdx.input.isKeyPressed(Input.Keys.S) && position.y > 30) {
             stateTime += Gdx.graphics.getDeltaTime();
-            position.y -= 1.5;
+            position.y -= speed;
         } else
         if(Gdx.input.isKeyPressed(Input.Keys.D) && position.x < 500) {
             stateTime += Gdx.graphics.getDeltaTime();
             horidirection = "right";
-            position.x += 1.5;
+            position.x += speed;
         }
     }
 }

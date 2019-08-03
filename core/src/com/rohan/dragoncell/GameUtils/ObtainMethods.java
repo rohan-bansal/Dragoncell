@@ -50,6 +50,14 @@ public class ObtainMethods {
         add("welded sand");
     }};
 
+    public static final ArrayList<String> juiceable = new ArrayList<String>() {{
+        add("blackberry");
+        add("green apple");
+        add("cherry");
+        add("carrot");
+        add("cactus");
+    }};
+
     // 1 woodland
     // 2 woodland river
     // 3 desert

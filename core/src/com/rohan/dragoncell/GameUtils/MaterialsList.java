@@ -9,6 +9,8 @@ package com.rohan.dragoncell.GameUtils;
 // 6 - mystic
 
 import com.badlogic.gdx.Gdx;
+import com.rohan.dragoncell.GameUtils.Entity.Crafting;
+import com.sun.org.apache.regexp.internal.RE;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -64,6 +66,13 @@ public class MaterialsList {
     public final Material CACTUS = new Material("Cactus", "The sharpest plant", 46, 2);
     public final Material CACTUS_RESIN = new Material("Cactus Resin", "The sticky juice of a cactus", 47, 2);
     public final Material STABILIZED_WOOD = new Material("Stabilized Wood", "Industrial grade hardened wood", 48, 2);
+    public final Material BASIC_GEARS = new Material("Basic Gears", "Crafts the mechanism for a common item", 49, 1);
+    public final Material REINFORCED_GEARS = new Material("Reinforced Gears", "Much more durable", 50, 2);
+    public final Material ADVANCED_GEARS = new Material("Advanced Gears", "Each part has been refined", 51, 3);
+    public final Material ELITE_GEARS = new Material("Elite Gears", "Only available to the rich", 52, 4);
+    public final Material VOID_GEARS = new Material("Void Gears", "So futuristic it can make a portal in time", 53, 5);
+    public final Material SMALL_BLADE = new Material("Small Blade", "Can be used to press items into liquid", 54, 2);
+
 
 
 
@@ -119,7 +128,7 @@ public class MaterialsList {
         GREEN_APPLE.setObtainMethod(ObtainMethods.TREE).setJuicingRecipe(APPLE_JUICE);
         CHERRY.setObtainMethod(ObtainMethods.TREE).setJuicingRecipe(CHERRY_JUICE);
         CARROT.setObtainMethod(ObtainMethods.FARMING).setJuicingRecipe(CARROT_JUICE);
-        HARDENED_WOOD.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {WOOD, WOOD, WOOD});
+        HARDENED_WOOD.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {WOOD, WOOD, WOOD}).setDiscovered(true);
         CARROT_SEEDS.setObtainMethod(ObtainMethods.FARMING).setSeedDrop(CARROT, 2).setRecipe(new Material[] {CARROT, CARROT, CARROT});
         WHEAT.setObtainMethod(ObtainMethods.FARMING);
         COPPER_ORE.setObtainMethod(ObtainMethods.MINING).setSmelting(COPPER_INGOT, 1);
@@ -146,6 +155,11 @@ public class MaterialsList {
         CACTUS.setObtainMethod(ObtainMethods.TREE).setJuicingRecipe(CACTUS_RESIN);
         CACTUS_RESIN.setObtainMethod(ObtainMethods.JUICER);
         STABILIZED_WOOD.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {HARDENED_WOOD, HARDENED_WOOD, CACTUS_RESIN});
-
+        BASIC_GEARS.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {HARDENED_WOOD, STICK, STICK, CACTUS});
+        REINFORCED_GEARS.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {BASIC_GEARS, BASIC_GEARS, IRON_INGOT, IRON_INGOT, IRON_INGOT, IRON_INGOT, IRON_INGOT});
+        ADVANCED_GEARS.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {REINFORCED_GEARS, STEEL_INGOT, REINFORCED_GEARS, STEEL_INGOT, STABILIZED_WOOD, STABILIZED_WOOD});
+        ELITE_GEARS.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {ADVANCED_GEARS, STEEL_INGOT, ADVANCED_GEARS, STEEL_INGOT, STEEL_INGOT, STEEL_INGOT, STEEL_INGOT, STABILIZED_WOOD, SASMITE_BAR});
+        VOID_GEARS.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {ELITE_GEARS, ELITE_GEARS, CRIMSTONE_BAR, CRIMSTONE_BAR, CRIMSTONE_BAR, CRIMSTONE_BAR, CRIMSTONE_BAR, CRIMSTONE_BAR, SASMITE_BAR, SASMITE_BAR, AMBER, AMBER});
+        SMALL_BLADE.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {IRON_INGOT, IRON_INGOT, IRON_INGOT});
     }
 }

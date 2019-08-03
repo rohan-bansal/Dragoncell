@@ -17,9 +17,9 @@ public class HUD {
     private Player player;
     private SpriteBatch batch = new SpriteBatch();
 
-    private Texture heart, emptyHeart, inventory, chest, crafting_, recipeBook, forge_;
+    private Texture heart, emptyHeart, inventory, chest, crafting_, recipeBook, forge_, presser_;
     public Texture collection_;
-    private Sprite craftingIcon, clearIcon, materialsBookIcon, forgeIcon, collectionIcon, clearIconHighlight, finishIcon, finishIconHighlight;
+    private Sprite craftingIcon, clearIcon, materialsBookIcon, forgeIcon, collectionIcon, clearIconHighlight, finishIcon, finishIconHighlight, presserIcon;
     private Sprite alert_ = new Sprite(new Texture(Gdx.files.internal("Interface/World/Collection/alert.png")));
     private boolean clearIconActive = true;
     private boolean finishIconActive = true;
@@ -27,6 +27,8 @@ public class HUD {
     public boolean forgeActive = false;
     public boolean collectionActive = false;
     public boolean matBookActive = true;
+    public boolean presserActive = false;
+    public boolean presserUnlocked = false;
 
     public HashMap<String, String> alert = new HashMap<String, String>();
     private BitmapFont alertDrawer = new BitmapFont(Gdx.files.internal("Fonts/ari2.fnt"), Gdx.files.internal("Fonts/ari2.png"), false);
@@ -48,12 +50,14 @@ public class HUD {
         chest = new Texture(Gdx.files.internal("Interface/HUD/chestInventory.png"));
         crafting_ = new Texture(Gdx.files.internal("Interface/HUD/workbench_view.png"));
         forge_ = new Texture(Gdx.files.internal("Interface/HUD/forge_view.png"));
+        presser_ = new Texture(Gdx.files.internal("Interface/HUD/presser_view.png"));
         collection_ = new Texture(Gdx.files.internal("Interface/HUD/Collection/woodland.png"));
         recipeBook = new Texture(Gdx.files.internal("Interface/HUD/recipeBook.png"));
         craftingIcon = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/craftingIcon.png")));
         collectionIcon = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/collectionIcon.png")));
         clearIcon = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/clear.png")));
         forgeIcon = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/forgeIcon.png")));
+        presserIcon = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/presserIcon.png")));
         materialsBookIcon = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/materialsBookIcon.png")));
         clearIconHighlight = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/clear_highlight.png")));
         finishIcon = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/finish.png")));
@@ -63,6 +67,7 @@ public class HUD {
         forgeIcon.setPosition(549, 370);
         materialsBookIcon.setPosition(549,430);
         collectionIcon.setPosition(549, 340);
+        presserIcon.setPosition(549, 310);
 
         inventory_.setColor(Color.TAN);
         inventory_.getData().setScale(2);
@@ -112,6 +117,10 @@ public class HUD {
         materialsBookIcon.draw(batch);
         collectionIcon.draw(batch);
 
+        if(presserUnlocked) {
+            presserIcon.draw(batch);
+        }
+
         checkClicks();
 
         if(matBookActive) {
@@ -134,6 +143,7 @@ public class HUD {
             }
         }
 
+        crafting.setColor(Color.TAN);
         if(craftingActive) {
             batch.draw(crafting_, 20, 10);
             MainScreen.crafting.render(batch);
@@ -158,13 +168,26 @@ public class HUD {
         } else if(collectionActive) {
             batch.draw(collection_, 20, 10);
             MainScreen.collectionView.render(batch);
+        } else if(presserActive) {
+            batch.draw(presser_, 20, 10);
+            MainScreen.presser.render(batch);
+
+            clearIcon.setCenter(480, 260);
+            clearIconHighlight.setCenter(480, 260);
+
+            layout.setText(crafting, "Presser");
+            crafting.draw(batch, "Presser", 20 + (presser_.getWidth() / 2) - layout.width / 2, 480);
         }
 
         if(clearIconActive) {
             if (clearIcon.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
                 clearIconHighlight.draw(batch);
                 if (Gdx.input.justTouched()) {
-                    MainScreen.crafting.clearGrid();
+                    if(craftingActive) {
+                        MainScreen.crafting.clearGrid();
+                    } else if(presserActive) {
+                        MainScreen.presser.clearGrid();
+                    }
                 }
             } else {
                 clearIcon.draw(batch);
@@ -224,6 +247,7 @@ public class HUD {
                     collectionActive = false;
                     clearIconActive = true;
                     finishIconActive = true;
+                    presserActive = false;
                 } else {
                     craftingActive = false;
                     clearIconActive = false;
@@ -246,6 +270,7 @@ public class HUD {
                     collectionActive = false;
                     clearIconActive = false;
                     finishIconActive = false;
+                    presserActive = false;
                 } else {
                     forgeActive = false;
                     clearIconActive = false;
@@ -259,10 +284,28 @@ public class HUD {
                     clearIconActive = false;
                     finishIconActive = false;
                     collectionActive = true;
+                    presserActive = false;
                 } else {
                     collectionActive = false;
                 }
             }
+        } else if(presserIcon.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+            if(presserUnlocked) {
+                if (Gdx.input.justTouched()) {
+                    if (!presserActive) {
+                        forgeActive = false;
+                        craftingActive = false;
+                        collectionActive = false;
+                        clearIconActive = true;
+                        finishIconActive = false;
+                        presserActive = true;
+                    } else {
+                        presserActive = false;
+                        clearIconActive = false;
+                    }
+                }
+            }
+
         }
     }
 }

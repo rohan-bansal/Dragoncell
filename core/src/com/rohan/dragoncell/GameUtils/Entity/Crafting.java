@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.rohan.dragoncell.FileUtils.Tuple;
+import com.rohan.dragoncell.GameScenes.MainScreen;
 import com.rohan.dragoncell.GameUtils.Display.HUD;
 import com.rohan.dragoncell.GameUtils.Material;
 import com.rohan.dragoncell.GameUtils.MaterialsList;
@@ -84,6 +85,25 @@ public class Crafting {
             temp.add(n.name);
         }
 
+        ArrayList<String> presserRecipe = new ArrayList<String>() {{
+            add("Basic Gears");
+            add("Basic Gears");
+            add("Basic Gears");
+            add("Hardened Stone");
+            add("Hardened Stone");
+            add("Hardened Stone");
+        }};
+
+        if(presserRecipe.size() == temp.size()) {
+            if(temp.containsAll(presserRecipe) && presserRecipe.containsAll(temp)) {
+                outputSucc = true;
+                craft = new Material("Presser", "Materials/presser.png", "Null", 0, 1);
+                craft.setCenter(outputSuccess.getX() + 25, outputSuccess.getY() + 25);
+                craftingItems.clear();
+                return;
+            }
+        }
+
         for(Material m : craftables) {
             temp2.clear();
             for(Material x : m.recipe) {
@@ -157,9 +177,16 @@ public class Crafting {
             craft.render(batch);
             if(craft.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
                 if(Gdx.input.justTouched()) {
-                    inventory.addItem(craft);
-                    craft = null;
-                    outputSucc = false;
+                    if(craft.name.equals("Presser")) {
+                        MainScreen.headsUp.presserUnlocked = true;
+                        craft = null;
+                        outputSucc = false;
+                    } else {
+                        inventory.addItem(craft);
+                        craft = null;
+                        outputSucc = false;
+                    }
+
                 }
             }
         }

@@ -26,6 +26,7 @@ public class MainScreen implements Screen {
     public static Forge forge;
     public static MaterialsBook materialsBook;
     public static Collection collectionView;
+    public static Presser presser;
 
 
     private boolean loadData = false;
@@ -48,34 +49,20 @@ public class MainScreen implements Screen {
         forge = new Forge(player.getInventory(), materials);
         materialsBook = new MaterialsBook(materials);
         collectionView = new Collection(materials, player);
+        presser = new Presser(player, materials);
 
         Gdx.app.log("World", "Materials and Recipes Loaded");
 
-        player.getInventory().addItem(new Material(materials.STICK));
         player.getInventory().addItem(new Material(materials.IRON_ORE), 19);
+        player.getInventory().addItem(new Material(materials.HARDENED_STONE), 3);
+        player.getInventory().addItem(new Material(materials.BASIC_GEARS), 3);
+        player.getInventory().addItem(new Material(materials.SMALL_BLADE), 3);
+        player.getInventory().addItem(new Material(materials.CACTUS), 2);
+        player.getInventory().addItem(new Material(materials.COAL), 5);
         player.getInventory().addItem(new Material(materials.STICK));
-        player.getInventory().addItem(new Material(materials.WOOD));
-        player.getInventory().addItem(new Material(materials.FLINT));
-        player.getInventory().addItem(new Material(materials.IRON_INGOT));
-        player.getInventory().addItem(new Material(materials.STONE));
-        player.getInventory().addItem(new Material(materials.STONE));
-        player.getInventory().addItem(new Material(materials.STONE));
-        player.getInventory().addItem(new Material(materials.STICK));
-        player.getInventory().addItem(new Material(materials.STONE));
-        player.getInventory().addItem(new Material(materials.COPPER_ORE));
-        player.getInventory().addItem(new Material(materials.COAL));
-        player.getInventory().addItem(new Material(materials.COAL));
-        player.getInventory().addItem(new Material(materials.COAL));
-        player.getInventory().addItem(new Material(materials.COAL));
-        player.getInventory().addItem(new Material(materials.STICK));
-        player.getInventory().addItem(new Material(materials.LEATHER));
-        player.getInventory().addItem(new Material(materials.LEATHER));
-        player.getInventory().addItem(new Material(materials.PAPER));
-        player.getInventory().addItem(new Material(materials.PAPER));
-        player.getInventory().addItem(new Material(materials.CARROT));
-        player.getInventory().addItem(new Material(materials.CARROT));
-        player.getInventory().addItem(new Material(materials.CARROT));
-        player.getInventory().addItem(new Material(materials.WELDED_SAND));
+        player.getInventory().addItem(new Material(materials.LEATHER), 2);
+        player.getInventory().addItem(new Material(materials.PAPER), 2);
+        player.getInventory().addItem(new Material(materials.WELDED_SAND), 10);
 
     }
 

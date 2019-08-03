@@ -40,6 +40,8 @@ public class Collection {
 
     private int areaNumber = 1;
     private int biomeType = 1;
+    private int prevBiomeType = 1;
+    private Rectangle tempRect;
 
     private BitmapFont nameDrawer = new BitmapFont(Gdx.files.internal("Fonts/ari2.fnt"), Gdx.files.internal("Fonts/ari2.png"), false);
 
@@ -55,6 +57,7 @@ public class Collection {
 
     public void render(SpriteBatch batch) {
 
+        prevBiomeType = biomeType;
         detectSceneChange();
 
 
@@ -78,15 +81,17 @@ public class Collection {
 
         player.renderPlayer(batch);
 
-        int pixel = ScreenUtils.getFrameBufferPixmap(0,0, 1000, 800).getPixel(Math.round(player.position.x), Math.round(player.position.y));
-        Color color = new Color(pixel);
-        if(color.r * 255 == 0.0 && color.g * 255 == 74.0 && color.b * 255 == 127.0) {
-            player.speed = 0.4f;
-        } else {
-            player.speed = 1.5f;
+        if(biomeType == 2) {
+            int pixel = ScreenUtils.getFrameBufferPixmap(0,0, 1000, 800).getPixel(Math.round(player.position.x), Math.round(player.position.y));
+            Color color = new Color(pixel);
+            if(color.r * 255 == 0.0 && color.g * 255 == 74.0 && color.b * 255 == 127.0) {
+                player.speed = 0.4f;
+            } else {
+                player.speed = 1.5f;
+            }
         }
 
-        Rectangle tempRect = new Rectangle(player.position.x, player.position.y, player.currentFrame.getRegionWidth(), player.currentFrame.getRegionHeight());
+        tempRect = new Rectangle(player.position.x, player.position.y, player.currentFrame.getRegionWidth(), player.currentFrame.getRegionHeight());
         if(biomeType == 1 || biomeType == 2) {
             treeBiome(batch, tempRect);
         } else if(biomeType == 5) {
@@ -277,11 +282,15 @@ public class Collection {
 
             }
 
-            if(biomeType == 2) {
-                for(BreakableObject tree : trees) {
-                    recursivePosChange(tree, 1);
+            if(prevBiomeType != biomeType) {
+                if(biomeType == 2) {
+                    for(BreakableObject tree : trees) {
+                        Gdx.app.log("here", "here");
+                        recursivePosChange(tree, 1);
+                    }
                 }
             }
+
         } else {
             Gdx.app.log("Collection", "Scene Loading Error");
         }
@@ -290,6 +299,8 @@ public class Collection {
     }
 
     private boolean checkPossible(int biome) {
+        Gdx.app.log("Collection", "Checking Possible Biome");
+
         int tempBiomeType = Integer.parseInt(areas.get(areaNumber)[biome].split(" ")[0]);
         if(ObtainMethods.getBiomeByInt.get(tempBiomeType).equals("Desert")) {
             if (!player.desertUnlocked) {
@@ -354,6 +365,8 @@ public class Collection {
     }
 
     private void recursivePosChange(BreakableObject object, int scenario) {
+        Gdx.app.log("Collection", "Recursively Pos Changing");
+
         if(scenario == 1) {
             if(object.sprite.getY() < 325 && object.sprite.getY() > 175) {
                 object.sprite.setPosition(rand.nextInt((460 - 40) + 1) + 40, rand.nextInt((400 - 30) + 1) + 30);

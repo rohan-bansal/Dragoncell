@@ -72,7 +72,7 @@ public class Inventory {
     }
 
     public void addItem(Material item, int... count) {
-        Gdx.app.log("Inventory", item.name + " added to inventory");
+        //Gdx.app.log("Inventory", item.name + " added to inventory");
         Material item_ = new Material(item);
         item_ = item.setVariables(item_);
         item_.setCenter(slots.get(slotToFill - 1).getX() + 25, slots.get(slotToFill - 1).getY() + 25);
@@ -332,7 +332,32 @@ public class Inventory {
                     }
                 }
             }
-
+            if(MainScreen.headsUp.presserActive) {
+                if(MainScreen.presser.presserFuel.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+                    if (followMaterial.stackedItem.getSprite().getBoundingRectangle().overlaps(MainScreen.presser.presserFuel.getBoundingRectangle())) {
+                        if (!MainScreen.presser.dropIntoFuelSlot()) {
+                            if (inventory.get(slotNumberForFollow - 1).stackedItem.getSprite().getColor().a == 0) {
+                                inventory.remove(inventory.get(slotNumberForFollow - 1));
+                                slotNumberForFollow = 0;
+                            }
+                        }
+                        refreshInventory();
+                        return;
+                    }
+                }
+                if(MainScreen.presser.presserItem.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+                    if (followMaterial.stackedItem.getSprite().getBoundingRectangle().overlaps(MainScreen.presser.presserItem.getBoundingRectangle())) {
+                        if (!MainScreen.presser.dropIntoItemSlot()) {
+                            if (inventory.get(slotNumberForFollow - 1).stackedItem.getSprite().getColor().a == 0) {
+                                inventory.remove(inventory.get(slotNumberForFollow - 1));
+                                slotNumberForFollow = 0;
+                            }
+                        }
+                        refreshInventory();
+                        return;
+                    }
+                }
+            }
             dropBack();
         }
     }

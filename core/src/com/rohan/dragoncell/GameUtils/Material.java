@@ -61,6 +61,22 @@ public class Material {
         this.sprite.setSize(32, 32);
     }
 
+    public Material(String name, String path, String description, int ID, int rarity, boolean... unpickupable) {
+        this.name = name;
+        this.description = description;
+        this.ID = ID;
+        this.rarity = rarity;
+
+        if(unpickupable.length != 0) {
+            this.unpickupable = unpickupable[0];
+        }
+
+        String temp = name.toLowerCase();
+        String temp2 = temp.replaceAll(" ", "_");
+        this.sprite = new Sprite(new Texture(path));
+        this.sprite.setSize(32, 32);
+    }
+
     public Material(Material material) {
         this.name = material.name;
         this.description = material.description;

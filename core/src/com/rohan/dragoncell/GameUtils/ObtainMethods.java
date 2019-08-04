@@ -1,6 +1,7 @@
 package com.rohan.dragoncell.GameUtils;
 
 import com.badlogic.gdx.graphics.Color;
+import com.rohan.dragoncell.GameScenes.MainScreen;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,6 +41,11 @@ public class ObtainMethods {
             put("Wooden Stick", 35f);
     }};
 
+    public static final HashMap<String, Float> presserFuel = new HashMap<String, Float>() {{
+        put("Small Blade", 20f);
+        put("Large Blade", 12f);
+    }};
+
     public static final ArrayList<String> ore = new ArrayList<String>() {{
         add("stone");
         add("copper ore");
@@ -56,6 +62,14 @@ public class ObtainMethods {
         add("cherry");
         add("carrot");
         add("cactus");
+    }};
+
+    public static final HashMap<String, Integer> juicedInto = new HashMap<String, Integer>() {{
+        put("Blackberry", 43);
+        put("Apple", 42);
+        put("Cherry", 45);
+        put("Carrot", 41);
+        put("Cactus", 47);
     }};
 
     // 1 woodland

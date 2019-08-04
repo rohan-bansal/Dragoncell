@@ -28,7 +28,7 @@ public class HUD {
     public boolean collectionActive = false;
     public boolean matBookActive = true;
     public boolean presserActive = false;
-    public boolean presserUnlocked = false;
+    public boolean presserUnlocked = true;
 
     public HashMap<String, String> alert = new HashMap<String, String>();
     private BitmapFont alertDrawer = new BitmapFont(Gdx.files.internal("Fonts/ari2.fnt"), Gdx.files.internal("Fonts/ari2.png"), false);
@@ -175,8 +175,8 @@ public class HUD {
             clearIcon.setCenter(480, 260);
             clearIconHighlight.setCenter(480, 260);
 
-            layout.setText(crafting, "Presser");
-            crafting.draw(batch, "Presser", 20 + (presser_.getWidth() / 2) - layout.width / 2, 480);
+            layout.setText(crafting, "Juicer");
+            crafting.draw(batch, "Juicer", 20 + (presser_.getWidth() / 2) - layout.width / 2, 480);
         }
 
         if(clearIconActive) {

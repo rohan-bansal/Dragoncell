@@ -21,9 +21,13 @@ public class Presser {
     private ItemStack toPressItem = null;
     private ItemStack finishedPress = null;
 
+    private float smeltTime = 20f;
+    private boolean pressSucc = false;
     private float stateTime = 0f;
 
     private BitmapFont itemCounter = new BitmapFont(Gdx.files.internal("Fonts/Retron2.fnt"), Gdx.files.internal("Fonts/Retron2.png"), false);
+    private BitmapFont timeDrawer = new BitmapFont(Gdx.files.internal("Fonts/ari2.fnt"), Gdx.files.internal("Fonts/ari2.png"), false);
+    private GlyphLayout layout = new GlyphLayout();
     private Animation<TextureRegion> smeltAnimation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("Interface/HUD/processing.gif").read());
 
     private ArrayList<String> fuels = new ArrayList<String>() {{
@@ -38,6 +42,7 @@ public class Presser {
         this.inventory = player.getInventory();
 
         itemCounter.getData().setScale(0.5f);
+        timeDrawer.getData().setScale(0.5f);
 
         presserFuel = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/fuelSlot.png")));
         presserFuelHigh = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/fuelSlot2.png")));
@@ -65,12 +70,15 @@ public class Presser {
             return true;
         }
 
+
         if(bladeFuel != null) {
             return true;
         } else {
             bladeFuel = temp;
             Gdx.app.log("Presser", "Fuel Drop Successful");
             inventory.followMaterial = null;
+            smeltTime = ObtainMethods.presserFuel.get(bladeFuel.stackedItem.name);
+
             return false;
         }
 
@@ -110,8 +118,24 @@ public class Presser {
         } else {
             presserItem.draw(batch);
         }
-        presserFinish.draw(batch);
         presserIcon.draw(batch);
+
+        if(pressSucc) {
+            if(finishedPress != null) {
+                presserFinishHigh.draw(batch);
+                finishedPress.stackedItem.render(batch);
+                if(finishedPress.stackedItem.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+                    if(Gdx.input.justTouched()) {
+                        inventory.addItem(finishedPress.stackedItem, finishedPress.count);
+                        finishedPress = null;
+                        pressSucc = false;
+                    }
+                }
+            }
+
+        } else {
+            presserFinish.draw(batch);
+        }
 
         if(toPressItem != null) {
             toPressItem.stackedItem.render(batch);
@@ -128,6 +152,51 @@ public class Presser {
 
         if(toPressItem != null && bladeFuel != null) {
             batch.draw(smeltAnimation.getKeyFrame(stateTime), presserIcon.getX(), presserIcon.getY() - 50);
+            layout.setText(timeDrawer, ObtainMethods.round((double) smeltTime, 1) + "");
+            timeDrawer.draw(batch, ObtainMethods.round((double) smeltTime, 1) + "",
+                    presserIcon.getX() + 10, presserIcon.getY() - 70);
+            if(finishedPress != null) {
+                if(finishedPress.count > 1) {
+                    itemCounter.draw(batch, finishedPress.count + "", finishedPress.stackedItem.getSprite().getX() + 26, finishedPress.stackedItem.getSprite().getY() + 8);
+                }
+            }
+            threadTime();
+
+        }
+    }
+
+    public void threadTime() {
+        smeltTime -= 0.015f;
+
+        if(smeltTime <= 0) {
+            if(toPressItem.count > 1) {
+                smeltTime = ObtainMethods.presserFuel.get(bladeFuel.stackedItem.name);
+            } else {
+                smeltTime = 20f;
+            }
+            pressItem();
+        }
+    }
+
+    private void pressItem() {
+        if(finishedPress != null) {
+            finishedPress.count += 1;
+        } else {
+            finishedPress = new ItemStack(lis_.getMaterialByID(ObtainMethods.juicedInto.get(toPressItem.stackedItem.name)), 1);
+        }
+        finishedPress.stackedItem.setCenter(presserFinish.getX() + 25, presserFinish.getY() + 25);
+        pressSucc = true;
+
+        if(bladeFuel.count > 1) {
+            bladeFuel.count -= 1;
+        } else {
+            bladeFuel = null;
+        }
+
+        if(toPressItem.count > 1) {
+            toPressItem.count -= 1;
+        } else {
+            toPressItem = null;
         }
     }
 

@@ -72,7 +72,7 @@ public class MaterialsList {
     public final Material ELITE_GEARS = new Material("Elite Gears", "Only available to the rich", 52, 4);
     public final Material VOID_GEARS = new Material("Void Gears", "So futuristic it can make a portal in time", 53, 5);
     public final Material SMALL_BLADE = new Material("Small Blade", "Can be used to press items into liquid", 54, 2);
-
+    public final Material COPPER_WIRE = new Material("Copper Wire", "Great conductor", 55, 2);
 
 
 
@@ -161,5 +161,6 @@ public class MaterialsList {
         ELITE_GEARS.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {ADVANCED_GEARS, STEEL_INGOT, ADVANCED_GEARS, STEEL_INGOT, STEEL_INGOT, STEEL_INGOT, STEEL_INGOT, STABILIZED_WOOD, SASMITE_BAR});
         VOID_GEARS.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {ELITE_GEARS, ELITE_GEARS, CRIMSTONE_BAR, CRIMSTONE_BAR, CRIMSTONE_BAR, CRIMSTONE_BAR, CRIMSTONE_BAR, CRIMSTONE_BAR, SASMITE_BAR, SASMITE_BAR, AMBER, AMBER});
         SMALL_BLADE.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {IRON_INGOT, IRON_INGOT, IRON_INGOT});
+        COPPER_WIRE.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {COPPER_INGOT, COPPER_INGOT, COPPER_INGOT});
     }
 }

@@ -5,10 +5,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.rohan.dragoncell.FileUtils.GifDecoder;
 import com.rohan.dragoncell.FileUtils.Tuple;
+import com.rohan.dragoncell.GameScenes.MainScreen;
 import com.rohan.dragoncell.GameUtils.ItemStack;
 import com.rohan.dragoncell.GameUtils.Material;
 import com.rohan.dragoncell.GameUtils.MaterialsList;
 import com.rohan.dragoncell.GameUtils.ObtainMethods;
+import com.rohan.dragoncell.Main;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -116,6 +118,10 @@ public class Forge {
             return true;
         }
 
+        if(!checkDiscovered(temp.stackedItem)) {
+            return true;
+        }
+
         for(ItemStack material : forgeItems) {
             if(material.stackedItem.getSprite().getX() == temp.stackedItem.getSprite().getX() && material.stackedItem.getSprite().getY() == temp.stackedItem.getSprite().getY()) {
                 Gdx.app.log("Forge", "Forge Drop Failed");
@@ -125,6 +131,19 @@ public class Forge {
         Gdx.app.log("Forge", "Forge Drop Successful");
         forgeItems.add(temp);
         inventory.followMaterial = null;
+        return false;
+    }
+
+    private boolean checkDiscovered(Material material) {
+        for(Material m : materials.materialList) {
+            if(m.name.equals(material.name)) {
+                if(m.discovered) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
         return false;
     }
 
@@ -298,6 +317,7 @@ public class Forge {
                 }
             }
         }
+        MainScreen.headsUp.player.getLeveling().setSubLevelPoints(MainScreen.headsUp.player.getLeveling().getSubLevelPoints() + 1);
         tempMaterial.setCenter(forgeSlots.get((forgePos - 1) + 4).getX() + 25, forgeSlots.get((forgePos - 1) + 4).getY() + 25);
 
         boolean countAdd = false;

@@ -7,9 +7,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class BreakableObject {
 
     public Sprite sprite;
+    public int ID;
+    public boolean unobtainable = false;
     public int hits = 0;
 
-    public BreakableObject(String spritePath) {
+    public BreakableObject(String spritePath, int ID) {
+        this.ID = ID;
         sprite = new Sprite(new Texture(spritePath));
     }
 

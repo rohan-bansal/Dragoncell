@@ -58,11 +58,10 @@ public class MainScreen implements Screen {
         player.getInventory().addItem(new Material(materials.BASIC_GEARS), 3);
         player.getInventory().addItem(new Material(materials.SMALL_BLADE), 3);
         player.getInventory().addItem(new Material(materials.CACTUS), 2);
+        player.getInventory().addItem(new Material(materials.CACTUS_RESIN), 2);
         player.getInventory().addItem(new Material(materials.COAL), 5);
         player.getInventory().addItem(new Material(materials.STICK));
-        player.getInventory().addItem(new Material(materials.LEATHER), 2);
-        player.getInventory().addItem(new Material(materials.PAPER), 2);
-        player.getInventory().addItem(new Material(materials.WELDED_SAND), 10);
+        player.getInventory().addItem(new Material(materials.WOOD), 6);
 
     }
 
@@ -87,12 +86,18 @@ public class MainScreen implements Screen {
             forge.threadTime();
         }
 
+        if(!headsUp.presserActive && presser.pressingActive) {
+            presser.threadTime();
+        }
+
         if(Gdx.input.isKeyJustPressed(Input.Keys.U)) {
             player.getInventory().refreshInventory();
         } else if(Gdx.input.isKeyJustPressed(Input.Keys.I)) {
             Gdx.app.log("Main", Gdx.input.getX() + " | " + (800 - Gdx.input.getY()));
         } else if(Gdx.input.isKeyJustPressed(Input.Keys.O)) {
             collectionView.refreshView();
+        } else if(Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+            player.getLeveling().setSubLevelPoints(player.getLeveling().getSubLevelPoints() + 1);
         }
 
     }

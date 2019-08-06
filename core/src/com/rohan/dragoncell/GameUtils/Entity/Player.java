@@ -7,15 +7,17 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.rohan.dragoncell.GameUtils.Display.Leveling;
 
 import java.util.HashMap;
 
 public class Player {
 
     private Inventory inventory;
+    private Leveling leveling;
 
-    public int hearts = 20;
-    public int health = 20;
+    public int hearts = 10;
+    public int health = 10;
     public int coins = 0;
     public float speed = 1.5f;
 
@@ -38,6 +40,9 @@ public class Player {
     public Player() {
 
         inventory = new Inventory(this);
+        leveling = new Leveling();
+
+        leveling.setLevel(1);
 
         position = new Vector2(285, 260);
 
@@ -63,10 +68,15 @@ public class Player {
         return inventory;
     }
 
+    public Leveling getLeveling() {
+        return leveling;
+    }
+
 
     public void renderInventory() {
 
         inventory.render();
+        leveling.update();
     }
 
     public void renderPlayer(SpriteBatch batch) {

@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 public class HUD {
 
-    private Player player;
+    public Player player;
     private SpriteBatch batch = new SpriteBatch();
 
     private Texture heart, emptyHeart, inventory, chest, crafting_, recipeBook, forge_, presser_;
@@ -28,7 +28,7 @@ public class HUD {
     public boolean collectionActive = false;
     public boolean matBookActive = true;
     public boolean presserActive = false;
-    public boolean presserUnlocked = true;
+    public boolean presserUnlocked = false;
 
     public HashMap<String, String> alert = new HashMap<String, String>();
     private BitmapFont alertDrawer = new BitmapFont(Gdx.files.internal("Fonts/ari2.fnt"), Gdx.files.internal("Fonts/ari2.png"), false);
@@ -40,6 +40,9 @@ public class HUD {
     private BitmapFont inventory_ = new BitmapFont(Gdx.files.internal("Fonts/turok2.fnt"), Gdx.files.internal("Fonts/turok2.png"), false);
     private BitmapFont crafting = new BitmapFont(Gdx.files.internal("Fonts/turok2.fnt"), Gdx.files.internal("Fonts/turok2.png"), false);
     private BitmapFont recipe_ = new BitmapFont(Gdx.files.internal("Fonts/turok2.fnt"), Gdx.files.internal("Fonts/turok2.png"), false);
+
+    private BitmapFont levelDrawer = new BitmapFont(Gdx.files.internal("Fonts/ari2.fnt"), Gdx.files.internal("Fonts/ari2.png"), false);
+
 
     public HUD(Player player) {
         this.player = player;
@@ -62,6 +65,8 @@ public class HUD {
         clearIconHighlight = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/clear_highlight.png")));
         finishIcon = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/finish.png")));
         finishIconHighlight = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/finish_highlight.png")));
+
+        levelDrawer.getData().setScale(0.6f);
 
         craftingIcon.setPosition(549, 400);
         forgeIcon.setPosition(549, 370);
@@ -141,6 +146,16 @@ public class HUD {
                     }
                 }
             }
+
+            layout.setText(levelDrawer, new String(new char[player.getLeveling().getSubLevelPoints()]).replace("\0", "-"));
+            levelDrawer.setColor(Color.GREEN);
+            levelDrawer.draw(batch, new String(new char[player.getLeveling().getSubLevelPoints()]).replace("\0", "-"), 10, 755);
+            levelDrawer.setColor(Color.LIGHT_GRAY);
+            levelDrawer.draw(batch, new String(new char[player.getLeveling().getSubLevelGoal() - player.getLeveling().getSubLevelPoints()]).replace("\0", "-"),
+                    10 + layout.width + 2, 755);
+
+            levelDrawer.setColor(Color.GOLDENROD);
+            levelDrawer.draw(batch, "Level " + player.getLeveling().getLevel(), 10, 735);
         }
 
         crafting.setColor(Color.TAN);

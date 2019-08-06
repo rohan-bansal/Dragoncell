@@ -16,6 +16,7 @@ public class Material {
     public String obtainMethod;
     public int rarity;
     public boolean unpickupable;
+    public int levelNeeded = 1;
     private Sprite sprite;
 
     public boolean canBeFilled = false;
@@ -79,6 +80,7 @@ public class Material {
 
     public Material(Material material) {
         this.name = material.name;
+        this.levelNeeded = material.levelNeeded;
         this.description = material.description;
         this.ID = material.ID;
         this.rarity = material.rarity;
@@ -129,6 +131,7 @@ public class Material {
     public Material setVariables(Material material) {
         material.canBeFilled = canBeFilled;
         material.canBeCrafted = canBeCrafted;
+        material.levelNeeded = levelNeeded;
         material.isOre = isOre;
         material.isSeed = isSeed;
         material.discovered = discovered;
@@ -157,6 +160,11 @@ public class Material {
 
     public Material setFuel(boolean fuel) {
         this.isFuel = fuel;
+        return this;
+    }
+
+    public Material setLevelNeeded(int level) {
+        this.levelNeeded = level;
         return this;
     }
 

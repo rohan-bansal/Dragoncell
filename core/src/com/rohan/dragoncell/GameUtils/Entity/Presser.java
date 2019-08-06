@@ -24,6 +24,7 @@ public class Presser {
     private float smeltTime = 20f;
     private boolean pressSucc = false;
     private float stateTime = 0f;
+    public boolean pressingActive = false;
 
     private BitmapFont itemCounter = new BitmapFont(Gdx.files.internal("Fonts/Retron2.fnt"), Gdx.files.internal("Fonts/Retron2.png"), false);
     private BitmapFont timeDrawer = new BitmapFont(Gdx.files.internal("Fonts/ari2.fnt"), Gdx.files.internal("Fonts/ari2.png"), false);
@@ -91,6 +92,10 @@ public class Presser {
         if(!ObtainMethods.juiceable.contains(temp.stackedItem.name.toLowerCase())) {
             return true;
         }
+
+        if(!checkDiscovered(temp.stackedItem)) {
+            return true;
+        }
 /*       if(temp.stackedItem.getSprite().getY() < 250) {
             return true;
         }*/
@@ -155,18 +160,19 @@ public class Presser {
             layout.setText(timeDrawer, ObtainMethods.round((double) smeltTime, 1) + "");
             timeDrawer.draw(batch, ObtainMethods.round((double) smeltTime, 1) + "",
                     presserIcon.getX() + 10, presserIcon.getY() - 70);
-            if(finishedPress != null) {
-                if(finishedPress.count > 1) {
-                    itemCounter.draw(batch, finishedPress.count + "", finishedPress.stackedItem.getSprite().getX() + 26, finishedPress.stackedItem.getSprite().getY() + 8);
-                }
-            }
             threadTime();
 
+        }
+        if(finishedPress != null) {
+            if(finishedPress.count > 1) {
+                itemCounter.draw(batch, finishedPress.count + "", finishedPress.stackedItem.getSprite().getX() + 26, finishedPress.stackedItem.getSprite().getY() + 8);
+            }
         }
     }
 
     public void threadTime() {
         smeltTime -= 0.015f;
+        pressingActive = true;
 
         if(smeltTime <= 0) {
             if(toPressItem.count > 1) {
@@ -186,6 +192,8 @@ public class Presser {
         }
         finishedPress.stackedItem.setCenter(presserFinish.getX() + 25, presserFinish.getY() + 25);
         pressSucc = true;
+        pressingActive = false;
+        player.getLeveling().setSubLevelPoints(player.getLeveling().getSubLevelPoints() + 1);
 
         if(bladeFuel.count > 1) {
             bladeFuel.count -= 1;
@@ -200,6 +208,19 @@ public class Presser {
         }
     }
 
+    private boolean checkDiscovered(Material material) {
+        for(Material m : lis_.materialList) {
+            if(m.name.equals(material.name)) {
+                if(m.discovered) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+
     public void clearGrid() {
         if(toPressItem != null) {
             inventory.addItem(toPressItem.stackedItem, toPressItem.count);
@@ -210,5 +231,6 @@ public class Presser {
 
         toPressItem = null;
         bladeFuel = null;
+        pressingActive = false;
     }
 }

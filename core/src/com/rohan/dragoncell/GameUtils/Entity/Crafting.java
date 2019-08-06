@@ -100,6 +100,7 @@ public class Crafting {
                 craft = new Material("Presser", "Materials/presser.png", "Null", 0, 1);
                 craft.setCenter(outputSuccess.getX() + 25, outputSuccess.getY() + 25);
                 craftingItems.clear();
+                MainScreen.headsUp.player.getLeveling().setSubLevelPoints(MainScreen.headsUp.player.getLeveling().getSubLevelPoints() + 1);
                 return;
             }
         }
@@ -112,17 +113,36 @@ public class Crafting {
             if (temp2.size() == temp.size()) {
                 if (temp.containsAll(temp2) && temp2.containsAll(temp)) {
                     Gdx.app.log("Crafting", "Crafting Option: " + m.name);
-                    craft = new Material(m.name, m.description, m.ID, m.rarity);
-                    break;
+                    if(!checkDiscovered(m)) {
+                        return;
+                    } else {
+                        craft = new Material(m.name, m.description, m.ID, m.rarity);
+                        break;
+                    }
+
                 }
             }
         }
 
         if(craft != null) {
             outputSucc = true;
+            MainScreen.headsUp.player.getLeveling().setSubLevelPoints(MainScreen.headsUp.player.getLeveling().getSubLevelPoints() + 1);
             craft.setCenter(outputSuccess.getX() + 25, outputSuccess.getY() + 25);
             craftingItems.clear();
         }
+    }
+
+    private boolean checkDiscovered(Material material) {
+        for(Material m : materials.materialList) {
+            if(m.name.equals(material.name)) {
+                if(m.discovered) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+        return false;
     }
 
     public boolean addToSlot(int slot) {

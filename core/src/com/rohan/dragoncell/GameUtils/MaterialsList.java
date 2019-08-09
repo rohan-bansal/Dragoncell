@@ -20,13 +20,13 @@ public class MaterialsList {
 
     public final Material STICK = new Material("Wooden Stick", "Can be obtained from trees or carving", 1, 1).setFuel(true);
     public final Material STONE = new Material("Stone", "Hard material obtained from mining", 2, 1);
-    public final Material AMBER = new Material("Amber", "Might contain a mosquito", 3, 3).setLevelNeeded(15);
+    public final Material AMBER = new Material("Amber", "Might contain a mosquito", 3, 3).setLevelNeeded(9);
     public final Material DIRT = new Material("Dirt", "Diggy diggy hole", 4, 1).setFuel(true);
     public final Material WOOD = new Material("Wood", "Obtained from trees through sawing", 5, 1);
-    public final Material SASMITE_ORE = new Material("Sasmite Ore", "Created from Earth's seismic motions", 6, 3).setLevelNeeded(10);
+    public final Material SASMITE_ORE = new Material("Sasmite Ore", "Created from Earth's seismic motions", 6, 3).setLevelNeeded(5);
     public final Material SASMITE_BAR = new Material("Sasmite Bar", "Very hard and shock resistant metal", 7, 3);
     public final Material COAL = new Material("Coal", "Powers almost everything", 8, 1).setFuel(true);
-    public final Material CRIMSTONE_ORE = new Material("Crimstone Ore", "Epic mining drop", 9, 4).setLevelNeeded(12);
+    public final Material CRIMSTONE_ORE = new Material("Crimstone Ore", "Epic mining drop", 9, 4).setLevelNeeded(7);
     public final Material CRIMSTONE_BAR = new Material("Crimstone Bar", "Contains the essence of the Earth's core", 10, 4);
     public final Material IRON_ORE = new Material("Iron Ore", "One of the most abundant ores", 11, 2);
     public final Material IRON_INGOT = new Material("Iron Ingot", "Important crafting material", 12, 2);

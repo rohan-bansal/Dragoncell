@@ -162,6 +162,7 @@ public class Inventory {
 
         for(ItemStack material : materialsToRemove) {
             inventory.remove(material);
+            refreshInventory();
         }
 
         materialsToRemove.clear();

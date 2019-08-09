@@ -53,7 +53,7 @@ public class MainScreen implements Screen {
 
         Gdx.app.log("World", "Materials and Recipes Loaded");
 
-        player.getInventory().addItem(new Material(materials.IRON_ORE), 19);
+        player.getInventory().addItem(new Material(materials.IRON_ORE), 18);
         player.getInventory().addItem(new Material(materials.HARDENED_STONE), 3);
         player.getInventory().addItem(new Material(materials.BASIC_GEARS), 3);
         player.getInventory().addItem(new Material(materials.SMALL_BLADE), 3);

@@ -1,5 +1,7 @@
 package com.rohan.dragoncell.GameUtils.Display;
 
+import com.rohan.dragoncell.GameScenes.MainScreen;
+
 public class Leveling {
 
 
@@ -13,6 +15,8 @@ public class Leveling {
             level++;
             subLevelPoints = 0;
             subLevelGoal += 1;
+            MainScreen.headsUp.alert.put("alert_text", "Leveled Up");
+            MainScreen.headsUp.alert.put("alert_description", "Level " + level);
         }
 
     }

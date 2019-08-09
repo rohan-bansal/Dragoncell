@@ -66,7 +66,7 @@ public class ObtainMethods {
 
     public static final HashMap<String, Integer> juicedInto = new HashMap<String, Integer>() {{
         put("Blackberry", 43);
-        put("Apple", 42);
+        put("Green Apple", 42);
         put("Cherry", 45);
         put("Carrot", 41);
         put("Cactus", 47);

@@ -177,31 +177,37 @@ public class Collection {
     private void desertBiome(SpriteBatch batch, Rectangle tempRect) {
         if(Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             for (BreakableObject cact : desert) {
-                if (tempRect.overlaps(cact.sprite.getBoundingRectangle())) {
-                    if (cact.hits == 7) {
-                        desertToRemove.add(cact);
-                        player.getLeveling().setSubLevelPoints(player.getLeveling().getSubLevelPoints() + 1);
-                        String path = ((FileTextureData) cact.sprite.getTexture().getTextureData()).getFileHandle().path();
-                        if (path.contains("cactus")) {
-                            player.getInventory().addItem(new Material(materials.CACTUS));
-                            discoveredItem(materials.CACTUS);
+                if(!cact.unobtainable) {
+                    if (tempRect.overlaps(cact.sprite.getBoundingRectangle())) {
+                        if (cact.hits == 7) {
+                            desertToRemove.add(cact);
+                            player.getLeveling().setSubLevelPoints(player.getLeveling().getSubLevelPoints() + 1);
+                            String path = ((FileTextureData) cact.sprite.getTexture().getTextureData()).getFileHandle().path();
+                            if (path.contains("cactus")) {
+                                player.getInventory().addItem(new Material(materials.CACTUS));
+                                discoveredItem(materials.CACTUS);
+                            }
+                        } else {
+                            cact.hits += 1;
                         }
-                    } else {
-                        cact.hits += 1;
                     }
                 }
+
             }
         }
         for(BreakableObject object_ : desert) {
             if(biomeType == 3) {
-                Rectangle tempRect_ = new Rectangle(player.position.x, player.position.y, player.currentFrame.getRegionWidth(), player.currentFrame.getRegionHeight());
-                if (tempRect_.overlaps(object_.sprite.getBoundingRectangle())) {
-                    axeIcon.setCenter(object_.sprite.getX() + (object_.sprite.getWidth() / 2), object_.sprite.getY() + 75);
-                    axeIcon.draw(batch);
-                    if(object_.hits != 0) {
-                        nameDrawer.draw(batch, object_.hits + "", object_.sprite.getX() + 35, object_.sprite.getY() + 45);
+                if(!object_.unobtainable) {
+                    Rectangle tempRect_ = new Rectangle(player.position.x, player.position.y, player.currentFrame.getRegionWidth(), player.currentFrame.getRegionHeight());
+                    if (tempRect_.overlaps(object_.sprite.getBoundingRectangle())) {
+                        axeIcon.setCenter(object_.sprite.getX() + (object_.sprite.getWidth() / 2), object_.sprite.getY() + 75);
+                        axeIcon.draw(batch);
+                        if(object_.hits != 0) {
+                            nameDrawer.draw(batch, object_.hits + "", object_.sprite.getX() + 35, object_.sprite.getY() + 45);
+                        }
                     }
                 }
+
             }
         }
     }
@@ -339,7 +345,6 @@ public class Collection {
                             } else {
                                 player.getInventory().materialsToRemove.add(item);
                             }
-                            player.getInventory().refreshInventory();
                             Gdx.app.log("Collection", "Unlocked Desert Area");
                             discoveredItem(materials.WATER, "Desert");
                             return true;
@@ -362,7 +367,6 @@ public class Collection {
                             } else {
                                 player.getInventory().materialsToRemove.add(item);
                             }
-                            player.getInventory().refreshInventory();
                             Gdx.app.log("Collection", "Unlocked Beach Area");
                             discoveredItem(materials.WATER, "Beach");
                             return true;

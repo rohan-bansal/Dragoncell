@@ -1,5 +1,6 @@
 package com.rohan.dragoncell.GameUtils.Entity;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -7,6 +8,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.rohan.dragoncell.FileUtils.MyTextInputListener;
+import com.rohan.dragoncell.GameScenes.MainScreen;
 import com.rohan.dragoncell.GameUtils.Material;
 import com.rohan.dragoncell.GameUtils.MaterialsList;
 import com.rohan.dragoncell.GameUtils.ObtainMethods;
@@ -15,6 +19,7 @@ public class MaterialsBook {
 
     private boolean questionDrawerActive = false;
     private boolean recipeShowing = false;
+    private boolean refreshing = false;
 
     private BitmapFont nameDrawer = new BitmapFont(Gdx.files.internal("Fonts/turok2.fnt"), Gdx.files.internal("Fonts/turok2.png"), false);
     private BitmapFont questionDrawer = new BitmapFont(Gdx.files.internal("Fonts/turok2.fnt"), Gdx.files.internal("Fonts/turok2.png"), false);
@@ -26,7 +31,7 @@ public class MaterialsBook {
     private Sprite forge = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/forge.png")));
     private Sprite pixelTree = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/pixelTree.png")));
 
-    private Sprite next, down, back, next_high, back_high, return_;
+    private Sprite next, down, back, next_high, back_high, return_, search;
     GlyphLayout layout = new GlyphLayout();
 
     private int IDpage = 1;
@@ -34,8 +39,12 @@ public class MaterialsBook {
     private Material shownMat;
     private MaterialsList materials;
 
+    private MyTextInputListener listener;
+
     public MaterialsBook(MaterialsList materials) {
         this.materials = materials;
+
+        listener = new MyTextInputListener();
 
         next = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/arrow_right.png")));
         next_high = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/arrow_right_highlight.png")));
@@ -46,6 +55,7 @@ public class MaterialsBook {
         down = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/arrow_down.png")));
 
         return_ = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/back.png")));
+        search = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/search.png")));
 
         next.setCenter(450, 730);
         next_high.setCenter(450, 730);
@@ -54,6 +64,9 @@ public class MaterialsBook {
         back_high.setCenter(125, 730);
 
         return_.setCenter(125, 555);
+
+        search.setScale(0.8f);
+        search.setCenter(410, 752);
 
         forge.setCenter(337, 650);
         pixelTree.setCenter(290, 650);
@@ -96,6 +109,35 @@ public class MaterialsBook {
 
         if(questionDrawerActive) {
             questionDrawer.draw(batch, "???", 200, 700);
+        }
+    }
+
+    public void setpageID(String text) {
+        try {
+            int tempID = Integer.parseInt(text);
+            Material material = materials.getMaterialByID(tempID);
+            if(material == null) {
+                MainScreen.headsUp.alert.put("alert_text", "ID Error");
+                MainScreen.headsUp.alert.put("alert_description", "No Material Found");
+            } else {
+                IDpage = material.ID;
+                refreshing = true;
+                return;
+            }
+
+        } catch (Exception e) {
+            for(Material m : materials.materialList) {
+                if(m.name.equals(text)) {
+                    if(m.discovered) {
+                        IDpage = m.ID;
+                        refreshing = true;
+                        return;
+                    }
+
+                }
+            }
+            MainScreen.headsUp.alert.put("alert_text", "Name Error");
+            MainScreen.headsUp.alert.put("alert_description", "No Material Found");
         }
     }
 
@@ -412,6 +454,18 @@ public class MaterialsBook {
             }
         }
 
+        if(refreshing) {
+            refreshMaterialShown();
+            refreshing = false;
+        }
+
+        search.draw(batch);
+        if (search.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+            if(Gdx.input.justTouched()) {
+                Gdx.input.getTextInput(listener, "Search", "", "ID / Name");
+            }
+        }
+
         if (shownMat.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
             if(shownMat.canBeCrafted || shownMat.isSeed || shownMat.isOre || shownMat.canBeFilled || shownMat.canBeJuiced
                     || shownMat.canBeGround || shownMat.obtainMethod.equals(ObtainMethods.TREE)) {
@@ -424,6 +478,7 @@ public class MaterialsBook {
     }
 
     private void refreshMaterialShown() {
+
         for(Material material : materials.materialList) {
             if(material.discovered) {
                 if(material.ID == IDpage) {
@@ -440,5 +495,12 @@ public class MaterialsBook {
             }
 
         }
+        /*Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });*/
+
     }
 }

@@ -35,7 +35,6 @@ public class HUD {
 
     private float animTime = 0f;
 
-
     private GlyphLayout layout = new GlyphLayout();
     private BitmapFont inventory_ = new BitmapFont(Gdx.files.internal("Fonts/turok2.fnt"), Gdx.files.internal("Fonts/turok2.png"), false);
     private BitmapFont crafting = new BitmapFont(Gdx.files.internal("Fonts/turok2.fnt"), Gdx.files.internal("Fonts/turok2.png"), false);

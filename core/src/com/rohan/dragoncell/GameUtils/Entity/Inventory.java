@@ -193,7 +193,6 @@ public class Inventory {
     }
 
     public void refreshInventory() {
-        Gdx.app.log("Inventory", "Inventory Refreshed");
         slotToFill = 1;
         for(ItemStack item : inventory) {
             item.stackedItem.setCenter(slots.get(slotToFill - 1).getX() + 25, slots.get(slotToFill - 1).getY() + 25);
@@ -365,5 +364,9 @@ public class Inventory {
 
     public ArrayList<ItemStack> getInventory() {
         return inventory;
+    }
+
+    public void setInventory(ArrayList<ItemStack> inventory) {
+        this.inventory = inventory;
     }
 }

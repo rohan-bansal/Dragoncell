@@ -34,7 +34,7 @@ public class MaterialsBook {
     private Sprite next, down, back, next_high, back_high, return_, search;
     GlyphLayout layout = new GlyphLayout();
 
-    private int IDpage = 1;
+    public int IDpage = 1;
     private int recipePage = 1;
     private Material shownMat;
     private MaterialsList materials;
@@ -127,7 +127,7 @@ public class MaterialsBook {
 
         } catch (Exception e) {
             for(Material m : materials.materialList) {
-                if(m.name.equals(text)) {
+                if(m.name.toLowerCase().equals(text.toLowerCase())) {
                     if(m.discovered) {
                         IDpage = m.ID;
                         refreshing = true;

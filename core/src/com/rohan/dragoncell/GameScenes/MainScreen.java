@@ -6,13 +6,16 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.rohan.dragoncell.FileUtils.DataManager;
 import com.rohan.dragoncell.FileUtils.ModInputProcessor;
-import com.rohan.dragoncell.FileUtils.SoundEffects;
 import com.rohan.dragoncell.GameUtils.Display.HUD;
 import com.rohan.dragoncell.GameUtils.Display.ViewCam;
 import com.rohan.dragoncell.GameUtils.Entity.*;
+import com.rohan.dragoncell.GameUtils.ItemStack;
 import com.rohan.dragoncell.GameUtils.Material;
 import com.rohan.dragoncell.GameUtils.MaterialsList;
+
+import java.util.ArrayList;
 
 public class MainScreen implements Screen {
 
@@ -27,20 +30,30 @@ public class MainScreen implements Screen {
     public static MaterialsBook materialsBook;
     public static Collection collectionView;
     public static Presser presser;
+    public static DataManager manager;
 
 
-    private boolean loadData = false;
+    //private boolean loadData = false;
+    public static boolean encryptSaveFiles = false;
 
 
     public MainScreen(Game game, boolean loadData) {
         this.game = game;
-        this.loadData = loadData;
+        //this.loadData = loadData;
 
         initPlayer();
         initMaterials();
 
         ModInputProcessor processor = new ModInputProcessor(player.getInventory());
         Gdx.input.setInputProcessor(processor);
+
+        if(loadData) {
+            manager.loadData();
+            loadNewData();
+        } else {
+            manager.createNewSave();
+            applyNewData();
+        }
     }
 
     private void initMaterials() {
@@ -50,6 +63,8 @@ public class MainScreen implements Screen {
         materialsBook = new MaterialsBook(materials);
         collectionView = new Collection(materials, player);
         presser = new Presser(player, materials);
+
+        manager = new DataManager(player);
 
         Gdx.app.log("World", "Materials and Recipes Loaded");
 
@@ -71,6 +86,65 @@ public class MainScreen implements Screen {
         camera = new ViewCam();
     }
 
+    private void applyNewData() {
+        manager.gameData.setInventory(player.getInventory().getInventory());
+        manager.gameData.setAreaNumber(collectionView.areaNumber);
+        manager.gameData.setBeachUnlocked(player.beachUnlocked);
+        manager.gameData.setDesertUnlocked(player.desertUnlocked);
+        manager.gameData.setOreFieldUnlocked(player.oreFieldUnlocked);
+        manager.gameData.setIDpage(materialsBook.IDpage);
+        manager.gameData.setMaterialsActive(headsUp.matBookActive);
+        manager.gameData.setPresserUnlocked(headsUp.presserUnlocked);
+        manager.gameData.setLevel(player.getLeveling().getLevel());
+        manager.gameData.setSubLevelGoal(player.getLeveling().getSubLevelGoal());
+        manager.gameData.setSubLevels(player.getLeveling().getSubLevelPoints());
+
+
+        for(Material m : materials.materialList) {
+            if(m.discovered) {
+                manager.gameData.getUnlocked().put(m.name, true);
+            }
+        }
+
+        manager.saveData();
+    }
+
+    private void loadNewData() {
+        player.beachUnlocked = manager.gameData.isBeachUnlocked();
+        player.oreFieldUnlocked = manager.gameData.isOreFieldUnlocked();
+        player.desertUnlocked = manager.gameData.isDesertUnlocked();
+        headsUp.presserUnlocked = manager.gameData.isPresserUnlocked();
+        headsUp.matBookActive = manager.gameData.isMaterialsActive();
+
+        player.getLeveling().setLevel(manager.gameData.getLevel());
+        player.getLeveling().setSubLevelPoints(manager.gameData.getSubLevels());
+        player.getLeveling().setSubLevelGoal(manager.gameData.getSubLevelGoal());
+
+
+        collectionView.areaNumber = manager.gameData.getAreaNumber();
+        materialsBook.IDpage = manager.gameData.getIDpage();
+
+        ArrayList<ItemStack> temp = new ArrayList<ItemStack>();
+        for(Material m : materials.materialList) {
+            for(ItemStack invItem : manager.gameData.getInventory()) {
+                if(invItem.stackedItem.name.equals(m.name)) {
+                    temp.add(new ItemStack(new Material(m), invItem.count));
+                }
+            }
+            if(manager.gameData.getUnlocked().keySet().contains(m.name)) {
+                m.discovered = manager.gameData.getUnlocked().get(m.name);
+            }
+
+        }
+
+
+        manager.gameData.setInventory(temp);
+
+        player.getInventory().setInventory(manager.gameData.getInventory());
+
+        player.getInventory().refreshInventory();
+
+    }
 
     @Override
     public void render(float delta) {
@@ -98,6 +172,8 @@ public class MainScreen implements Screen {
             collectionView.refreshView();
         } else if(Gdx.input.isKeyJustPressed(Input.Keys.P)) {
             player.getLeveling().setSubLevelPoints(player.getLeveling().getSubLevelPoints() + 1);
+        } else if(Gdx.input.isKeyJustPressed(Input.Keys.K)) {
+            applyNewData();
         }
 
     }

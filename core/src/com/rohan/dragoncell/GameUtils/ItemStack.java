@@ -10,6 +10,8 @@ public class ItemStack {
         this.count = count;
     }
 
+    public ItemStack() {}
+
     public void addItem() {
         count += 1;
     }

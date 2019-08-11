@@ -21,7 +21,7 @@ public class Main extends Game {
 
 	@Override
 	public void create () {
-		Gdx.app.log("Main", "Loading Libraries: Program Launched: Code 0");
+		Gdx.app.log("Main", "Loading Libraries: Program Launched");
 		batch = new SpriteBatch();
 
 		logo = new Sprite(new Texture(Gdx.files.internal("Interface/Title/logo.png")));

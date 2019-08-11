@@ -4,11 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Material {
+public class Material implements Json.Serializable {
 
     public String name;
     public String description;
@@ -61,6 +63,8 @@ public class Material {
         this.sprite = new Sprite(new Texture(Gdx.files.internal("Materials/" + temp2 + ".png")));
         this.sprite.setSize(32, 32);
     }
+
+    public Material() {}
 
     public Material(String name, String path, String description, int ID, int rarity, boolean... unpickupable) {
         this.name = name;
@@ -224,5 +228,31 @@ public class Material {
         this.juicedInto = juicedInto;
         this.canBeJuiced = true;
         return this;
+    }
+
+    @Override
+    public void write(Json json) {
+        json.writeValue("name", name);
+        json.writeValue("description", description);
+        json.writeValue("ID", ID);
+        json.writeValue("obtainMethod", obtainMethod);
+        json.writeValue("rarity", rarity);
+        json.writeValue("unpickupable", unpickupable);
+        json.writeValue("levelNeeded", levelNeeded);
+        json.writeValue("spritePath", "Materials/" + name.toLowerCase().replaceAll(" ", "_") + ".png");
+    }
+
+    @Override
+    public void read(Json json, JsonValue jsonData) {
+        name = jsonData.getString("name");
+        description = jsonData.getString("description");
+        ID = jsonData.getInt("ID");
+        obtainMethod = jsonData.getString("obtainMethod");
+        rarity = jsonData.getInt("rarity");
+        unpickupable = jsonData.getBoolean("unpickupable");
+        levelNeeded = jsonData.getInt("levelNeeded");
+        sprite = new Sprite(new Texture(jsonData.getString("spritePath")));
+
+        sprite.setSize(32, 32);
     }
 }

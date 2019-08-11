@@ -38,7 +38,7 @@ public class Collection {
     private Sprite axeIcon = new Sprite(new Texture(Gdx.files.internal("Interface/World/Collection/axe.png")));
     private Sprite hammerIcon = new Sprite(new Texture(Gdx.files.internal("Interface/World/Collection/hammer.png")));
 
-    private int areaNumber = 1;
+    public int areaNumber = 1;
     private int biomeType = 1;
     private int prevBiomeType = 1;
     private Rectangle tempRect;
@@ -317,7 +317,6 @@ public class Collection {
             if(prevBiomeType != biomeType) {
                 if(biomeType == 2) {
                     for(BreakableObject tree : trees) {
-                        Gdx.app.log("here", "here");
                         recursivePosChange(tree, 1);
                     }
                 }
@@ -395,7 +394,6 @@ public class Collection {
     }
 
     private void recursivePosChange(BreakableObject object, int scenario) {
-        Gdx.app.log("Collection", "Recursively Pos Changing");
 
         if(scenario == 1) {
             if(object.sprite.getY() < 325 && object.sprite.getY() > 175) {

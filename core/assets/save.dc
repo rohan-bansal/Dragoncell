@@ -1,0 +1,116 @@
+{
+health: 10
+hearts: 10
+level: 4
+subLevels: 4
+subLevelGoal: 8
+desertUnlocked: true
+oreFieldUnlocked: true
+presserUnlocked: true
+IDpage: 1
+areaNumber: 2
+inventory: [
+	{
+		count: 3
+		stackedItem: {
+			name: Small Blade
+			description: Can be used to press items into liquid
+			ID: 54
+			obtainMethod: crafting
+			rarity: 2
+			unpickupable: false
+			levelNeeded: 1
+			spritePath: Materials/small_blade.png
+		}
+	}
+	{
+		count: 4
+		stackedItem: {
+			name: Cactus
+			description: The sharpest plant
+			ID: 46
+			obtainMethod: tree
+			rarity: 2
+			unpickupable: false
+			levelNeeded: 1
+			spritePath: Materials/cactus.png
+		}
+	}
+	{
+		count: 2
+		stackedItem: {
+			name: Cactus Resin
+			description: The sticky juice of a cactus
+			ID: 47
+			obtainMethod: juicing
+			rarity: 2
+			unpickupable: false
+			levelNeeded: 1
+			spritePath: Materials/cactus_resin.png
+		}
+	}
+	{
+		count: 5
+		stackedItem: {
+			name: Coal
+			description: Powers almost everything
+			ID: 8
+			obtainMethod: mining
+			rarity: 1
+			unpickupable: false
+			levelNeeded: 1
+			spritePath: Materials/coal.png
+		}
+	}
+	{
+		count: 1
+		stackedItem: {
+			name: Wooden Stick
+			description: Can be obtained from trees or carving
+			ID: 1
+			obtainMethod: tree
+			rarity: 1
+			unpickupable: false
+			levelNeeded: 1
+			spritePath: Materials/wooden_stick.png
+		}
+	}
+	{
+		count: 6
+		stackedItem: {
+			name: Wood
+			description: Obtained from trees through sawing
+			ID: 5
+			obtainMethod: crafting
+			rarity: 1
+			unpickupable: false
+			levelNeeded: 1
+			spritePath: Materials/wood.png
+		}
+	}
+]
+unlocked: {
+	Cactus Resin: true
+	Stabilized Wood: true
+	Advanced Gears: true
+	Hardened Wood: true
+	Iron Ingot: true
+	Wood: true
+	Flint: true
+	Wooden Stick: true
+	Nails: true
+	Dirt: true
+	Iron Ore: true
+	Steel Ingot: true
+	Stone: true
+	Basic Gears: true
+	Void Gears: true
+	Torch: true
+	Reinforced Gears: true
+	Elite Gears: true
+	Coal: true
+	Cactus: true
+	Small Blade: true
+	Firestarter: true
+}
+}

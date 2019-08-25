@@ -1,15 +1,51 @@
 {
 health: 10
 hearts: 10
-level: 4
-subLevels: 4
-subLevelGoal: 8
-desertUnlocked: true
-oreFieldUnlocked: true
-presserUnlocked: true
+level: 1
+subLevelGoal: 5
+materialsActive: true
 IDpage: 1
-areaNumber: 2
+areaNumber: 1
 inventory: [
+	{
+		count: 18
+		stackedItem: {
+			name: Iron Ore
+			description: One of the most abundant ores
+			ID: 11
+			obtainMethod: mining
+			rarity: 2
+			unpickupable: false
+			levelNeeded: 1
+			spritePath: Materials/iron_ore.png
+		}
+	}
+	{
+		count: 3
+		stackedItem: {
+			name: Hardened Stone
+			description: Much better building material
+			ID: 15
+			obtainMethod: smelting
+			rarity: 1
+			unpickupable: false
+			levelNeeded: 1
+			spritePath: Materials/hardened_stone.png
+		}
+	}
+	{
+		count: 3
+		stackedItem: {
+			name: Basic Gears
+			description: Crafts the mechanism for a common item
+			ID: 49
+			obtainMethod: crafting
+			rarity: 1
+			unpickupable: false
+			levelNeeded: 1
+			spritePath: Materials/basic_gears.png
+		}
+	}
 	{
 		count: 3
 		stackedItem: {
@@ -24,7 +60,7 @@ inventory: [
 		}
 	}
 	{
-		count: 4
+		count: 2
 		stackedItem: {
 			name: Cactus
 			description: The sharpest plant
@@ -90,27 +126,13 @@ inventory: [
 	}
 ]
 unlocked: {
-	Cactus Resin: true
-	Stabilized Wood: true
-	Advanced Gears: true
 	Hardened Wood: true
-	Iron Ingot: true
 	Wood: true
 	Flint: true
 	Wooden Stick: true
-	Nails: true
 	Dirt: true
-	Iron Ore: true
-	Steel Ingot: true
-	Stone: true
-	Basic Gears: true
-	Void Gears: true
-	Torch: true
-	Reinforced Gears: true
-	Elite Gears: true
 	Coal: true
-	Cactus: true
-	Small Blade: true
-	Firestarter: true
+	Stone: true
+	Torch: true
 }
 }

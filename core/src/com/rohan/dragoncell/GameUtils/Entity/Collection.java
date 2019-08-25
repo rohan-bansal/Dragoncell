@@ -20,6 +20,7 @@ import com.rohan.dragoncell.GameUtils.MaterialsList;
 import com.rohan.dragoncell.GameUtils.ObtainMethods;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import static com.rohan.dragoncell.GameUtils.ObtainMethods.areas;
@@ -43,6 +44,11 @@ public class Collection {
     private int prevBiomeType = 1;
     private Rectangle tempRect;
     private Color tempColor;
+
+    private int spawnOre_ = 0;
+    private int spawnCactus_ = 0;
+    private int spawnTree_ = 0;
+
 
     private BitmapFont nameDrawer = new BitmapFont(Gdx.files.internal("Fonts/ari2.fnt"), Gdx.files.internal("Fonts/ari2.png"), false);
     private BitmapFont noPickUpDrawer = new BitmapFont(Gdx.files.internal("Fonts/ari2.fnt"), Gdx.files.internal("Fonts/ari2.png"), false);
@@ -85,6 +91,19 @@ public class Collection {
             }
         }
 
+        for(int x = 0; x < spawnOre_; x++) {
+            spawnOre();
+            spawnOre_ -= 1;
+        }
+        for(int x = 0; x < spawnCactus_; x++) {
+            spawnCactus();
+            spawnCactus_ -= 1;
+        }
+        for(int x = 0; x < spawnTree_; x++) {
+            spawnTree();
+            spawnTree_ -= 1;
+        }
+        
         player.renderPlayer(batch);
         tempRect = new Rectangle(player.position.x, player.position.y, player.currentFrame.getRegionWidth(), player.currentFrame.getRegionHeight());
 
@@ -154,6 +173,7 @@ public class Collection {
                         } else if (path.contains("tree1")) {
                             player.getInventory().addItem(new Material(materials.STICK));
                         }
+                        spawnTree_ += 1;
                     } else {
                         tree_.hits += 1;
                     }
@@ -187,6 +207,7 @@ public class Collection {
                                 player.getInventory().addItem(new Material(materials.CACTUS));
                                 discoveredItem(materials.CACTUS);
                             }
+                            spawnCactus_ += 1;
                         } else {
                             cact.hits += 1;
                         }
@@ -211,7 +232,6 @@ public class Collection {
             }
         }
     }
-
     private void oreBiome(SpriteBatch batch, Rectangle tempRect) {
         if(Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             for (BreakableObject ore_ : ores) {
@@ -243,6 +263,7 @@ public class Collection {
                                 player.getInventory().addItem(new Material(materials.AMBER));
                                 discoveredItem(materials.AMBER);
                             }
+                            spawnOre_ += 1;
                         } else {
                             ore_.hits += 1;
                         }
@@ -458,57 +479,69 @@ public class Collection {
         desert.clear();
 
         for(int x = 0; x < 5; x++) {
-            BreakableObject tempTree = null;
-            int spawnPercentage = rand.nextInt(100);
-            if(spawnPercentage <= 60) {
-                tempTree = new BreakableObject("Interface/World/Collection/tree1.png", 0);
-            } else if(spawnPercentage <= 80) {
-                tempTree = new BreakableObject("Interface/World/Collection/tree2.png", 0);
-            } else if(spawnPercentage <= 100) {
-                tempTree = new BreakableObject("Interface/World/Collection/tree4.png", 0);
-            }
-            tempTree.sprite.setPosition(rand.nextInt((460 - 40) + 1) + 40, rand.nextInt((400 - 30) + 1) + 30);
-            recursivePosChange(tempTree, 2);
-
-            trees.add(tempTree);
+            spawnTree();
         }
 
         for(int x = 0; x < 10; x++) {
-            BreakableObject tempCact = new BreakableObject("Interface/World/Collection/cactus.png", 46);
-            tempCact.sprite.setPosition(rand.nextInt((460 - 40) + 1) + 40, rand.nextInt((400 - 30) + 1) + 30);
-            recursivePosChange(tempCact, 4);
-
-            desert.add(tempCact);
+            spawnCactus();
         }
 
         for(int x = 0; x < 15; x++) {
-            BreakableObject tempOre = null;
-            int spawnPercentage = rand.nextInt(100);
-            if(spawnPercentage <= 40) {
-                tempOre = new BreakableObject("Materials/stone.png", 2);
-                tempOre.sprite.setSize(32, 32);
-            } else if(spawnPercentage <= 60) {
-                tempOre = new BreakableObject("Materials/coal.png", 8);
-                tempOre.sprite.setSize(32, 32);
-            } else if(spawnPercentage <= 75) {
-                tempOre = new BreakableObject("Materials/iron_ore.png", 11);
-                tempOre.sprite.setSize(32, 32);
-            } else if(spawnPercentage <= 77) {
-                tempOre = new BreakableObject("Materials/amber.png", 3);
-                tempOre.sprite.setSize(32, 32);
-            } else if(spawnPercentage <= 90) {
-                tempOre = new BreakableObject("Materials/copper_ore.png", 24);
-                tempOre.sprite.setSize(32, 32);
-            } else if(spawnPercentage <= 97) {
-                tempOre = new BreakableObject("Materials/sasmite_ore.png", 6);
-                tempOre.sprite.setSize(32, 32);
-            } else if(spawnPercentage <= 100) {
-                tempOre = new BreakableObject("Materials/crimstone_ore.png", 9);
-                tempOre.sprite.setSize(32, 32);
-            }
-            tempOre.sprite.setPosition(rand.nextInt((460 - 40) + 1) + 40, rand.nextInt((440 - 30) + 1) + 30);
-            recursivePosChange(tempOre, 3);
-            ores.add(tempOre);
+            spawnOre();
         }
+    }
+
+    private void spawnTree() {
+        BreakableObject tempTree = null;
+        int spawnPercentage = rand.nextInt(100);
+        if(spawnPercentage <= 60) {
+            tempTree = new BreakableObject("Interface/World/Collection/tree1.png", 0);
+        } else if(spawnPercentage <= 80) {
+            tempTree = new BreakableObject("Interface/World/Collection/tree2.png", 0);
+        } else if(spawnPercentage <= 100) {
+            tempTree = new BreakableObject("Interface/World/Collection/tree4.png", 0);
+        }
+        tempTree.sprite.setPosition(rand.nextInt((460 - 40) + 1) + 40, rand.nextInt((400 - 30) + 1) + 30);
+        recursivePosChange(tempTree, 2);
+
+        trees.add(tempTree);
+    }
+
+    private void spawnCactus() {
+        BreakableObject tempCact = new BreakableObject("Interface/World/Collection/cactus.png", 46);
+        tempCact.sprite.setPosition(rand.nextInt((460 - 40) + 1) + 40, rand.nextInt((400 - 30) + 1) + 30);
+        recursivePosChange(tempCact, 4);
+
+        desert.add(tempCact);
+    }
+
+    private void spawnOre() {
+        BreakableObject tempOre = null;
+        int spawnPercentage = rand.nextInt(100);
+        if(spawnPercentage <= 40) {
+            tempOre = new BreakableObject("Materials/stone.png", 2);
+            tempOre.sprite.setSize(32, 32);
+        } else if(spawnPercentage <= 60) {
+            tempOre = new BreakableObject("Materials/coal.png", 8);
+            tempOre.sprite.setSize(32, 32);
+        } else if(spawnPercentage <= 75) {
+            tempOre = new BreakableObject("Materials/iron_ore.png", 11);
+            tempOre.sprite.setSize(32, 32);
+        } else if(spawnPercentage <= 77) {
+            tempOre = new BreakableObject("Materials/amber.png", 3);
+            tempOre.sprite.setSize(32, 32);
+        } else if(spawnPercentage <= 90) {
+            tempOre = new BreakableObject("Materials/copper_ore.png", 24);
+            tempOre.sprite.setSize(32, 32);
+        } else if(spawnPercentage <= 97) {
+            tempOre = new BreakableObject("Materials/sasmite_ore.png", 6);
+            tempOre.sprite.setSize(32, 32);
+        } else if(spawnPercentage <= 100) {
+            tempOre = new BreakableObject("Materials/crimstone_ore.png", 9);
+            tempOre.sprite.setSize(32, 32);
+        }
+        tempOre.sprite.setPosition(rand.nextInt((460 - 40) + 1) + 40, rand.nextInt((440 - 30) + 1) + 30);
+        recursivePosChange(tempOre, 3);
+        ores.add(tempOre);
     }
 }

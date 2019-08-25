@@ -9,8 +9,6 @@ package com.rohan.dragoncell.GameUtils;
 // 6 - mystic
 
 import com.badlogic.gdx.Gdx;
-import com.rohan.dragoncell.GameUtils.Entity.Crafting;
-import com.sun.org.apache.regexp.internal.RE;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -158,7 +156,7 @@ public class MaterialsList {
         BASIC_GEARS.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {HARDENED_WOOD, STICK, STICK, CACTUS});
         REINFORCED_GEARS.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {BASIC_GEARS, BASIC_GEARS, IRON_INGOT, IRON_INGOT, IRON_INGOT, IRON_INGOT, IRON_INGOT});
         ADVANCED_GEARS.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {REINFORCED_GEARS, STEEL_INGOT, REINFORCED_GEARS, STEEL_INGOT, STABILIZED_WOOD, STABILIZED_WOOD});
-        ELITE_GEARS.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {ADVANCED_GEARS, STEEL_INGOT, ADVANCED_GEARS, STEEL_INGOT, STEEL_INGOT, STEEL_INGOT, STEEL_INGOT, STABILIZED_WOOD, SASMITE_BAR});
+        ELITE_GEARS.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {ADVANCED_GEARS, STEEL_INGOT, ADVANCED_GEARS, STEEL_INGOT, STEEL_INGOT, STEEL_INGOT, STEEL_INGOT, STABILIZED_WOOD, STEEL_INGOT});
         VOID_GEARS.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {ELITE_GEARS, ELITE_GEARS, CRIMSTONE_BAR, CRIMSTONE_BAR, CRIMSTONE_BAR, CRIMSTONE_BAR, CRIMSTONE_BAR, CRIMSTONE_BAR, SASMITE_BAR, SASMITE_BAR, AMBER, AMBER});
         SMALL_BLADE.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {IRON_INGOT, IRON_INGOT, IRON_INGOT});
         COPPER_WIRE.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {COPPER_INGOT, COPPER_INGOT, COPPER_INGOT});

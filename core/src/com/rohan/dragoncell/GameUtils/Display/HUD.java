@@ -17,14 +17,16 @@ public class HUD {
     public Player player;
     private SpriteBatch batch = new SpriteBatch();
 
-    private Texture heart, emptyHeart, inventory, chest, crafting_, recipeBook, forge_, presser_;
+    private Texture heart, emptyHeart, inventory, chest, crafting_, recipeBook, forge_, presser_, shop_;
     public Texture collection_;
-    private Sprite craftingIcon, clearIcon, materialsBookIcon, forgeIcon, collectionIcon, clearIconHighlight, finishIcon, finishIconHighlight, presserIcon;
+    private Sprite craftingIcon, clearIcon, materialsBookIcon, forgeIcon, collectionIcon, clearIconHighlight, finishIcon, finishIconHighlight, presserIcon, shopIcon;
     private Sprite alert_ = new Sprite(new Texture(Gdx.files.internal("Interface/World/Collection/alert.png")));
     private boolean clearIconActive = true;
     private boolean finishIconActive = true;
     public boolean craftingActive = true;
     public boolean forgeActive = false;
+    public boolean shopActive = false;
+    public boolean shopUnlocked = true;
     public boolean collectionActive = false;
     public boolean matBookActive = true;
     public boolean presserActive = false;
@@ -64,6 +66,9 @@ public class HUD {
         clearIconHighlight = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/clear_highlight.png")));
         finishIcon = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/finish.png")));
         finishIconHighlight = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/finish_highlight.png")));
+        shopIcon = new Sprite(new Texture(Gdx.files.internal("Interface/HUD/shopIcon.png")));
+        shop_ = new Texture(Gdx.files.internal("Interface/HUD/shop_view.png"));
+
 
         levelDrawer.getData().setScale(0.6f);
 
@@ -71,7 +76,9 @@ public class HUD {
         forgeIcon.setPosition(549, 370);
         materialsBookIcon.setPosition(549,430);
         collectionIcon.setPosition(549, 340);
-        presserIcon.setPosition(549, 310);
+        presserIcon.setPosition(549, 280);
+        shopIcon.setPosition(549, 310);
+
 
         inventory_.setColor(Color.TAN);
         inventory_.getData().setScale(2);
@@ -123,6 +130,9 @@ public class HUD {
 
         if(presserUnlocked) {
             presserIcon.draw(batch);
+        }
+        if(shopUnlocked) {
+            shopIcon.draw(batch);
         }
 
         checkClicks();
@@ -191,6 +201,13 @@ public class HUD {
 
             layout.setText(crafting, "Juicer");
             crafting.draw(batch, "Juicer", 20 + (presser_.getWidth() / 2) - layout.width / 2, 480);
+        } else if(shopActive) {
+            crafting.setColor(Color.DARK_GRAY);
+            batch.draw(shop_, 20, 10);
+            MainScreen.shop.render(batch);
+
+            layout.setText(crafting, "Market");
+            crafting.draw(batch, "Market", 20 + (shop_.getWidth() / 2) - layout.width / 2, 480);
         }
 
         if(clearIconActive) {
@@ -256,12 +273,10 @@ public class HUD {
         if(craftingIcon.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
             if(Gdx.input.justTouched()) {
                 if(!craftingActive) {
+                    turnAllOff();
                     craftingActive = true;
-                    forgeActive = false;
-                    collectionActive = false;
                     clearIconActive = true;
                     finishIconActive = true;
-                    presserActive = false;
                 } else {
                     craftingActive = false;
                     clearIconActive = false;
@@ -279,12 +294,8 @@ public class HUD {
         } else if(forgeIcon.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
             if(Gdx.input.justTouched()) {
                 if(!forgeActive) {
+                    turnAllOff();
                     forgeActive = true;
-                    craftingActive = false;
-                    collectionActive = false;
-                    clearIconActive = false;
-                    finishIconActive = false;
-                    presserActive = false;
                 } else {
                     forgeActive = false;
                     clearIconActive = false;
@@ -293,12 +304,8 @@ public class HUD {
         } else if(collectionIcon.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
             if (Gdx.input.justTouched()) {
                 if (!collectionActive) {
-                    forgeActive = false;
-                    craftingActive = false;
-                    clearIconActive = false;
-                    finishIconActive = false;
+                    turnAllOff();
                     collectionActive = true;
-                    presserActive = false;
                 } else {
                     collectionActive = false;
                 }
@@ -307,11 +314,8 @@ public class HUD {
             if(presserUnlocked) {
                 if (Gdx.input.justTouched()) {
                     if (!presserActive) {
-                        forgeActive = false;
-                        craftingActive = false;
-                        collectionActive = false;
+                        turnAllOff();
                         clearIconActive = true;
-                        finishIconActive = false;
                         presserActive = true;
                     } else {
                         presserActive = false;
@@ -319,7 +323,27 @@ public class HUD {
                     }
                 }
             }
-
+        } else if(shopIcon.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
+            if (shopUnlocked) {
+                if (Gdx.input.justTouched()) {
+                    if (!shopActive) {
+                        turnAllOff();
+                        shopActive = true;
+                    } else {
+                        shopActive = false;
+                    }
+                }
+            }
         }
+    }
+
+    private void turnAllOff() {
+        forgeActive = false;
+        craftingActive = false;
+        collectionActive = false;
+        clearIconActive = false;
+        finishIconActive = false;
+        presserActive = false;
+        shopActive = false;
     }
 }

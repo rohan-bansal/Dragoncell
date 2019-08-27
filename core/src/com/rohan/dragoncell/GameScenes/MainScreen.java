@@ -31,6 +31,7 @@ public class MainScreen implements Screen {
     public static Collection collectionView;
     public static Presser presser;
     public static DataManager manager;
+    public static Shop shop;
 
 
     //private boolean loadData = false;
@@ -63,6 +64,7 @@ public class MainScreen implements Screen {
         materialsBook = new MaterialsBook(materials);
         collectionView = new Collection(materials, player);
         presser = new Presser(player, materials);
+        shop = new Shop(materials, player);
 
         manager = new DataManager(player);
 

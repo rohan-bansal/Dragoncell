@@ -3,13 +3,11 @@ package com.rohan.dragoncell.GameUtils.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FileTextureData;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.rohan.dragoncell.GameScenes.MainScreen;
@@ -20,7 +18,6 @@ import com.rohan.dragoncell.GameUtils.MaterialsList;
 import com.rohan.dragoncell.GameUtils.ObtainMethods;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
 import static com.rohan.dragoncell.GameUtils.ObtainMethods.areas;
@@ -103,7 +100,7 @@ public class Collection {
             spawnTree();
             spawnTree_ -= 1;
         }
-        
+
         player.renderPlayer(batch);
         tempRect = new Rectangle(player.position.x, player.position.y, player.currentFrame.getRegionWidth(), player.currentFrame.getRegionHeight());
 

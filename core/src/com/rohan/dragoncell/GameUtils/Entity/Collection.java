@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FileTextureData;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.rohan.dragoncell.FileUtils.Tuple;
 import com.rohan.dragoncell.GameScenes.MainScreen;
 import com.rohan.dragoncell.GameUtils.Entity.Object.BreakableObject;
 import com.rohan.dragoncell.GameUtils.ItemStack;
@@ -18,6 +19,7 @@ import com.rohan.dragoncell.GameUtils.MaterialsList;
 import com.rohan.dragoncell.GameUtils.ObtainMethods;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import static com.rohan.dragoncell.GameUtils.ObtainMethods.areas;
@@ -32,9 +34,12 @@ public class Collection {
     private ArrayList<BreakableObject> treesToRemove = new ArrayList<BreakableObject>();
     private ArrayList<BreakableObject> oresToRemove = new ArrayList<BreakableObject>();
     private ArrayList<BreakableObject> desertToRemove = new ArrayList<BreakableObject>();
+    private HashMap<Tuple<Integer, Integer>, Float> digTime = new HashMap<Tuple<Integer, Integer>, Float>();
+    private HashMap<Tuple<Integer, Integer>, Material> digResults = new HashMap<Tuple<Integer, Integer>, Material>();
     private Random rand = new Random();
     private Sprite axeIcon = new Sprite(new Texture(Gdx.files.internal("Interface/World/Collection/axe.png")));
     private Sprite hammerIcon = new Sprite(new Texture(Gdx.files.internal("Interface/World/Collection/hammer.png")));
+    private BitmapFont timeDrawer = new BitmapFont(Gdx.files.internal("Fonts/ari2.fnt"), Gdx.files.internal("Fonts/ari2.png"), false);
 
     public int areaNumber = 1;
     private int biomeType = 1;
@@ -59,6 +64,8 @@ public class Collection {
         noPickUpDrawer.setColor(Color.SCARLET);
         noPickUpDrawer.getData().setScale(0.5f);
         hammerIcon.setScale(1.5f);
+
+        timeDrawer.getData().setScale(0.5f);
 
         refreshView();
     }
@@ -146,6 +153,26 @@ public class Collection {
             desert.remove(t);
         }
 
+        if(digTime != null && digResults != null) {
+            for(Tuple<Integer, Integer> coords : digTime.keySet()) {
+
+                if(digTime.get(coords) <= 0) {
+                    for(Tuple<Integer, Integer> coords_2 : digResults.keySet()) {
+                        if((coords_2.x + " " + coords_2.y).equals(coords.x + " " + coords.y)) {
+                            player.getInventory().addItem(digResults.get(coords_2));
+                            digResults.remove(coords_2);
+                        }
+                    }
+                    digTime.remove(coords);
+                    break;
+                } else {
+                    timeDrawer.draw(batch, ObtainMethods.round((double) digTime.get(coords), 1) + "", coords.x, coords.y);
+                    digTime.put(coords, digTime.get(coords) - 0.02f);
+                }
+
+            }
+        }
+
 
         treesToRemove.clear();
         oresToRemove.clear();
@@ -178,7 +205,11 @@ public class Collection {
             }
             if(spawnTree_ == 0) {
                 if(player.getInventory().getInventory().get(player.getInventory().getSlotSelected() - 1).stackedItem.name.toLowerCase().equals("spade")) {
-                    player.getInventory().addItem(new Material(materials.DIRT));
+                    if(digTime.size() == 0) {
+                        digTime.put(new Tuple<Integer, Integer>(Math.round(player.position.x), Math.round(player.position.y)), 2.0f);
+                        digResults.put(new Tuple<Integer, Integer>(Math.round(player.position.x), Math.round(player.position.y)), new Material(materials.DIRT));
+                    }
+
                 }
             }
         }
@@ -218,8 +249,14 @@ public class Collection {
             }
             if(spawnCactus_ == 0) {
                 if(player.getInventory().getInventory().get(player.getInventory().getSlotSelected() - 1).stackedItem.name.toLowerCase().equals("spade")) {
-                    discoveredItem(materials.SAND);
-                    player.getInventory().addItem(new Material(materials.SAND));
+                    if(digTime.size() == 0) {
+                        digTime.put(new Tuple<Integer, Integer>(Math.round(player.position.x), Math.round(player.position.y)), 1.5f);
+                        digResults.put(new Tuple<Integer, Integer>(Math.round(player.position.x), Math.round(player.position.y)), new Material(materials.SAND));
+                        if(!materials.SAND.discovered) {
+                            discoveredItem(materials.SAND);
+                        }
+                    }
+
                 }
             }
         }

@@ -2,14 +2,24 @@
 health: 10
 hearts: 10
 level: 1
-subLevels: 3
 subLevelGoal: 5
-desertUnlocked: true
-oreFieldUnlocked: true
 materialsActive: true
 IDpage: 1
-areaNumber: 2
+areaNumber: 1
 inventory: [
+	{
+		count: 18
+		stackedItem: {
+			name: Iron Ore
+			description: One of the most abundant ores
+			ID: 11
+			obtainMethod: mining
+			rarity: 2
+			unpickupable: false
+			levelNeeded: 1
+			spritePath: Materials/iron_ore.png
+		}
+	}
 	{
 		count: 3
 		stackedItem: {
@@ -127,69 +137,15 @@ inventory: [
 			spritePath: Materials/spade.png
 		}
 	}
-	{
-		count: 3
-		stackedItem: {
-			name: Dirt
-			description: Diggy diggy hole
-			ID: 4
-			obtainMethod: digging
-			rarity: 1
-			unpickupable: false
-			levelNeeded: 1
-			spritePath: Materials/dirt.png
-		}
-	}
-	{
-		count: 100
-		stackedItem: {
-			name: Sand
-			description: Near beaches and near rivers
-			ID: 29
-			obtainMethod: digging
-			rarity: 2
-			unpickupable: false
-			levelNeeded: 1
-			spritePath: Materials/sand.png
-		}
-	}
-	{
-		count: 1
-		stackedItem: {
-			name: Welded Sand
-			description: Extremely packed sand. Very heavy
-			ID: 37
-			obtainMethod: null
-			rarity: 2
-			unpickupable: false
-			levelNeeded: 1
-			spritePath: Materials/welded_sand.png
-		}
-	}
 ]
 unlocked: {
-	Advanced Gears: true
 	Hardened Wood: true
-	Iron Ingot: true
-	Sand: true
 	Wood: true
 	Flint: true
 	Wooden Stick: true
-	Nails: true
 	Dirt: true
-	Glass: true
-	Iron Ore: true
-	Steel Ingot: true
-	Stone: true
-	Void Gears: true
-	Thick Glass: true
-	Torch: true
-	Reinforced Gears: true
-	Bottle: true
-	Welded Sand: true
-	Elite Gears: true
 	Coal: true
-	Small Blade: true
-	Firestarter: true
+	Stone: true
+	Torch: true
 }
 }

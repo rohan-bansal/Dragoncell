@@ -34,6 +34,7 @@ public class Player {
     public boolean desertUnlocked = false;
     public boolean oreFieldUnlocked = false;
     public boolean beachUnlocked = false;
+    public boolean restrictMovement = false;
     public String[] desertRequirement = new String[] {"11", "20"};
     public String[] beachRequirement = new String[] {"37", "10"};
 
@@ -81,7 +82,9 @@ public class Player {
 
     public void renderPlayer(SpriteBatch batch) {
 
-        checkMove();
+        if(!restrictMovement)  {
+            checkMove();
+        }
 
         currentFrame = walkAnim.getKeyFrame(stateTime, true);
         flip = horidirection.equals("left");

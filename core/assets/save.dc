@@ -137,6 +137,19 @@ inventory: [
 			spritePath: Materials/spade.png
 		}
 	}
+	{
+		count: 1
+		stackedItem: {
+			name: Dirt
+			description: Diggy diggy hole
+			ID: 4
+			obtainMethod: digging
+			rarity: 1
+			unpickupable: false
+			levelNeeded: 1
+			spritePath: Materials/dirt.png
+		}
+	}
 ]
 unlocked: {
 	Hardened Wood: true

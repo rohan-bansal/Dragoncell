@@ -79,6 +79,7 @@ public class MainScreen implements Screen {
         player.getInventory().addItem(new Material(materials.COAL), 5);
         player.getInventory().addItem(new Material(materials.STICK));
         player.getInventory().addItem(new Material(materials.WOOD), 6);
+        player.getInventory().addItem(new Material(materials.SPADE));
 
     }
 

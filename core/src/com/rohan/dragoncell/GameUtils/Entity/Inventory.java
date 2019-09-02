@@ -362,6 +362,10 @@ public class Inventory {
         }
     }
 
+    public int getSlotSelected() {
+        return slotSelected;
+    }
+
     public ArrayList<ItemStack> getInventory() {
         return inventory;
     }

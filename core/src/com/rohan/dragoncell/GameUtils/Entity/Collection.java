@@ -176,6 +176,11 @@ public class Collection {
                     }
                 }
             }
+            if(spawnTree_ == 0) {
+                if(player.getInventory().getInventory().get(player.getInventory().getSlotSelected() - 1).stackedItem.name.toLowerCase().equals("spade")) {
+                    player.getInventory().addItem(new Material(materials.DIRT));
+                }
+            }
         }
         for(BreakableObject object_ : trees) {
             if(biomeType == 1 || biomeType == 2) {
@@ -210,7 +215,12 @@ public class Collection {
                         }
                     }
                 }
-
+            }
+            if(spawnCactus_ == 0) {
+                if(player.getInventory().getInventory().get(player.getInventory().getSlotSelected() - 1).stackedItem.name.toLowerCase().equals("spade")) {
+                    discoveredItem(materials.SAND);
+                    player.getInventory().addItem(new Material(materials.SAND));
+                }
             }
         }
         for(BreakableObject object_ : desert) {

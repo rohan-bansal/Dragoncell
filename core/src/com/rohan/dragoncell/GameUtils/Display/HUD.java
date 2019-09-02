@@ -209,7 +209,6 @@ public class HUD {
             layout.setText(crafting, "Market");
             crafting.draw(batch, "Market", 20 + (shop_.getWidth() / 2) - layout.width / 2, 480);
         }
-
         if(clearIconActive) {
             if (clearIcon.getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
                 clearIconHighlight.draw(batch);

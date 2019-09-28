@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import static com.rohan.dragoncell.GameUtils.ObtainMethods.areas;
+import static com.rohan.dragoncell.GameUtils.ObtainMethods.rooms;
 
 public class Collection {
 
@@ -44,9 +44,10 @@ public class Collection {
     private Sprite hammerIcon = new Sprite(new Texture(Gdx.files.internal("Interface/World/Collection/hammer.png")));
     private BitmapFont timeDrawer = new BitmapFont(Gdx.files.internal("Fonts/ari2.fnt"), Gdx.files.internal("Fonts/ari2.png"), false);
 
-    public int areaNumber = 1;
+
+    public int[] roomCoords = {3, 2};
+
     private int biomeType = 1;
-    private int prevBiomeType = 1;
     private Rectangle tempRect;
     private Color tempColor;
 
@@ -75,8 +76,8 @@ public class Collection {
 
     public void render(SpriteBatch batch) {
 
-        prevBiomeType = biomeType;
-        detectSceneChange();
+        detectRoomChange();
+        //detectSceneChange();
 
 
         for(BreakableObject tree : trees) {
@@ -359,72 +360,64 @@ public class Collection {
         }
     }
 
-    //biomeType = rand.nextInt((6 - 1) + 1) + 1;
+    
+    private void detectRoomChange() {
+        //Gdx.app.log("Current Room", roomCoords[0] + " " + roomCoords[1] + " : " + ObtainMethods.getBiomeByInt.get(rooms[roomCoords[0]][roomCoords[1]]));
+        if(rooms[roomCoords[0]][roomCoords[1]] != 0) {
+            try {
+                if(player.position.x > 490) { // right
+                    if(checkPossible(rooms[roomCoords[0]][roomCoords[1] + 1])) {
+                        roomCoords[1] += 1;
+                        biomeType = rooms[roomCoords[0]][roomCoords[1]];
 
-    private void detectSceneChange() {
-
-        if(areas.get(areaNumber) != null) {
-            if(player.position.x > 490) { // right
-
-                if(checkPossible(1)) {
-                    biomeType = Integer.parseInt(areas.get(areaNumber)[1].split(" ")[0]);
-                    areaNumber = Integer.parseInt(areas.get(areaNumber)[1].split(" ")[1]);
-
-                    MainScreen.headsUp.changeCollectionScene(biomeType);
-                    player.position.x = 50;
-                }
-
-            } else if(player.position.x < 40) { // left
-
-                if(checkPossible(3)) {
-                    biomeType = Integer.parseInt(areas.get(areaNumber)[3].split(" ")[0]);
-                    areaNumber = Integer.parseInt(areas.get(areaNumber)[3].split(" ")[1]);
-
-                    MainScreen.headsUp.changeCollectionScene(biomeType);
-                    player.position.x = 480;
-                }
-
-            } else if(player.position.y < 40) { // down
-
-                if(checkPossible(2)) {
-                    biomeType = Integer.parseInt(areas.get(areaNumber)[2].split(" ")[0]);
-                    areaNumber = Integer.parseInt(areas.get(areaNumber)[2].split(" ")[1]);
-
-                    MainScreen.headsUp.changeCollectionScene(biomeType);
-                    player.position.y = 430;
-                }
-
-            } else if(player.position.y > 439) { // up
-
-                if(checkPossible(0)) {
-                    biomeType = Integer.parseInt(areas.get(areaNumber)[0].split(" ")[0]);
-                    areaNumber = Integer.parseInt(areas.get(areaNumber)[0].split(" ")[1]);
-
-                    MainScreen.headsUp.changeCollectionScene(biomeType);
-                    player.position.y = 50;
-                }
-
-            }
-
-            if(prevBiomeType != biomeType) {
-                if(biomeType == 2) {
-                    for(BreakableObject tree : trees) {
-                        recursivePosChange(tree, 1);
+                        MainScreen.headsUp.changeCollectionScene(biomeType);
+                        player.position.x = 50;
                     }
+
+                } else if(player.position.x < 40) { // left
+
+                    if(checkPossible(rooms[roomCoords[0]][roomCoords[1] - 1])) {
+                        roomCoords[1] -= 1;
+                        biomeType = rooms[roomCoords[0]][roomCoords[1]];
+
+                        MainScreen.headsUp.changeCollectionScene(biomeType);
+                        player.position.x = 480;
+                    }
+
+                } else if(player.position.y < 40) { // down
+
+                    if(checkPossible(rooms[roomCoords[0] + 1][roomCoords[1]])) {
+                        roomCoords[0] += 1;
+                        biomeType = rooms[roomCoords[0]][roomCoords[1]];
+
+                        MainScreen.headsUp.changeCollectionScene(biomeType);
+                        player.position.y = 430;
+                    }
+
+                } else if(player.position.y > 439) { // up
+
+                    if(checkPossible(rooms[roomCoords[0] - 1][roomCoords[1]])) {
+                        roomCoords[0] -= 1;
+                        biomeType = rooms[roomCoords[0]][roomCoords[1]];
+
+                        MainScreen.headsUp.changeCollectionScene(biomeType);
+                        player.position.y = 50;
+                    }
+
                 }
+            } catch (ArrayIndexOutOfBoundsException e) {
+                Gdx.app.log("Scene Loading Error", "End Of World");
             }
 
-        } else {
-            Gdx.app.log("Collection", "Scene Loading Error");
+
         }
-
-
     }
 
     private boolean checkPossible(int biome) {
         Gdx.app.log("Collection", "Checking Possible Biome");
 
-        int tempBiomeType = Integer.parseInt(areas.get(areaNumber)[biome].split(" ")[0]);
+        //int tempBiomeType = Integer.parseInt(areas.get(areaNumber)[biome].split(" ")[0]);
+        int tempBiomeType = biome;
         if(ObtainMethods.getBiomeByInt.get(tempBiomeType).equals("Desert")) {
             if (!player.desertUnlocked) {
                 for (ItemStack item : player.getInventory().getInventory()) {

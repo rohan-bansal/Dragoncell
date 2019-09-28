@@ -92,7 +92,7 @@ public class MainScreen implements Screen {
 
     private void applyNewData() {
         manager.gameData.setInventory(player.getInventory().getInventory());
-        manager.gameData.setAreaNumber(collectionView.areaNumber);
+        //manager.gameData.setAreaNumber(collectionView.areaNumber);
         manager.gameData.setBeachUnlocked(player.beachUnlocked);
         manager.gameData.setDesertUnlocked(player.desertUnlocked);
         manager.gameData.setOreFieldUnlocked(player.oreFieldUnlocked);
@@ -125,7 +125,7 @@ public class MainScreen implements Screen {
         player.getLeveling().setSubLevelGoal(manager.gameData.getSubLevelGoal());
 
 
-        collectionView.areaNumber = manager.gameData.getAreaNumber();
+        //collectionView.areaNumber = manager.gameData.getAreaNumber();
         materialsBook.IDpage = manager.gameData.getIDpage();
 
         ArrayList<ItemStack> temp = new ArrayList<ItemStack>();

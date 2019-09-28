@@ -5,7 +5,6 @@ level: 1
 subLevelGoal: 5
 materialsActive: true
 IDpage: 1
-areaNumber: 1
 inventory: [
 	{
 		count: 18

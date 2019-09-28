@@ -39,6 +39,20 @@ public class Crafting {
         this.inventory = inventory;
         this.materials = materials;
 
+        refreshSlots();
+
+        for(Sprite slot : craftingSlots) {
+            slotPositions.put(craftingSlots.indexOf(slot) + 1, new Tuple<Integer, Integer>(Math.round(slot.getX() + 25), Math.round(slot.getY() + 25)));
+        }
+
+        outputFail.setCenter(280, 100);
+        outputSuccess.setCenter(280, 100);
+
+    }
+
+    public void refreshSlots() {
+        craftingSlots.clear();
+
         int xPos = 190;
         int yPos = 350;
         int incr = 1;
@@ -53,14 +67,6 @@ public class Crafting {
             }
             incr++;
         }
-
-        for(Sprite slot : craftingSlots) {
-            slotPositions.put(craftingSlots.indexOf(slot) + 1, new Tuple<Integer, Integer>(Math.round(slot.getX() + 25), Math.round(slot.getY() + 25)));
-        }
-
-        outputFail.setCenter(280, 100);
-        outputSuccess.setCenter(280, 100);
-
     }
 
     public void clearGrid() {

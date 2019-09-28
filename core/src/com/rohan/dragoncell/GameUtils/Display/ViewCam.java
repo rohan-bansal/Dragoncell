@@ -13,14 +13,15 @@ public class ViewCam {
 
     public ViewCam() {
 
-        camera = new OrthographicCamera(1000, 800);
-
-
+        camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.zoom = 0.5f;
     }
 
     public void render() {
 
         camera.update();
+
+
 
     }
 

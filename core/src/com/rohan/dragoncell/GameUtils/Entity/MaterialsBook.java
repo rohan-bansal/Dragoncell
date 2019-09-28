@@ -190,11 +190,11 @@ public class MaterialsBook {
         if (temp1.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
             layout.setText(recipeNameDrawer, temp1.name);
             recipeNameDrawer.draw(batch, temp1.name, temp1.getSprite().getX() +
-                    (temp1.getSprite().getWidth() / 2)- layout.width / 2, temp1.getSprite().getY() - 10);
+                    (temp1.getSprite().getWidth() / 2)- layout.width / 2, temp1.getSprite().getY() + 45);
         } else if (temp2.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
             layout.setText(recipeNameDrawer, temp2.name);
             recipeNameDrawer.draw(batch, temp2.name, temp2.getSprite().getX() +
-                    (temp2.getSprite().getWidth() / 2)- layout.width / 2, temp2.getSprite().getY() - 10);
+                    (temp2.getSprite().getWidth() / 2)- layout.width / 2, temp2.getSprite().getY() + 45);
         }
     }
 
@@ -218,11 +218,11 @@ public class MaterialsBook {
         if (temp1.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
             layout.setText(recipeNameDrawer, temp1.name);
             recipeNameDrawer.draw(batch, temp1.name, temp1.getSprite().getX() +
-                    (temp1.getSprite().getWidth() / 2)- layout.width / 2, temp1.getSprite().getY() - 10);
+                    (temp1.getSprite().getWidth() / 2)- layout.width / 2, temp1.getSprite().getY() + 45);
         } else if (temp2.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
             layout.setText(recipeNameDrawer, temp2.name);
             recipeNameDrawer.draw(batch, temp2.name, temp2.getSprite().getX() +
-                    (temp2.getSprite().getWidth() / 2)- layout.width / 2, temp2.getSprite().getY() - 10);
+                    (temp2.getSprite().getWidth() / 2)- layout.width / 2, temp2.getSprite().getY() + 45);
         }
     }
 
@@ -242,7 +242,7 @@ public class MaterialsBook {
         if (temp2.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
             layout.setText(recipeNameDrawer, temp2.name);
             recipeNameDrawer.draw(batch, temp2.name, temp2.getSprite().getX() +
-                    (temp2.getSprite().getWidth() / 2)- layout.width / 2, temp2.getSprite().getY() - 10);
+                    (temp2.getSprite().getWidth() / 2)- layout.width / 2, temp2.getSprite().getY() + 45);
         }
     }
 
@@ -254,7 +254,7 @@ public class MaterialsBook {
         recipeTypeDrawer.draw(batch, "Presser", down.getX() + 55 + (down.getWidth() / 2) - layout.width / 2, down.getY() + 20);
 
         Material temp2 = new Material(tempMaterial);
-        temp2.setCenter(337, 615);
+        temp2.setCenter(337, 610);
         temp2.render(batch);
 
         Material[] recipe = temp2.grinderRecipe.toArray(new Material[0]);
@@ -305,11 +305,11 @@ public class MaterialsBook {
         if (temp1.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
             layout.setText(recipeNameDrawer, temp1.name);
             recipeNameDrawer.draw(batch, temp1.name, temp1.getSprite().getX() +
-                    (temp1.getSprite().getWidth() / 2)- layout.width / 2, temp1.getSprite().getY() - 10);
+                    (temp1.getSprite().getWidth() / 2)- layout.width / 2, temp1.getSprite().getY() + 45);
         } else if (temp2.getSprite().getBoundingRectangle().contains(Gdx.input.getX(), 800 - Gdx.input.getY())) {
             layout.setText(recipeNameDrawer, temp2.name);
             recipeNameDrawer.draw(batch, temp2.name, temp2.getSprite().getX() +
-                    (temp2.getSprite().getWidth() / 2)- layout.width / 2, temp2.getSprite().getY() - 10);
+                    (temp2.getSprite().getWidth() / 2)- layout.width / 2, temp2.getSprite().getY() + 45);
         }
     }
 

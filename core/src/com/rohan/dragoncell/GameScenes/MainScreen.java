@@ -5,10 +5,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
 import com.rohan.dragoncell.FileUtils.DataManager;
 import com.rohan.dragoncell.FileUtils.ModInputProcessor;
 import com.rohan.dragoncell.GameUtils.Display.HUD;
+import com.rohan.dragoncell.GameUtils.Display.Rumble;
 import com.rohan.dragoncell.GameUtils.Display.ViewCam;
 import com.rohan.dragoncell.GameUtils.Entity.*;
 import com.rohan.dragoncell.GameUtils.ItemStack;
@@ -24,7 +27,6 @@ public class MainScreen implements Screen {
     private Player player;
     private SpriteBatch mainBatch = new SpriteBatch();
     public static HUD headsUp;
-    private ViewCam camera;
     public static Crafting crafting;
     public static Forge forge;
     public static MaterialsBook materialsBook;
@@ -32,6 +34,8 @@ public class MainScreen implements Screen {
     public static Presser presser;
     public static DataManager manager;
     public static Shop shop;
+
+    private boolean rumbleRefresh = false;
 
 
     //private boolean loadData = false;
@@ -68,9 +72,15 @@ public class MainScreen implements Screen {
 
         manager = new DataManager(player);
 
+        for(Material material : materials.materialList) {
+            if(material.discovered) {
+                collectionView.unlockItems(material);
+            }
+        }
+
         Gdx.app.log("World", "Materials and Recipes Loaded");
 
-        player.getInventory().addItem(new Material(materials.IRON_ORE), 18);
+        player.getInventory().addItem(new Material(materials.IRON_ORE), 20);
         player.getInventory().addItem(new Material(materials.HARDENED_STONE), 3);
         player.getInventory().addItem(new Material(materials.BASIC_GEARS), 3);
         player.getInventory().addItem(new Material(materials.SMALL_BLADE), 3);
@@ -87,7 +97,6 @@ public class MainScreen implements Screen {
     private void initPlayer() {
         player = new Player();
         headsUp = new HUD(player);
-        camera = new ViewCam();
     }
 
     private void applyNewData() {
@@ -155,7 +164,19 @@ public class MainScreen implements Screen {
         Gdx.gl.glClearColor(37/255f, 27/255f, 26/255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-        camera.render();
+        if (Rumble.getRumbleTimeLeft() > 0) {
+            rumbleRefresh = true;
+            Rumble.tick(Gdx.graphics.getDeltaTime());
+            for(Sprite sprite : crafting.craftingSlots) {
+                sprite.setPosition(sprite.getX() + Rumble.getPos().x, sprite.getY() + Rumble.getPos().y);
+            }
+        } else {
+            if(rumbleRefresh) {
+                crafting.refreshSlots();
+                rumbleRefresh = false;
+            }
+        }
+
         headsUp.render(delta);
 
         player.renderInventory();
@@ -178,6 +199,9 @@ public class MainScreen implements Screen {
             player.getLeveling().setSubLevelPoints(player.getLeveling().getSubLevelPoints() + 1);
         } else if(Gdx.input.isKeyJustPressed(Input.Keys.K)) {
             applyNewData();
+        } else if(Gdx.input.isKeyJustPressed(Input.Keys.R)) {
+            Gdx.app.log("Camera", "Rumble Triggered");
+            Rumble.rumble(5, 2f);
         }
 
     }

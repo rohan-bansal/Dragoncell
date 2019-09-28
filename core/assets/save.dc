@@ -7,7 +7,7 @@ materialsActive: true
 IDpage: 1
 inventory: [
 	{
-		count: 18
+		count: 20
 		stackedItem: {
 			name: Iron Ore
 			description: One of the most abundant ores
@@ -151,13 +151,28 @@ inventory: [
 	}
 ]
 unlocked: {
+	Stabilized Wood: true
+	Advanced Gears: true
 	Hardened Wood: true
+	Spade: true
 	Wood: true
 	Flint: true
 	Wooden Stick: true
+	Nails: true
 	Dirt: true
-	Coal: true
+	Steel Ingot: true
 	Stone: true
+	Basic Gears: true
+	Void Gears: true
 	Torch: true
+	Reinforced Gears: true
+	Wooden Bowl: true
+	Bottle: true
+	Elite Gears: true
+	Book: true
+	Coal: true
+	Hardened Stone: true
+	Paper: true
+	Firestarter: true
 }
 }

@@ -360,9 +360,8 @@ public class Collection {
         }
     }
 
-    
+
     private void detectRoomChange() {
-        //Gdx.app.log("Current Room", roomCoords[0] + " " + roomCoords[1] + " : " + ObtainMethods.getBiomeByInt.get(rooms[roomCoords[0]][roomCoords[1]]));
         if(rooms[roomCoords[0]][roomCoords[1]] != 0) {
             try {
                 if(player.position.x > 490) { // right
@@ -527,7 +526,7 @@ public class Collection {
 
     }
 
-    private void unlockItems(Material material) {
+    public void unlockItems(Material material) {
         for(Material material_ : materials.materialList) {
             if(material_.recipe.contains(material) || material.smeltInto == material_ || material.seedDrop == material_ || material.juicedInto == material_
                     || material_.grinderRecipe.contains(material)) {

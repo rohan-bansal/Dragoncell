@@ -36,6 +36,9 @@ public class Collection {
     private ArrayList<BreakableObject> desertToRemove = new ArrayList<BreakableObject>();
     private HashMap<Tuple<Integer, Integer>, Float> digTime = new HashMap<Tuple<Integer, Integer>, Float>();
     private HashMap<Tuple<Integer, Integer>, Material> digResults = new HashMap<Tuple<Integer, Integer>, Material>();
+    private ArrayList<Tuple<Integer, Integer>> digResultsToRemove = new ArrayList<Tuple<Integer, Integer>>();
+    private ArrayList<Tuple<Integer, Integer>> digTimeToRemove = new ArrayList<Tuple<Integer, Integer>>();
+
     private Random rand = new Random();
     private Sprite axeIcon = new Sprite(new Texture(Gdx.files.internal("Interface/World/Collection/axe.png")));
     private Sprite hammerIcon = new Sprite(new Texture(Gdx.files.internal("Interface/World/Collection/hammer.png")));
@@ -160,10 +163,12 @@ public class Collection {
                     for(Tuple<Integer, Integer> coords_2 : digResults.keySet()) {
                         if((coords_2.x + " " + coords_2.y).equals(coords.x + " " + coords.y)) {
                             player.getInventory().addItem(digResults.get(coords_2));
-                            digResults.remove(coords_2);
+                            digResultsToRemove.add(coords_2);
+                            //digResults.remove(coords_2);
                         }
                     }
-                    digTime.remove(coords);
+                    //digTime.remove(coords);
+                    digTimeToRemove.add(coords);
                     break;
                 } else {
                     timeDrawer.draw(batch, ObtainMethods.round((double) digTime.get(coords), 1) + "", coords.x, coords.y);
@@ -173,6 +178,28 @@ public class Collection {
             }
         }
 
+        if(digTime != null && digTimeToRemove != null) {
+            for(Tuple<Integer, Integer> coords : digTimeToRemove) {
+                for(Tuple<Integer, Integer> coords_2 : digTime.keySet()) {
+                    if((coords_2.x + " " + coords_2.y).equals(coords.x + " " + coords.y)) {
+                        digTime.remove(coords_2);
+                    }
+                }
+            }
+        }
+        if(digResults != null && digResultsToRemove != null) {
+            for(Tuple<Integer, Integer> coords : digResultsToRemove) {
+                for(Tuple<Integer, Integer> coords_2 : digResults.keySet()) {
+                    if((coords_2.x + " " + coords_2.y).equals(coords.x + " " + coords.y)) {
+                        digResults.remove(coords_2);
+                    }
+                }
+            }
+        }
+
+
+        digResultsToRemove.clear();
+        digTimeToRemove.clear();
 
         treesToRemove.clear();
         oresToRemove.clear();

@@ -99,16 +99,16 @@ inventory: [
 		}
 	}
 	{
-		count: 1
+		count: 2
 		stackedItem: {
-			name: Wooden Stick
-			description: Can be obtained from trees or carving
-			ID: 1
-			obtainMethod: tree
+			name: Hardened Wood
+			description: Can hold much more weight
+			ID: 21
+			obtainMethod: crafting
 			rarity: 1
 			unpickupable: false
 			levelNeeded: 1
-			spritePath: Materials/wooden_stick.png
+			spritePath: Materials/hardened_wood.png
 		}
 	}
 	{
@@ -138,16 +138,16 @@ inventory: [
 		}
 	}
 	{
-		count: 1
+		count: 10
 		stackedItem: {
-			name: Dirt
-			description: Diggy diggy hole
-			ID: 4
-			obtainMethod: digging
-			rarity: 1
+			name: Nails
+			description: Hold a lot of things together
+			ID: 39
+			obtainMethod: crafting
+			rarity: 2
 			unpickupable: false
 			levelNeeded: 1
-			spritePath: Materials/dirt.png
+			spritePath: Materials/nails.png
 		}
 	}
 ]

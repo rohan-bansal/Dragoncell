@@ -94,13 +94,32 @@ public class Crafting {
             add("Hardened Stone");
         }};
 
+        ArrayList<String> marketRecipe = new ArrayList<String>() {{
+            add("Hardened Wood");
+            add("Hardened Wood");
+            add("Nails");
+            add("Nails");
+            add("Hardened Stone");
+            add("Hardened Stone");
+        }};
+
         if(presserRecipe.size() == temp.size()) {
             if(temp.containsAll(presserRecipe) && presserRecipe.containsAll(temp)) {
                 outputSucc = true;
                 craft = new Material("Presser", "Materials/presser.png", "Null", 0, 1);
                 craft.setCenter(outputSuccess.getX() + 25, outputSuccess.getY() + 25);
                 craftingItems.clear();
-                MainScreen.headsUp.player.getLeveling().setSubLevelPoints(MainScreen.headsUp.player.getLeveling().getSubLevelPoints() + 1);
+                MainScreen.headsUp.player.getLeveling().setSubLevelPoints(MainScreen.headsUp.player.getLeveling().getSubLevelPoints() + 2);
+                return;
+            }
+        }
+        if(marketRecipe.size() == temp.size()) {
+            if(temp.containsAll(marketRecipe) && marketRecipe.containsAll(temp)) {
+                outputSucc = true;
+                craft = new Material("Market", "Materials/market.png", "Null", 0, 1);
+                craft.setCenter(outputSuccess.getX() + 25, outputSuccess.getY() + 25);
+                craftingItems.clear();
+                MainScreen.headsUp.player.getLeveling().setSubLevelPoints(MainScreen.headsUp.player.getLeveling().getSubLevelPoints() + 2);
                 return;
             }
         }
@@ -199,6 +218,10 @@ public class Crafting {
                 if(Gdx.input.justTouched()) {
                     if(craft.name.equals("Presser")) {
                         MainScreen.headsUp.presserUnlocked = true;
+                        craft = null;
+                        outputSucc = false;
+                    } else if(craft.name.equals("Market")) {
+                        MainScreen.headsUp.shopUnlocked = true;
                         craft = null;
                         outputSucc = false;
                     } else {

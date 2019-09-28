@@ -26,7 +26,7 @@ public class HUD {
     public boolean craftingActive = true;
     public boolean forgeActive = false;
     public boolean shopActive = false;
-    public boolean shopUnlocked = true;
+    public boolean shopUnlocked = false;
     public boolean collectionActive = false;
     public boolean matBookActive = true;
     public boolean presserActive = false;

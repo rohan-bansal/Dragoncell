@@ -12,6 +12,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.rohan.dragoncell.FileUtils.Tuple;
 import com.rohan.dragoncell.GameScenes.MainScreen;
+import com.rohan.dragoncell.GameUtils.Entity.Mob.Cow;
+import com.rohan.dragoncell.GameUtils.Entity.Mob.PassiveMob;
 import com.rohan.dragoncell.GameUtils.Entity.Object.BreakableObject;
 import com.rohan.dragoncell.GameUtils.ItemStack;
 import com.rohan.dragoncell.GameUtils.Material;
@@ -38,6 +40,8 @@ public class Collection {
     private HashMap<Tuple<Integer, Integer>, Material> digResults = new HashMap<Tuple<Integer, Integer>, Material>();
     private ArrayList<Tuple<Integer, Integer>> digResultsToRemove = new ArrayList<Tuple<Integer, Integer>>();
     private ArrayList<Tuple<Integer, Integer>> digTimeToRemove = new ArrayList<Tuple<Integer, Integer>>();
+
+    private ArrayList<PassiveMob> animals = new ArrayList<PassiveMob>();
 
     private Random rand = new Random();
     private Sprite axeIcon = new Sprite(new Texture(Gdx.files.internal("Interface/World/Collection/axe.png")));
@@ -138,11 +142,20 @@ public class Collection {
         }
 
         if(biomeType == 1 || biomeType == 2) {
+            if(animals.size() == 0) {
+                for(int i = 0; i < rand.nextInt(6); i++) {
+                    animals.add(new Cow(new Tuple<Integer, Integer>(roomCoords[0], roomCoords[1])));
+                }
+            }
             treeBiome(batch, tempRect);
         } else if(biomeType == 5) {
+            animals.clear();
             oreBiome(batch, tempRect);
         } else if(biomeType == 3) {
+            animals.clear();
             desertBiome(batch, tempRect);
+        } else if(biomeType == 4) {
+            animals.clear();
         }
 
         for(BreakableObject t : treesToRemove) {
@@ -155,6 +168,10 @@ public class Collection {
 
         for(BreakableObject t : desertToRemove) {
             desert.remove(t);
+        }
+
+        for(PassiveMob mob : animals) {
+            mob.render(batch);
         }
 
         if(digTime != null && digResults != null) {
@@ -278,7 +295,7 @@ public class Collection {
             if(spawnCactus_ == 0) {
                 if(player.getInventory().getInventory().get(player.getInventory().getSlotSelected() - 1).stackedItem.name.toLowerCase().equals("spade")) {
                     if(digTime.size() == 0) {
-                        digTime.put(new Tuple<Integer, Integer>(Math.round(player.position.x), Math.round(player.position.y)), 1.5f);
+                        digTime.put(new Tuple<Integer, Integer>(Math.round(player.position.x), Math.round(player.position.y)), 2.5f);
                         digResults.put(new Tuple<Integer, Integer>(Math.round(player.position.x), Math.round(player.position.y)), new Material(materials.SAND));
                         if(!materials.SAND.discovered) {
                             discoveredItem(materials.SAND);
@@ -368,7 +385,7 @@ public class Collection {
                     if(checkPossible(rooms[roomCoords[0]][roomCoords[1] + 1])) {
                         roomCoords[1] += 1;
                         biomeType = rooms[roomCoords[0]][roomCoords[1]];
-
+                        refreshView();
                         MainScreen.headsUp.changeCollectionScene(biomeType);
                         player.position.x = 50;
                     }
@@ -378,7 +395,7 @@ public class Collection {
                     if(checkPossible(rooms[roomCoords[0]][roomCoords[1] - 1])) {
                         roomCoords[1] -= 1;
                         biomeType = rooms[roomCoords[0]][roomCoords[1]];
-
+                        refreshView();
                         MainScreen.headsUp.changeCollectionScene(biomeType);
                         player.position.x = 480;
                     }
@@ -388,7 +405,7 @@ public class Collection {
                     if(checkPossible(rooms[roomCoords[0] + 1][roomCoords[1]])) {
                         roomCoords[0] += 1;
                         biomeType = rooms[roomCoords[0]][roomCoords[1]];
-
+                        refreshView();
                         MainScreen.headsUp.changeCollectionScene(biomeType);
                         player.position.y = 430;
                     }
@@ -398,7 +415,7 @@ public class Collection {
                     if(checkPossible(rooms[roomCoords[0] - 1][roomCoords[1]])) {
                         roomCoords[0] -= 1;
                         biomeType = rooms[roomCoords[0]][roomCoords[1]];
-
+                        refreshView();
                         MainScreen.headsUp.changeCollectionScene(biomeType);
                         player.position.y = 50;
                     }

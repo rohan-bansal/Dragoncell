@@ -25,6 +25,7 @@ import com.rohan.dragoncell.GameUtils.ObtainMethods;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Queue;
 import java.util.Random;
 
 import static com.rohan.dragoncell.GameUtils.ObtainMethods.rooms;
@@ -45,6 +46,7 @@ public class Collection {
     private ArrayList<Tuple<Integer, Integer>> digTimeToRemove = new ArrayList<Tuple<Integer, Integer>>();
 
     public ArrayList<PassiveMob> animals = new ArrayList<PassiveMob>();
+    private ArrayList<PassiveMob> animalsToRemove = new ArrayList<PassiveMob>();
 
     private Random rand = new Random();
     private Sprite axeIcon = new Sprite(new Texture(Gdx.files.internal("Interface/World/Collection/axe.png")));
@@ -86,7 +88,7 @@ public class Collection {
     private void generateCows() {
         if(animals.size() == 0) {
             for(int i = 0; i < rand.nextInt(6); i++) {
-                PassiveMob temp = new Cow(new Tuple<Integer, Integer>(roomCoords[0], roomCoords[1]), "Cow");
+                PassiveMob temp = new Cow("Cow", player, materials);
                 recursiveMobChange(temp, 1);
                 animals.add(temp);
             }
@@ -101,12 +103,28 @@ public class Collection {
 
         for(PassiveMob mob : animals) {
             mob.render(batch);
-            Rectangle tempRect_ = new Rectangle(player.position.x, player.position.y, player.currentFrame.getRegionWidth(), player.currentFrame.getRegionHeight());
-            if(tempRect_.overlaps(mob.getRect())) {
+            if(mob.hits != 0) {
+                nameDrawer.draw(batch, mob.hits + "", mob.position.x + 67, mob.position.y + 25);
+                if(mob.hits == 18) {
+                    animalsToRemove.add(mob);
+                    mob.kill();
+                }
+            }
+            if(player.getRect().overlaps(mob.getRect())) {
                 nameDrawer.setColor(Color.GOLDENROD);
                 nameDrawer.getData().setScale(0.7f);
                 layout.setText(nameDrawer, mob.name);
                 nameDrawer.draw(batch, mob.name, mob.position.x + (mob.getRect().getWidth() / 2) - layout.width / 2, mob.position.y + 57);
+                try {
+                    if (player.getInventory().getInventory().get(player.getInventory().getSlotSelected() - 1).stackedItem.name.toLowerCase().equals("knight sword")) {
+                        if(Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+                            mob.hits += 1;
+                            mob.speed += 0.1f;
+                        }
+                    }
+                } catch (IndexOutOfBoundsException e) {
+                }
+
             }
         }
 
@@ -205,6 +223,10 @@ public class Collection {
             desert.remove(t);
         }
 
+        for(PassiveMob t : animalsToRemove) {
+            animals.remove(t);
+        }
+
         if(digTime != null && digResults != null) {
             for(Tuple<Integer, Integer> coords : digTime.keySet()) {
 
@@ -249,6 +271,7 @@ public class Collection {
 
         digResultsToRemove.clear();
         digTimeToRemove.clear();
+        animalsToRemove.clear();
 
         treesToRemove.clear();
         oresToRemove.clear();
@@ -257,7 +280,7 @@ public class Collection {
     }
 
     private void treeBiome(SpriteBatch batch, Rectangle tempRect) {
-        if(Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             for (BreakableObject tree_ : trees) {
                 if (tempRect.overlaps(tree_.sprite.getBoundingRectangle())) {
                     if (tree_.hits == 3) {
@@ -279,9 +302,9 @@ public class Collection {
                     }
                 }
             }
-            if(spawnTree_ == 0) {
-                if(player.getInventory().getInventory().get(player.getInventory().getSlotSelected() - 1).stackedItem.name.toLowerCase().equals("spade")) {
-                    if(digTime.size() == 0) {
+            if (spawnTree_ == 0) {
+                if (player.getInventory().getInventory().get(player.getInventory().getSlotSelected() - 1).stackedItem.name.toLowerCase().equals("spade")) {
+                    if (digTime.size() == 0) {
                         digTime.put(new Tuple<Integer, Integer>(Math.round(player.position.x), Math.round(player.position.y)), 2.0f);
                         digResults.put(new Tuple<Integer, Integer>(Math.round(player.position.x), Math.round(player.position.y)), new Material(materials.DIRT));
                     }
@@ -289,13 +312,13 @@ public class Collection {
                 }
             }
         }
-        for(BreakableObject object_ : trees) {
-            if(biomeType == 1 || biomeType == 2) {
+        for (BreakableObject object_ : trees) {
+            if (biomeType == 1 || biomeType == 2) {
                 Rectangle tempRect_ = new Rectangle(player.position.x, player.position.y, player.currentFrame.getRegionWidth(), player.currentFrame.getRegionHeight());
                 if (tempRect_.overlaps(object_.sprite.getBoundingRectangle())) {
                     axeIcon.setCenter(object_.sprite.getX() + (object_.sprite.getWidth() / 2), object_.sprite.getY() + 110);
                     axeIcon.draw(batch);
-                    if(object_.hits != 0) {
+                    if (object_.hits != 0) {
                         nameDrawer.draw(batch, object_.hits + "", object_.sprite.getX() + 90, object_.sprite.getY() + 50);
                     }
                 }

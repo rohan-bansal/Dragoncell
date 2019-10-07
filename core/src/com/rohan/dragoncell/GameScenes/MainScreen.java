@@ -87,9 +87,8 @@ public class MainScreen implements Screen {
         player.getInventory().addItem(new Material(materials.IRON_ORE), 20);
         player.getInventory().addItem(new Material(materials.HARDENED_STONE), 3);
         player.getInventory().addItem(new Material(materials.BASIC_GEARS), 3);
-        player.getInventory().addItem(new Material(materials.SMALL_BLADE), 3);
-        player.getInventory().addItem(new Material(materials.CACTUS), 2);
-        player.getInventory().addItem(new Material(materials.CACTUS_RESIN), 2);
+        player.getInventory().addItem(new Material(materials.KNIGHT_SWORD), 1);
+        player.getInventory().addItem(new Material(materials.STICK), 1);
         player.getInventory().addItem(new Material(materials.COAL), 5);
         player.getInventory().addItem(new Material(materials.HARDENED_WOOD), 2);
         player.getInventory().addItem(new Material(materials.WOOD), 6);

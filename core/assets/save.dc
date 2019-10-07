@@ -46,42 +46,29 @@ inventory: [
 		}
 	}
 	{
-		count: 3
+		count: 1
 		stackedItem: {
-			name: Small Blade
-			description: Can be used to press items into liquid
-			ID: 54
+			name: Knight Sword
+			description: Basic Weapon
+			ID: 57
 			obtainMethod: crafting
 			rarity: 2
 			unpickupable: false
 			levelNeeded: 1
-			spritePath: Materials/small_blade.png
+			spritePath: Materials/knight_sword.png
 		}
 	}
 	{
-		count: 2
+		count: 1
 		stackedItem: {
-			name: Cactus
-			description: The sharpest plant
-			ID: 46
+			name: Wooden Stick
+			description: Can be obtained from trees or carving
+			ID: 1
 			obtainMethod: tree
-			rarity: 2
+			rarity: 1
 			unpickupable: false
 			levelNeeded: 1
-			spritePath: Materials/cactus.png
-		}
-	}
-	{
-		count: 2
-		stackedItem: {
-			name: Cactus Resin
-			description: The sticky juice of a cactus
-			ID: 47
-			obtainMethod: juicing
-			rarity: 2
-			unpickupable: false
-			levelNeeded: 1
-			spritePath: Materials/cactus_resin.png
+			spritePath: Materials/wooden_stick.png
 		}
 	}
 	{
@@ -155,6 +142,7 @@ unlocked: {
 	Advanced Gears: true
 	Hardened Wood: true
 	Spade: true
+	Knight Sword: true
 	Wood: true
 	Flint: true
 	Wooden Stick: true

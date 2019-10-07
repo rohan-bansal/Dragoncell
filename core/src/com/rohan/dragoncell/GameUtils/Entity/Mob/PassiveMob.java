@@ -10,13 +10,16 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.rohan.dragoncell.FileUtils.Tuple;
 import com.rohan.dragoncell.GameScenes.MainScreen;
+import com.rohan.dragoncell.GameUtils.Entity.Player;
+import com.rohan.dragoncell.GameUtils.Material;
+import com.rohan.dragoncell.GameUtils.MaterialsList;
 import com.rohan.dragoncell.Main;
 
 import java.util.Random;
 
 public class PassiveMob {
 
-    protected Tuple<Integer, Integer> worldCoords;
+    private MaterialsList materials;
     protected Random random = new Random();
     protected Animation<TextureRegion> walkAnim;
     public Vector2 position;
@@ -31,11 +34,17 @@ public class PassiveMob {
     private boolean stop = false;
     private float stopCounter = 10f;
     private float lengthOfWalk = 3f;
+    private Player player;
+
+    public float speed = 0.2f;
+
+    public int hits = 0;
 
 
-    public PassiveMob(Tuple<Integer, Integer> coordinates, String name) {
-        worldCoords = coordinates;
+    public PassiveMob(String name, Player player, MaterialsList materials) {
         this.name = name;
+        this.player = player;
+        this.materials = materials;
     }
 
     public Rectangle getRect() {
@@ -67,16 +76,16 @@ public class PassiveMob {
         }
 
         if(lengthOfWalk > 0) {
-            lengthOfWalk -= 0.2f;
+            lengthOfWalk -= speed;
             if(flip) {
-                position.x -= 0.2;
+                position.x -= speed;
                 if(moveDiagonal) {
-                    position.y -= 0.2f;
+                    position.y -= speed;
                 }
             } else {
-                position.x += 0.2;
+                position.x += speed;
                 if(moveDiagonal) {
-                    position.y += 0.2f;
+                    position.y += speed;
                 }
             }
         } else {
@@ -89,7 +98,7 @@ public class PassiveMob {
                 }
             } else {
                 animState = 1;
-                lengthOfWalk = 10f + random.nextFloat() * (20f - 10f);
+                lengthOfWalk = (50f * speed) + random.nextFloat() * ((100f * speed) - (50f * speed));
                 directionLeft = random.nextBoolean();
                 moveDiagonal = random.nextBoolean();
                 stop = random.nextBoolean();
@@ -106,5 +115,10 @@ public class PassiveMob {
         batch.draw(currentFrame, flip ? position.x + currentFrame.getRegionWidth() : position.x, position.y, flip ? -currentFrame.getRegionWidth() : currentFrame.getRegionWidth(), currentFrame.getRegionHeight());
 
 
+    }
+
+    public void kill() {
+        Gdx.app.log("Mob", name + " killed by player");
+        player.getInventory().addItem(new Material(materials.LEATHER), random.nextInt(3));
     }
 }

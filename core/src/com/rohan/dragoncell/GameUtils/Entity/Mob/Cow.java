@@ -10,6 +10,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.rohan.dragoncell.FileUtils.Tuple;
+import com.rohan.dragoncell.GameUtils.Entity.Player;
+import com.rohan.dragoncell.GameUtils.Material;
+import com.rohan.dragoncell.GameUtils.MaterialsList;
 
 import java.util.Random;
 
@@ -22,13 +25,15 @@ public class Cow extends PassiveMob {
     private float stateTime = 0f;
     private Vector2 position = new Vector2();
     private String name;
+    private Player player;
+    private MaterialsList materials;
 
-    public Cow(Tuple<Integer, Integer> coordinates, String name) {
-        super(coordinates, name);
+    public Cow(String name, Player player, MaterialsList materials) {
+        super(name, player, materials);
 
         this.name = name;
-
-        worldCoords = coordinates;
+        this.player = player;
+        this.materials = materials;
 
         position.x = random.nextInt((460 - 40) + 1) + 40;
         position.y = random.nextInt((400 - 30) + 1) + 30;

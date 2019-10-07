@@ -72,6 +72,7 @@ public class MaterialsList {
     public final Material SMALL_BLADE = new Material("Small Blade", "Can be used to press items into liquid", 54, 2);
     public final Material COPPER_WIRE = new Material("Copper Wire", "Great conductor", 55, 2);
     public final Material SPADE = new Material("Spade", "Can dig through soft items", 56, 1);
+    public final Material KNIGHT_SWORD = new Material("Knight Sword", "Basic Weapon", 57, 2);
 
 
     public ArrayList<Material> materialList = new ArrayList<Material>();
@@ -161,5 +162,6 @@ public class MaterialsList {
         SMALL_BLADE.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {IRON_INGOT, IRON_INGOT, IRON_INGOT});
         COPPER_WIRE.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {COPPER_INGOT, COPPER_INGOT, COPPER_INGOT});
         SPADE.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {HARDENED_STONE, HARDENED_WOOD, HARDENED_WOOD});
+        KNIGHT_SWORD.setObtainMethod(ObtainMethods.WORKBENCH).setRecipe(new Material[] {STICK, IRON_INGOT, IRON_INGOT, IRON_INGOT, IRON_INGOT, IRON_INGOT});
     }
 }

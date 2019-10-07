@@ -6,8 +6,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.rohan.dragoncell.GameUtils.Display.Leveling;
+import org.w3c.dom.css.Rect;
 
 import java.util.HashMap;
 
@@ -63,6 +65,10 @@ public class Player {
         walkAnim.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
 
 
+    }
+
+    public Rectangle getRect() {
+        return new Rectangle(position.x, position.y, currentFrame.getRegionWidth(), currentFrame.getRegionHeight());
     }
 
     public Inventory getInventory() {

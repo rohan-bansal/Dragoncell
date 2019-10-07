@@ -10,7 +10,7 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
 		config.resizable = false;
-		config.title = "The DragonCell";
+		config.title = "The Dragoncell";
 		config.addIcon("Interface/Title/icon.png", Files.FileType.Internal);
 		config.width = 1000;
 		config.height = 800;

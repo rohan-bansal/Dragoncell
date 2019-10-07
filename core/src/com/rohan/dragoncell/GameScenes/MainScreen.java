@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.rohan.dragoncell.FileUtils.DataManager;
+import com.rohan.dragoncell.FileUtils.FrameRate;
 import com.rohan.dragoncell.FileUtils.ModInputProcessor;
 import com.rohan.dragoncell.GameUtils.Display.HUD;
 import com.rohan.dragoncell.GameUtils.Display.Rumble;
@@ -34,6 +35,7 @@ public class MainScreen implements Screen {
     public static Presser presser;
     public static DataManager manager;
     public static Shop shop;
+    public static FrameRate frameRate = new FrameRate();
 
     private boolean rumbleRefresh = false;
 
@@ -59,6 +61,8 @@ public class MainScreen implements Screen {
             manager.createNewSave();
             applyNewData();
         }
+
+        frameRate.update();
     }
 
     private void initMaterials() {
@@ -163,6 +167,9 @@ public class MainScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(37/255f, 27/255f, 26/255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+
+        frameRate.update();
+        frameRate.render();
 
         if (Rumble.getRumbleTimeLeft() > 0) {
             rumbleRefresh = true;

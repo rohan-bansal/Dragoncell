@@ -5,10 +5,12 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FileTextureData;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.rohan.dragoncell.FileUtils.Tuple;
 import com.rohan.dragoncell.GameScenes.MainScreen;
@@ -20,6 +22,7 @@ import com.rohan.dragoncell.GameUtils.Material;
 import com.rohan.dragoncell.GameUtils.MaterialsList;
 import com.rohan.dragoncell.GameUtils.ObtainMethods;
 
+import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -62,6 +65,7 @@ public class Collection {
 
     private BitmapFont nameDrawer = new BitmapFont(Gdx.files.internal("Fonts/ari2.fnt"), Gdx.files.internal("Fonts/ari2.png"), false);
     private BitmapFont noPickUpDrawer = new BitmapFont(Gdx.files.internal("Fonts/ari2.fnt"), Gdx.files.internal("Fonts/ari2.png"), false);
+    private GlyphLayout layout = new GlyphLayout();
 
     public Collection(MaterialsList materials, Player player) {
         this.player = player;
@@ -82,6 +86,20 @@ public class Collection {
 
         detectRoomChange();
         //detectSceneChange();
+
+        for(PassiveMob mob : animals) {
+            mob.render(batch);
+            Rectangle tempRect_ = new Rectangle(player.position.x, player.position.y, player.currentFrame.getRegionWidth(), player.currentFrame.getRegionHeight());
+            if(tempRect_.overlaps(mob.getRect())) {
+                nameDrawer.setColor(Color.GOLDENROD);
+                nameDrawer.getData().setScale(0.7f);
+                layout.setText(nameDrawer, mob.name);
+                nameDrawer.draw(batch, mob.name, mob.position.x + (mob.getRect().getWidth() / 2) - layout.width / 2, mob.position.y + 50);
+            }
+        }
+
+        nameDrawer.setColor(Color.WHITE);
+        nameDrawer.getData().setScale(1f);
 
 
         for(BreakableObject tree : trees) {
@@ -144,8 +162,11 @@ public class Collection {
         if(biomeType == 1 || biomeType == 2) {
             if(animals.size() == 0) {
                 for(int i = 0; i < rand.nextInt(6); i++) {
-                    animals.add(new Cow(new Tuple<Integer, Integer>(roomCoords[0], roomCoords[1])));
+                    PassiveMob temp = new Cow(new Tuple<Integer, Integer>(roomCoords[0], roomCoords[1]), "Cow");
+                    recursiveMobChange(temp, 1);
+                    animals.add(temp);
                 }
+
             }
             treeBiome(batch, tempRect);
         } else if(biomeType == 5) {
@@ -168,10 +189,6 @@ public class Collection {
 
         for(BreakableObject t : desertToRemove) {
             desert.remove(t);
-        }
-
-        for(PassiveMob mob : animals) {
-            mob.render(batch);
         }
 
         if(digTime != null && digResults != null) {
@@ -492,6 +509,20 @@ public class Collection {
             return true;
         }
         return false;
+    }
+
+    private void recursiveMobChange(PassiveMob mob, int scenario) {
+        if(scenario == 1) {
+            if (mob.position.y < 400 && mob.position.y > 30) {
+                mob.position.set(new Vector2(rand.nextInt((460 - 40) + 1) + 40, rand.nextInt((400 - 30) + 1) + 30));
+                for(BreakableObject object : trees) {
+                    if(object.sprite.getBoundingRectangle().overlaps(mob.getRect())) {
+                        recursiveMobChange(mob, 1);
+                    }
+                }
+                recursiveMobChange(mob, 1);
+            }
+        }
     }
 
     private void recursivePosChange(BreakableObject object, int scenario) {

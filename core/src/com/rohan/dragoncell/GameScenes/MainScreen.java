@@ -202,6 +202,9 @@ public class MainScreen implements Screen {
         } else if(Gdx.input.isKeyJustPressed(Input.Keys.R)) {
             Gdx.app.log("Camera", "Rumble Triggered");
             Rumble.rumble(5, 2f);
+        } else if(Gdx.input.isKeyJustPressed(Input.Keys.J)) {
+            Gdx.app.log("PassiveMobs", "Refreshed");
+            collectionView.animals.clear();
         }
 
     }

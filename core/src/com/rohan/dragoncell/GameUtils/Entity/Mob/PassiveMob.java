@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.rohan.dragoncell.FileUtils.Tuple;
+import com.rohan.dragoncell.GameScenes.MainScreen;
+import com.rohan.dragoncell.Main;
 
 import java.util.Random;
 
@@ -43,6 +45,26 @@ public class PassiveMob {
     public void render(SpriteBatch batch) {
         stateTime += Gdx.graphics.getDeltaTime();
         flip = directionLeft;
+
+        if(!new Rectangle(20, 10, MainScreen.headsUp.collection_.getWidth(), MainScreen.headsUp.collection_.getHeight()).contains(getRect())) {
+            stop = false;
+            animState = 1;
+            lengthOfWalk = 10f + random.nextFloat() * (20f - 10f);
+            if(directionLeft) {
+                directionLeft = false;
+                moveDiagonal = false;
+            } else {
+                directionLeft = true;
+                moveDiagonal = false;
+            }
+            if(position.y <= 30) {
+                directionLeft = false;
+                moveDiagonal = true;
+            } else if(position.y >= 460) {
+                directionLeft = true;
+                moveDiagonal = true;
+            }
+        }
 
         if(lengthOfWalk > 0) {
             lengthOfWalk -= 0.2f;

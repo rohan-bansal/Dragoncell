@@ -44,7 +44,7 @@ public class Collection {
     private ArrayList<Tuple<Integer, Integer>> digResultsToRemove = new ArrayList<Tuple<Integer, Integer>>();
     private ArrayList<Tuple<Integer, Integer>> digTimeToRemove = new ArrayList<Tuple<Integer, Integer>>();
 
-    private ArrayList<PassiveMob> animals = new ArrayList<PassiveMob>();
+    public ArrayList<PassiveMob> animals = new ArrayList<PassiveMob>();
 
     private Random rand = new Random();
     private Sprite axeIcon = new Sprite(new Texture(Gdx.files.internal("Interface/World/Collection/axe.png")));
@@ -55,6 +55,7 @@ public class Collection {
     public int[] roomCoords = {3, 2};
 
     private int biomeType = 1;
+    private int prevBiomeType = 1;
     private Rectangle tempRect;
     private Color tempColor;
 
@@ -82,6 +83,17 @@ public class Collection {
         refreshView();
     }
 
+    private void generateCows() {
+        if(animals.size() == 0) {
+            for(int i = 0; i < rand.nextInt(6); i++) {
+                PassiveMob temp = new Cow(new Tuple<Integer, Integer>(roomCoords[0], roomCoords[1]), "Cow");
+                recursiveMobChange(temp, 1);
+                animals.add(temp);
+            }
+
+        }
+    }
+
     public void render(SpriteBatch batch) {
 
         detectRoomChange();
@@ -94,7 +106,7 @@ public class Collection {
                 nameDrawer.setColor(Color.GOLDENROD);
                 nameDrawer.getData().setScale(0.7f);
                 layout.setText(nameDrawer, mob.name);
-                nameDrawer.draw(batch, mob.name, mob.position.x + (mob.getRect().getWidth() / 2) - layout.width / 2, mob.position.y + 50);
+                nameDrawer.draw(batch, mob.name, mob.position.x + (mob.getRect().getWidth() / 2) - layout.width / 2, mob.position.y + 57);
             }
         }
 
@@ -160,14 +172,6 @@ public class Collection {
         }
 
         if(biomeType == 1 || biomeType == 2) {
-            if(animals.size() == 0) {
-                for(int i = 0; i < rand.nextInt(6); i++) {
-                    PassiveMob temp = new Cow(new Tuple<Integer, Integer>(roomCoords[0], roomCoords[1]), "Cow");
-                    recursiveMobChange(temp, 1);
-                    animals.add(temp);
-                }
-
-            }
             treeBiome(batch, tempRect);
         } else if(biomeType == 5) {
             animals.clear();
@@ -177,6 +181,16 @@ public class Collection {
             desertBiome(batch, tempRect);
         } else if(biomeType == 4) {
             animals.clear();
+        }
+
+        if(biomeType == 1) {
+            if(animals.size() == 0) {
+                generateCows();
+            }
+        } else if(biomeType == 2) {
+            if(animals.size() == 0) {
+                generateCows();
+            }
         }
 
         for(BreakableObject t : treesToRemove) {
@@ -401,6 +415,7 @@ public class Collection {
                 if(player.position.x > 490) { // right
                     if(checkPossible(rooms[roomCoords[0]][roomCoords[1] + 1])) {
                         roomCoords[1] += 1;
+                        prevBiomeType = biomeType;
                         biomeType = rooms[roomCoords[0]][roomCoords[1]];
                         refreshView();
                         MainScreen.headsUp.changeCollectionScene(biomeType);
@@ -411,6 +426,7 @@ public class Collection {
 
                     if(checkPossible(rooms[roomCoords[0]][roomCoords[1] - 1])) {
                         roomCoords[1] -= 1;
+                        prevBiomeType = biomeType;
                         biomeType = rooms[roomCoords[0]][roomCoords[1]];
                         refreshView();
                         MainScreen.headsUp.changeCollectionScene(biomeType);
@@ -421,6 +437,7 @@ public class Collection {
 
                     if(checkPossible(rooms[roomCoords[0] + 1][roomCoords[1]])) {
                         roomCoords[0] += 1;
+                        prevBiomeType = biomeType;
                         biomeType = rooms[roomCoords[0]][roomCoords[1]];
                         refreshView();
                         MainScreen.headsUp.changeCollectionScene(biomeType);
@@ -431,6 +448,7 @@ public class Collection {
 
                     if(checkPossible(rooms[roomCoords[0] - 1][roomCoords[1]])) {
                         roomCoords[0] -= 1;
+                        prevBiomeType = biomeType;
                         biomeType = rooms[roomCoords[0]][roomCoords[1]];
                         refreshView();
                         MainScreen.headsUp.changeCollectionScene(biomeType);
@@ -513,7 +531,7 @@ public class Collection {
 
     private void recursiveMobChange(PassiveMob mob, int scenario) {
         if(scenario == 1) {
-            if (mob.position.y < 400 && mob.position.y > 30) {
+            if (mob.position.y > 400 && mob.position.y < 30) {
                 mob.position.set(new Vector2(rand.nextInt((460 - 40) + 1) + 40, rand.nextInt((400 - 30) + 1) + 30));
                 for(BreakableObject object : trees) {
                     if(object.sprite.getBoundingRectangle().overlaps(mob.getRect())) {

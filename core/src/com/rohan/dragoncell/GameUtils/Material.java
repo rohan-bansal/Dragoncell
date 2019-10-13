@@ -20,6 +20,7 @@ public class Material implements Json.Serializable {
     public boolean unpickupable;
     public int levelNeeded = 1;
     private Sprite sprite;
+    public int hitsNeeded;
 
     public boolean canBeFilled = false;
     public boolean isOre = false;
@@ -88,6 +89,7 @@ public class Material implements Json.Serializable {
         this.description = material.description;
         this.ID = material.ID;
         this.rarity = material.rarity;
+        this.hitsNeeded = material.hitsNeeded;
 
         if(material.unpickupable) {
             this.unpickupable = true;
@@ -143,6 +145,7 @@ public class Material implements Json.Serializable {
         material.canBeJuiced = canBeJuiced;
         material.isFuel = isFuel;
         material.canBeGround = canBeGround;
+        material.hitsNeeded = hitsNeeded;
 
         if(canBeCrafted) {
             material.recipe = recipe;
@@ -160,6 +163,11 @@ public class Material implements Json.Serializable {
             material.grinderRecipe = grinderRecipe;
         }
         return material;
+    }
+
+    public Material setHitsNeeded(int hits) {
+        this.hitsNeeded = hits;
+        return this;
     }
 
     public Material setFuel(boolean fuel) {

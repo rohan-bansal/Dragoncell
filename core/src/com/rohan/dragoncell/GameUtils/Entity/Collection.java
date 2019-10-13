@@ -283,18 +283,18 @@ public class Collection {
         if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             for (BreakableObject tree_ : trees) {
                 if (tempRect.overlaps(tree_.sprite.getBoundingRectangle())) {
-                    if (tree_.hits == 3) {
+                    if (tree_.hits == 18) {
                         treesToRemove.add(tree_);
                         player.getLeveling().setSubLevelPoints(player.getLeveling().getSubLevelPoints() + 1);
                         String path = ((FileTextureData) tree_.sprite.getTexture().getTextureData()).getFileHandle().path();
                         if (path.contains("tree2")) {
-                            player.getInventory().addItem(new Material(materials.CHERRY));
+                            player.getInventory().addItem(new Material(materials.CHERRY), rand.nextInt(2));
                             discoveredItem(materials.CHERRY);
                         } else if (path.contains("tree4")) {
-                            player.getInventory().addItem(new Material(materials.GREEN_APPLE));
+                            player.getInventory().addItem(new Material(materials.GREEN_APPLE), rand.nextInt(2));
                             discoveredItem(materials.GREEN_APPLE);
                         } else if (path.contains("tree1")) {
-                            player.getInventory().addItem(new Material(materials.STICK));
+                            player.getInventory().addItem(new Material(materials.STICK), rand.nextInt(3));
                         }
                         spawnTree_ += 1;
                     } else {
@@ -380,29 +380,28 @@ public class Collection {
             for (BreakableObject ore_ : ores) {
                 if (tempRect.overlaps(ore_.sprite.getBoundingRectangle())) {
                     if(!ore_.unobtainable) {
-                        if (ore_.hits == 15) {
+                        if (ore_.hits == ore_.material.hitsNeeded) {
                             oresToRemove.add(ore_);
                             player.getLeveling().setSubLevelPoints(player.getLeveling().getSubLevelPoints() + 1);
-                            String path = ((FileTextureData) ore_.sprite.getTexture().getTextureData()).getFileHandle().path();
-                            if (path.contains("coal")) {
+                            if (ore_.material.name.equals(materials.COAL.name)) {
                                 player.getInventory().addItem(new Material(materials.COAL));
                                 discoveredItem(materials.COAL);
-                            } else if (path.contains("iron")) {
+                            } else if (ore_.material.name.equals(materials.IRON_ORE.name)) {
                                 player.getInventory().addItem(new Material(materials.IRON_ORE));
                                 discoveredItem(materials.IRON_ORE);
-                            } else if (path.contains("crimstone")) {
+                            } else if (ore_.material.name.equals(materials.CRIMSTONE_ORE.name)) {
                                 player.getInventory().addItem(new Material(materials.CRIMSTONE_ORE));
                                 discoveredItem(materials.CRIMSTONE_ORE);
-                            } else if (path.contains("stone")) {
+                            } else if (ore_.material.name.equals(materials.STONE.name)) {
                                 player.getInventory().addItem(new Material(materials.STONE));
                                 discoveredItem(materials.STONE);
-                            } else if (path.contains("sasmite")) {
+                            } else if (ore_.material.name.equals(materials.SASMITE_ORE.name)) {
                                 player.getInventory().addItem(new Material(materials.SASMITE_ORE));
                                 discoveredItem(materials.SASMITE_ORE);
-                            } else if (path.contains("copper")) {
+                            } else if (ore_.material.name.equals(materials.COPPER_ORE.name)) {
                                 player.getInventory().addItem(new Material(materials.COPPER_ORE));
                                 discoveredItem(materials.COPPER_ORE);
-                            } else if (path.contains("amber")) {
+                            } else if (ore_.material.name.equals(materials.AMBER.name)) {
                                 player.getInventory().addItem(new Material(materials.AMBER));
                                 discoveredItem(materials.AMBER);
                             }
@@ -671,25 +670,25 @@ public class Collection {
         BreakableObject tempOre = null;
         int spawnPercentage = rand.nextInt(100);
         if(spawnPercentage <= 40) {
-            tempOre = new BreakableObject("Materials/stone.png", 2);
+            tempOre = new BreakableObject("Materials/stone.png", 2, new Material(materials.STONE));
             tempOre.sprite.setSize(32, 32);
         } else if(spawnPercentage <= 60) {
-            tempOre = new BreakableObject("Materials/coal.png", 8);
+            tempOre = new BreakableObject("Materials/coal.png", 8, new Material(materials.COAL));
             tempOre.sprite.setSize(32, 32);
         } else if(spawnPercentage <= 75) {
-            tempOre = new BreakableObject("Materials/iron_ore.png", 11);
+            tempOre = new BreakableObject("Materials/iron_ore.png", 11, new Material(materials.IRON_ORE));
             tempOre.sprite.setSize(32, 32);
         } else if(spawnPercentage <= 77) {
-            tempOre = new BreakableObject("Materials/amber.png", 3);
+            tempOre = new BreakableObject("Materials/amber.png", 3, new Material(materials.AMBER));
             tempOre.sprite.setSize(32, 32);
         } else if(spawnPercentage <= 90) {
-            tempOre = new BreakableObject("Materials/copper_ore.png", 24);
+            tempOre = new BreakableObject("Materials/copper_ore.png", 24, new Material(materials.COPPER_ORE));
             tempOre.sprite.setSize(32, 32);
         } else if(spawnPercentage <= 97) {
-            tempOre = new BreakableObject("Materials/sasmite_ore.png", 6);
+            tempOre = new BreakableObject("Materials/sasmite_ore.png", 6, new Material(materials.SASMITE_ORE));
             tempOre.sprite.setSize(32, 32);
         } else if(spawnPercentage <= 100) {
-            tempOre = new BreakableObject("Materials/crimstone_ore.png", 9);
+            tempOre = new BreakableObject("Materials/crimstone_ore.png", 9, new Material(materials.CRIMSTONE_ORE));
             tempOre.sprite.setSize(32, 32);
         }
         tempOre.sprite.setPosition(rand.nextInt((460 - 40) + 1) + 40, rand.nextInt((440 - 30) + 1) + 30);

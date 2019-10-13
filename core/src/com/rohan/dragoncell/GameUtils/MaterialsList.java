@@ -17,16 +17,16 @@ import java.util.HashMap;
 public class MaterialsList {
 
     public final Material STICK = new Material("Wooden Stick", "Can be obtained from trees or carving", 1, 1).setFuel(true);
-    public final Material STONE = new Material("Stone", "Hard material obtained from mining", 2, 1);
-    public final Material AMBER = new Material("Amber", "Might contain a mosquito", 3, 3).setLevelNeeded(9);
+    public final Material STONE = new Material("Stone", "Hard material obtained from mining", 2, 1).setHitsNeeded(15);
+    public final Material AMBER = new Material("Amber", "Might contain a mosquito", 3, 3).setLevelNeeded(9).setHitsNeeded(25);
     public final Material DIRT = new Material("Dirt", "Diggy diggy hole", 4, 1).setFuel(true);
     public final Material WOOD = new Material("Wood", "Obtained from trees through sawing", 5, 1);
-    public final Material SASMITE_ORE = new Material("Sasmite Ore", "Created from Earth's seismic motions", 6, 3).setLevelNeeded(5);
+    public final Material SASMITE_ORE = new Material("Sasmite Ore", "Created from Earth's seismic motions", 6, 3).setLevelNeeded(5).setHitsNeeded(20);
     public final Material SASMITE_BAR = new Material("Sasmite Bar", "Very hard and shock resistant metal", 7, 3);
-    public final Material COAL = new Material("Coal", "Powers almost everything", 8, 1).setFuel(true);
-    public final Material CRIMSTONE_ORE = new Material("Crimstone Ore", "Epic mining drop", 9, 4).setLevelNeeded(7);
+    public final Material COAL = new Material("Coal", "Powers almost everything", 8, 1).setFuel(true).setHitsNeeded(15);
+    public final Material CRIMSTONE_ORE = new Material("Crimstone Ore", "Epic mining drop", 9, 4).setLevelNeeded(7).setHitsNeeded(38);
     public final Material CRIMSTONE_BAR = new Material("Crimstone Bar", "Contains the essence of the Earth's core", 10, 4);
-    public final Material IRON_ORE = new Material("Iron Ore", "One of the most abundant ores", 11, 2);
+    public final Material IRON_ORE = new Material("Iron Ore", "One of the most abundant ores", 11, 2).setHitsNeeded(25);
     public final Material IRON_INGOT = new Material("Iron Ingot", "Important crafting material", 12, 2);
     public final Material SEEDS = new Material("Seeds", "The most basic farming material", 13, 1);
     public final Material TORCH = new Material("Torch", "Creates light wherever it goes", 14, 1);
@@ -39,7 +39,7 @@ public class MaterialsList {
     public final Material HARDENED_WOOD = new Material("Hardened Wood", "Can hold much more weight", 21, 1).setFuel(true);
     public final Material CARROT_SEEDS = new Material("Carrot Seeds", "Grows multiple carrots", 22, 2);
     public final Material WHEAT = new Material("Wheat", "Most abundant crop in the world", 23, 1);
-    public final Material COPPER_ORE = new Material("Copper Ore", "Stands out with its gold sheen", 24, 2).setLevelNeeded(3);
+    public final Material COPPER_ORE = new Material("Copper Ore", "Stands out with its gold sheen", 24, 2).setLevelNeeded(3).setHitsNeeded(24);
     public final Material COPPER_INGOT = new Material("Copper Ingot", "Conducts electricity very well", 25, 2);
     public final Material BOOK = new Material("Book", "Filled with knowledge", 26, 2);
     public final Material BOTTLE = new Material("Bottle", "Can be filled with various liquids", 27, 2);

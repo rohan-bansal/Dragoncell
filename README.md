@@ -32,6 +32,7 @@ The game ends when **you craft the dragoncell and use it to escape the planet**
 ## Download / Run
 
 - Download the latest release from the releases page or download the source code here
+  -  *update 12/6/19 - I may not be creating a new release for a while, so it's best to run the source code*
 - Load the source code into IDEA, or run the jar file from the release page in terminal
 
 

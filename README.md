@@ -2,6 +2,8 @@
 
 *A crafting based game aimed at getting the character off the planet*
 
+**Please read the Download/Run section**
+
 **50% Complete**
 
 ## How to Play
